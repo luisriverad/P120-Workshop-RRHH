@@ -1,7 +1,7 @@
-# TABLERO DE CONTROL PARA RRHH
+# Profit120 · Rentabilidad de RRHH
 
-Suite integral para Dirección y Gerencia de Recursos Humanos.
-Versión inicial sin branding — fondo blanco, letras negras.
+Tablero para Dirección y Gerencia de Recursos Humanos, usado en el workshop de rentabilidad de RRHH de Profit120.
+Branding Profit120: verde #6DBE45 y negro (logos en `src/assets/`).
 
 ## Módulos (7 pestañas + Dashboard)
 

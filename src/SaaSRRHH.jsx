@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback, Fragment } from "react";
 import GuiaEntrevista from "./GuiaEntrevista.jsx";
 import plantillaDetalleUrl from "./assets/plantilla-detalle-por-area.xlsx?url";
+import logoProfit120 from "./assets/profit120-logo.png";
 
 // Demo: configurar VITE_CATALOGOS_PASSWORD en .env para producción (no commitear secretos reales).
 const CATALOGOS_ADMIN_PASSWORD = import.meta.env.VITE_CATALOGOS_PASSWORD ?? "12345";
@@ -164,7 +165,7 @@ function ChartCopy({ children, label = "Gráfica" }) {
 }
 
 // =============================================================
-// TABLERO DE CONTROL PARA RRHH (sin branding)
+// TABLERO DE CONTROL PARA RRHH · Profit120
 // Layout: sidebar de catálogo a la IZQUIERDA + contenido a la derecha
 // =============================================================
 
@@ -177,7 +178,7 @@ const TABS = [
   { id: "capacitacion", label: "Capacitación", num: "6" },
 ];
 
-// ---------- estilos base — paleta cálida profesional, branding naranja de Cobertura ----------
+// ---------- estilos base — branding Profit120 (verde #6DBE45 + negro) ----------
 const FONT_STACK = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
 const COLOR = {
   ink: "#0f172a",
@@ -190,9 +191,9 @@ const COLOR = {
   surface: "#ffffff",
   surfaceSoft: "#fafafa",
   surfaceWarm: "#fbfaf7",
-  accent: "#c2410c",
-  accentLight: "#ea580c",
-  accentSoft: "#fff7ed",
+  accent: "#367f1f",
+  accentLight: "#6dbe45",
+  accentSoft: "#f1f8ec",
   shadow: "0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03)",
   shadowHover: "0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04)",
 };
@@ -200,7 +201,7 @@ const S = {
   page: {
     minHeight: "100vh",
     background: COLOR.surface,
-    backgroundImage: "radial-gradient(circle at 0% 0%, rgba(234, 88, 12, 0.035) 0%, transparent 40%), radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.025) 0%, transparent 35%)",
+    backgroundImage: "radial-gradient(circle at 0% 0%, rgba(109, 190, 69, 0.035) 0%, transparent 40%), radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.025) 0%, transparent 35%)",
     color: COLOR.ink,
     fontFamily: FONT_STACK,
     letterSpacing: "-0.005em",
@@ -210,7 +211,7 @@ const S = {
     padding: "18px 28px",
     display: "flex", alignItems: "center", justifyContent: "space-between",
     background: COLOR.surface,
-    boxShadow: "0 1px 0 rgba(194, 65, 12, 0.06)",
+    boxShadow: "0 1px 0 rgba(54, 127, 31, 0.06)",
     position: "relative",
   },
   title: { fontSize: 20, fontWeight: 700, color: COLOR.ink, letterSpacing: "-0.02em" },
@@ -245,7 +246,7 @@ const S = {
     fontSize: 11, fontWeight: 700,
     display: "flex", alignItems: "center", justifyContent: "center",
     flexShrink: 0,
-    boxShadow: active ? "0 1px 2px rgba(194, 65, 12, 0.25)" : "none",
+    boxShadow: active ? "0 1px 2px rgba(54, 127, 31, 0.25)" : "none",
     transition: "all 0.15s ease",
   }),
   sidebarSection: { padding: "22px 20px 14px", marginTop: 12, borderTop: "1px solid " + COLOR.borderSoft },
@@ -300,10 +301,10 @@ const S = {
   },
   btn: {
     padding: "9px 16px", border: "none",
-    background: `linear-gradient(135deg, ${COLOR.accentLight} 0%, ${COLOR.accent} 100%)`,
+    background: `linear-gradient(135deg, #4e9a2e 0%, ${COLOR.accent} 100%)`,
     color: "#fff", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer",
     fontFamily: FONT_STACK, letterSpacing: 0.2,
-    boxShadow: "0 1px 2px rgba(194, 65, 12, 0.25)",
+    boxShadow: "0 1px 2px rgba(54, 127, 31, 0.25)",
     transition: "transform 0.1s ease, box-shadow 0.15s ease",
   },
   btnGhost: {
@@ -316,9 +317,9 @@ const S = {
   badge: (color) => ({ display: "inline-block", padding: "3px 9px", borderRadius: 999, fontSize: 11, fontWeight: 700, background: color || COLOR.borderSoft, color: COLOR.ink, letterSpacing: 0.2 }),
   alert: (kind) => ({
     padding: "11px 14px", borderRadius: 6, fontSize: 12, marginBottom: 12,
-    background: kind === "danger" ? "#fef2f2" : kind === "warn" ? "#fff7ed" : "#eff6ff",
-    border: `1px solid ${kind === "danger" ? "#fca5a5" : kind === "warn" ? "#fdba74" : "#93c5fd"}`,
-    borderLeft: `3px solid ${kind === "danger" ? "#b00020" : kind === "warn" ? "#c2410c" : "#1d4ed8"}`,
+    background: kind === "danger" ? "#fef2f2" : kind === "warn" ? "#f1f8ec" : "#eff6ff",
+    border: `1px solid ${kind === "danger" ? "#fca5a5" : kind === "warn" ? "#a9d58f" : "#93c5fd"}`,
+    borderLeft: `3px solid ${kind === "danger" ? "#b00020" : kind === "warn" ? "#367f1f" : "#1d4ed8"}`,
     color: COLOR.inkSoft, lineHeight: 1.5,
   }),
 };
@@ -1345,7 +1346,7 @@ function AulaVariaciones({ data = [] }) {
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#1d4ed8", fontVariantNumeric: "tabular-nums" }}>{fmt(monto * factor)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>${factor.toFixed(2)} por cada $1 del recibo</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
               <div style={S.kpiLabel}>Compromiso total</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(total)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>{recurrente ? "un año de pagos + pasivo si sale" : "un solo pago con cargas"}</div>
@@ -1412,7 +1413,7 @@ function AulaVariaciones({ data = [] }) {
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(totalExceso)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>variable pagada arriba del límite</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
             <div style={S.kpiLabel}>Si se repite 12 meses</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(totalAnual)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>costo integral con cargas</div>
@@ -1701,7 +1702,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: cd.neto > 0 ? "#b00020" : "#0a7d2c", fontVariantNumeric: "tabular-nums" }}>{fmt(cd.neto)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>ya descontando el sueldo no pagado</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
               <div style={S.kpiLabel}>En {dias} días</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(acumulado)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>costo neto acumulado</div>
@@ -1807,7 +1808,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{filas.length}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>{criticas} con más de 60 días</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
             <div style={S.kpiLabel}>Costo acumulado a hoy</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(total)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>neto del sueldo no pagado</div>
@@ -2135,7 +2136,7 @@ function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, 
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(noVisible)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>productividad perdida</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
               <div style={S.kpiLabel}>Costo total de la baja</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(total)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>= {(total / sueldo).toFixed(1)} meses de sueldo del puesto</div>
@@ -2219,7 +2220,7 @@ function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, 
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{pctNoVisible.toFixed(0)}%</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>del costo es oculto o hundido</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
             <div style={S.kpiLabel}>Probablemente evitable</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(costoPrevenibles)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>{prevenibles.length} renuncias por sueldo, jefe, ambiente o carrera</div>
@@ -2474,7 +2475,7 @@ function AulaDesempeno({ colaboradores = [] }) {
     </label>
   );
   const kpi = (label, valor, nota, color, destacado) => (
-    <div style={{ ...S.kpi, padding: 12, ...(destacado ? { background: COLOR.accentSoft, borderColor: "#fed7aa" } : {}) }}>
+    <div style={{ ...S.kpi, padding: 12, ...(destacado ? { background: COLOR.accentSoft, borderColor: "#cfe7c0" } : {}) }}>
       <div style={S.kpiLabel}>{label}</div>
       <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: color || COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{valor}</div>
       <div style={{ fontSize: 11, color: COLOR.textMuted }}>{nota}</div>
@@ -2557,7 +2558,7 @@ function AulaDesempeno({ colaboradores = [] }) {
 
     const segmentos = [
       { label: "Valor que el puesto no genera", v: costoProductividad, color: "#983838", nota: `${nBajos} persona${nBajos !== 1 ? "s" : ""} al ${productividad}% · múltiplo ${multiplo}×` },
-      { label: "Retrabajo que absorben los demás", v: costoRetrabajo, color: "#c2410c", nota: `${horasRetrabajo} h/semana por cada una` },
+      { label: "Retrabajo que absorben los demás", v: costoRetrabajo, color: "#367f1f", nota: `${horasRetrabajo} h/semana por cada una` },
       { label: "Renuncias extra de los mejores", v: costoFuga, color: "#233a63", nota: `${Math.max(0, fugas - fugasBase).toFixed(1)} renuncias más de lo normal · ${mesesReemplazo} meses de sueldo cada una` },
     ];
 
@@ -3007,7 +3008,7 @@ function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, 
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(actual.total)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmt(gente ? actual.total / gente : 0)} por colaborador</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
               <div style={S.kpiLabel}>Se come de la utilidad</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{pctUtilidad.toFixed(1)}%</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>de {fmtM(potencial)} posibles</div>
@@ -3093,7 +3094,7 @@ function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, 
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(totalAreas)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>al año · desenganche + salidas</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
             <div style={S.kpiLabel}>Área que más cuesta</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac }}>{peor?.area}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmtM(peor?.total || 0)} al año</div>
@@ -3419,7 +3420,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(con.inversion)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>{(con.inversion / colegiatura).toFixed(1)}× lo que dice la factura</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
               <div style={S.kpiLabel}>ROI a 12 meses</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: con.roi12 >= 0 ? "#0a7d2c" : "#b00020", fontVariantNumeric: "tabular-nums" }}>{roiPct(con.roi12)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>sin rotación sería {roiPct(sin.roi12)}</div>
@@ -3522,7 +3523,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(totalFactura)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>lo que ve Finanzas</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
             <div style={S.kpiLabel}>Inversión real</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(totalReal)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>+{fmt(totalReal - totalFactura)} en horas fuera del puesto</div>
@@ -4079,9 +4080,9 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         yTicks.reverse();
         const mes = (periodo || "").split(" ")[0]?.toUpperCase() || "MES";
         const anio = (periodo || "").split(" ")[1] || "";
-        const colorAbove = "#c2410c"; // amber-700, sophisticated burnt orange
+        const colorAbove = "#367f1f"; // verde Profit120
         const colorBelow = "#475569"; // slate-600, neutral gray
-        const gradAbove = "linear-gradient(180deg, #ea580c 0%, #c2410c 100%)";
+        const gradAbove = "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)";
         const gradBelow = "linear-gradient(180deg, #64748b 0%, #475569 100%)";
         return (
           <div
@@ -4288,9 +4289,9 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         const months = monthsOrder.slice(0, idx + 1);
         const areasList = ["Comercial", "Posventa", "Operaciones", "Administración", "Dirección"];
         const areaAbbr = { Comercial: "Com", Posventa: "Pos", Operaciones: "Ope", "Administración": "Adm", "Dirección": "Dir" };
-        const colorAbove = "#c2410c";
+        const colorAbove = "#367f1f";
         const colorBelow = "#475569";
-        const gradAbove = "linear-gradient(180deg, #ea580c 0%, #c2410c 100%)";
+        const gradAbove = "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)";
         const gradBelow = "linear-gradient(180deg, #64748b 0%, #475569 100%)";
         const series = months.map((m) => {
           const raw = areasPorMes[m] || [];
@@ -4650,9 +4651,9 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                   <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", gap: 18, padding: "0 16px" }}>
                     {series.map((s) => {
                       const exceeds = s.pctVar > limite;
-                      const color = exceeds ? "#c2410c" : "#475569";
+                      const color = exceeds ? "#367f1f" : "#475569";
                       const grad = exceeds
-                        ? "linear-gradient(180deg, #ea580c 0%, #c2410c 100%)"
+                        ? "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)"
                         : "linear-gradient(180deg, #64748b 0%, #475569 100%)";
                       const heightPct = (s.pctVar / yMax) * 100;
                       return (
@@ -4728,7 +4729,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
             }}>
               <div style={{ display: "flex", gap: 18 }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
-                  <span style={{ width: 10, height: 10, background: "linear-gradient(180deg, #ea580c 0%, #c2410c 100%)", borderRadius: 2 }} />
+                  <span style={{ width: 10, height: 10, background: "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 2 }} />
                   Excede límite (18%)
                 </span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
@@ -4745,7 +4746,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
       })()}</ChartCopy>)}
 
       {cargaActual && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "8px 14px", marginBottom: 8, fontSize: 12, color: "#7c2d12" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#f1f8ec", border: "1px solid #cfe7c0", borderRadius: 8, padding: "8px 14px", marginBottom: 8, fontSize: 12, color: "#2b5f18" }}>
           <span>
             Datos cargados desde Excel · <strong>{cargaActual.archivo}</strong> · {Object.keys(cargaActual.meses || {}).length} mes(es) · {cargaActual.fecha}
           </span>
@@ -4778,8 +4779,8 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
               onDrop={(e) => { e.preventDefault(); setCargaDrag(false); procesarArchivoPlantilla(e.dataTransfer.files?.[0]); }}
               onClick={() => cargaInputRef.current?.click()}
               style={{
-                border: `2px dashed ${cargaDrag ? "#c2410c" : "#cbd5e1"}`,
-                background: cargaDrag ? "#fff7ed" : "#f8fafc",
+                border: `2px dashed ${cargaDrag ? "#367f1f" : "#cbd5e1"}`,
+                background: cargaDrag ? "#f1f8ec" : "#f8fafc",
                 borderRadius: 10,
                 padding: "32px 16px",
                 textAlign: "center",
@@ -4787,7 +4788,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                 transition: "all 0.15s",
               }}
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cargaDrag ? "#c2410c" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cargaDrag ? "#367f1f" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
                 {cargaLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
               </div>
@@ -5398,8 +5399,8 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                 style={{
                   ...S.btnGhost,
                   display: "inline-flex", alignItems: "center", gap: 6,
-                  borderColor: "#c2410c",
-                  color: "#c2410c",
+                  borderColor: "#367f1f",
+                  color: "#367f1f",
                 }}
                 onClick={() => {
                   const asunto = `Solicitud de bono · ${form.empleado || "(empleado)"} · $${(parseInt(String(form.monto).replace(/[^0-9]/g, "")) || 0).toLocaleString("es-MX")}`;
@@ -6674,7 +6675,7 @@ function Clima() {
               const raters = [
                 { key: "auto",   label: "Auto",   color: "#475569", grad: "linear-gradient(180deg, #94a3b8 0%, #64748b 100%)" },
                 { key: "pares",  label: "Pares",  color: "#0f172a", grad: "linear-gradient(180deg, #334155 0%, #1e293b 100%)" },
-                { key: "equipo", label: "Equipo", color: "#7c2d12", grad: "linear-gradient(180deg, #c2410c 0%, #9a3412 100%)" },
+                { key: "equipo", label: "Equipo", color: "#2b5f18", grad: "linear-gradient(180deg, #367f1f 0%, #2b5f18 100%)" },
                 { key: "jefe",   label: "Jefe",   color: "#3f3f46", grad: "linear-gradient(180deg, #52525b 0%, #3f3f46 100%)" },
               ];
               const avgOtros = (c) => (c.pares + c.equipo + c.jefe) / 3;
@@ -6812,7 +6813,7 @@ function Clima() {
                       ))}
                     </div>
                     <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, padding: 12, background: "#f8fafc" }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: "#c2410c", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Puntos ciegos</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: "#367f1f", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Puntos ciegos</div>
                       <div style={{ fontSize: 10, color: "#64748b", marginBottom: 8 }}>Auto &gt; Otros (sobreestima)</div>
                       {puntosCiegos.length === 0 ? (
                         <div style={{ fontSize: 12, color: "#94a3b8", fontStyle: "italic" }}>Sin brechas significativas.</div>
@@ -6956,7 +6957,7 @@ function Clima() {
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
                         {c.alertas.map((a, i) => (
-                          <div key={i} style={{ borderLeft: "3px solid #c2410c", background: "#fff7ed", padding: "8px 12px", fontSize: 12, color: "#7c2d12" }}>
+                          <div key={i} style={{ borderLeft: "3px solid #367f1f", background: "#f1f8ec", padding: "8px 12px", fontSize: 12, color: "#2b5f18" }}>
                             {a}
                           </div>
                         ))}
@@ -7335,7 +7336,7 @@ function Denuncia() {
   const estadoBadgeColor = (estado) =>
     estado === "Resuelta" ? "#e8f5e9" : estado === "En investigación" ? "#fff7e0" : "#fdecea";
   const severidadColor = (sev) =>
-    sev === "Crítica" ? "#b00020" : sev === "Alta" ? "#c2410c" : sev === "Media" ? "#a16207" : "#475569";
+    sev === "Crítica" ? "#b00020" : sev === "Alta" ? "#367f1f" : sev === "Media" ? "#a16207" : "#475569";
   const pasoEstadoColor = (estado) =>
     estado === "Hecho" ? "#e8f5e9" : estado === "En curso" ? "#fff7e0" : "#eee";
 
@@ -7426,7 +7427,7 @@ function Denuncia() {
           const hechos = c.hojaRuta.filter((p) => p.estado === "Hecho").length;
           const tot = c.hojaRuta.length || 1;
           const prog = Math.round((hechos / tot) * 100);
-          const ac = resuelto ? "#0a7d2c" : "#c2410c";
+          const ac = resuelto ? "#0a7d2c" : "#367f1f";
           return (
             <button
               onClick={() => intentarAbrir(c.id)}
@@ -7477,11 +7478,11 @@ function Denuncia() {
                 </div>
                 <div style={{ display: "flex", height: 12, overflow: "hidden", marginTop: 12, border: "1px solid " + COLOR.border }}>
                   <div style={{ width: `${tasa}%`, background: "linear-gradient(90deg, #16a34a 0%, #0a7d2c 100%)" }} title={`Resueltos: ${resueltos.length}`} />
-                  <div style={{ flex: 1, background: "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)" }} title={`No resueltos: ${noResueltos.length}`} />
+                  <div style={{ flex: 1, background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)" }} title={`No resueltos: ${noResueltos.length}`} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11 }}>
                   <span style={{ color: "#0a7d2c", fontWeight: 700 }}>● Resueltos {resueltos.length}</span>
-                  <span style={{ color: "#c2410c", fontWeight: 700 }}>No resueltos {noResueltos.length} ●</span>
+                  <span style={{ color: "#367f1f", fontWeight: 700 }}>No resueltos {noResueltos.length} ●</span>
                 </div>
               </div>
 
@@ -7516,7 +7517,7 @@ function Denuncia() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#c2410c" }} />
+                  <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#367f1f" }} />
                   <span style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, color: COLOR.textSoft }}>No resueltos · en proceso ({noResueltos.length})</span>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -8071,7 +8072,7 @@ async function descargarPlantillaCobertura(carga, ejemplo) {
   };
 
   const instrucciones = [
-    ["Plantilla de Cobertura de Plantilla"],
+    ["Profit120 · Plantilla de Cobertura de Plantilla"],
     [],
     ["Cómo llenarla (las columnas con * son obligatorias; puedes subir solo las hojas que quieras actualizar)"],
     ["1. Hoja \"Plantilla por área\": plantilla autorizada y cubierta de cada área. Con esto se calculan Plantilla autorizada, Cubierta y % cobertura."],
@@ -8432,7 +8433,7 @@ function Cobertura() {
       </div>
 
       {datosCob && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#7c2d12" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#f1f8ec", border: "1px solid #cfe7c0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#2b5f18" }}>
           <span>
             Datos cargados desde Excel · <strong>{cargaCob.archivo}</strong>
             {datosCob.plantilla && <> · {datosCob.plantilla.areas} áreas</>}
@@ -8471,8 +8472,8 @@ function Cobertura() {
                 onDrop={(e) => { e.preventDefault(); setCobDrag(false); procesarArchivoCob(e.dataTransfer.files?.[0]); }}
                 onClick={() => cobInputRef.current?.click()}
                 style={{
-                  border: `2px dashed ${cobDrag ? "#c2410c" : "#cbd5e1"}`,
-                  background: cobDrag ? "#fff7ed" : "#f8fafc",
+                  border: `2px dashed ${cobDrag ? "#367f1f" : "#cbd5e1"}`,
+                  background: cobDrag ? "#f1f8ec" : "#f8fafc",
                   borderRadius: 10,
                   padding: "32px 16px",
                   textAlign: "center",
@@ -8480,7 +8481,7 @@ function Cobertura() {
                   transition: "all 0.15s",
                 }}
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cobDrag ? "#c2410c" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cobDrag ? "#367f1f" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
                 <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
                   {cobLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
                 </div>
@@ -8564,7 +8565,7 @@ function Cobertura() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 2 }}>
               <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>Recibidas vs Cerradas</div>
               <div style={{ fontSize: 11, color: "#64748b" }}>
-                <span style={{ color: "#c2410c", fontWeight: 700 }}>Recibidas</span> · <span style={{ color: "#475569", fontWeight: 700 }}>Cerradas</span>
+                <span style={{ color: "#367f1f", fontWeight: 700 }}>Recibidas</span> · <span style={{ color: "#475569", fontWeight: 700 }}>Cerradas</span>
               </div>
             </div>
           </div>
@@ -8585,7 +8586,7 @@ function Cobertura() {
                   {solicitudesMensuales.map((m) => (
                     <div key={m.mes} style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 3, height: "100%" }}>
                       {[
-                        { val: m.recibidas, grad: "linear-gradient(180deg, #ea580c 0%, #c2410c 100%)", color: "#c2410c" },
+                        { val: m.recibidas, grad: "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)", color: "#367f1f" },
                         { val: m.cerradas,  grad: "linear-gradient(180deg, #64748b 0%, #475569 100%)", color: "#475569" },
                       ].map((b, j) => (
                         <div key={j} style={{ width: 14, height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
@@ -8605,7 +8606,7 @@ function Cobertura() {
             </div>
           </div>
           <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 10, paddingTop: 8, display: "flex", justifyContent: "space-between", fontSize: 11, color: "#475569" }}>
-            <span>Recibidas YTD: <strong style={{ color: "#c2410c" }}>{totalRecibidas}</strong></span>
+            <span>Recibidas YTD: <strong style={{ color: "#367f1f" }}>{totalRecibidas}</strong></span>
             <span>Cerradas YTD: <strong style={{ color: "#475569" }}>{totalCerradas}</strong></span>
             <span>Pendientes: <strong style={{ color: "#0f172a" }}>{totalRecibidas - totalCerradas}</strong></span>
           </div>
@@ -8620,7 +8621,7 @@ function Cobertura() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 2 }}>
               <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>Backlog del proceso</div>
               <div style={{ fontSize: 11, color: "#64748b" }}>
-                Backlog actual <strong style={{ color: "#c2410c", fontVariantNumeric: "tabular-nums" }}>{totalRecibidas - totalCerradas}</strong>
+                Backlog actual <strong style={{ color: "#367f1f", fontVariantNumeric: "tabular-nums" }}>{totalRecibidas - totalCerradas}</strong>
               </div>
             </div>
           </div>
@@ -8630,7 +8631,7 @@ function Cobertura() {
               <div key={a.mes} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11 }}>
                 <div style={{ width: 50, color: "#475569", fontWeight: 500 }}>{a.mes}</div>
                 <div style={{ flex: 1, position: "relative", height: 18, background: "#f1f5f9", borderRadius: 3, overflow: "hidden" }}>
-                  <div style={{ position: "absolute", inset: 0, width: `${(a.acumRecibidas / yMaxAcum) * 100}%`, background: "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)", borderRadius: 3 }} />
+                  <div style={{ position: "absolute", inset: 0, width: `${(a.acumRecibidas / yMaxAcum) * 100}%`, background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 3 }} />
                   <div style={{ position: "absolute", top: 2, bottom: 2, left: 0, width: `${(a.acumCerradas / yMaxAcum) * 100}%`, background: "linear-gradient(90deg, #64748b 0%, #475569 100%)", borderRadius: 3 }} />
                 </div>
                 <div style={{ width: 64, textAlign: "right", color: "#0f172a", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
@@ -8640,7 +8641,7 @@ function Cobertura() {
             ))}
           </div>
           <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 12, paddingTop: 8, fontSize: 11, color: "#64748b" }}>
-            Las barras naranjas marcan recibidas acumuladas; las grises encima muestran las cerradas. La diferencia es el backlog histórico.
+            Las barras verdes marcan recibidas acumuladas; las grises encima muestran las cerradas. La diferencia es el backlog histórico.
           </div>
         </div></ChartCopy>
       </div>
@@ -8666,7 +8667,7 @@ function Cobertura() {
             const isSourcing = idx === 1;
             const grad = idx === 0
               ? "linear-gradient(90deg, #1e293b 0%, #0f172a 100%)"
-              : "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)";
+              : "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)";
             return (
               <div key={s.etapa} style={{ display: "grid", gridTemplateColumns: "200px 1fr 80px 110px", gap: 10, alignItems: "center", fontSize: 12 }}>
                 <div style={{ color: "#0f172a", fontWeight: 600 }}>{s.etapa}</div>
@@ -8708,13 +8709,13 @@ function Cobertura() {
         <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 14, paddingTop: 10, display: "flex", justifyContent: "space-between", fontSize: 11, color: "#475569" }}>
           {datosCob?.funnel ? (
             <>
-              <span>Mayor caída: {datosCob.funnelCaida ? <><strong style={{ color: "#c2410c" }}>{datosCob.funnelCaida.de} → {datosCob.funnelCaida.a}</strong> ({Math.round(100 - datosCob.funnelCaida.conv)}% queda fuera)</> : "—"}</span>
-              <span>Cuello de botella: {datosCob.funnelCuello ? <><strong style={{ color: "#c2410c" }}>{datosCob.funnelCuello.de} → {datosCob.funnelCuello.a}</strong> ({Math.round(datosCob.funnelCuello.conv)}% conversión, {Math.round(datosCob.funnelCuello.extra)} días extra)</> : "—"}</span>
+              <span>Mayor caída: {datosCob.funnelCaida ? <><strong style={{ color: "#367f1f" }}>{datosCob.funnelCaida.de} → {datosCob.funnelCaida.a}</strong> ({Math.round(100 - datosCob.funnelCaida.conv)}% queda fuera)</> : "—"}</span>
+              <span>Cuello de botella: {datosCob.funnelCuello ? <><strong style={{ color: "#367f1f" }}>{datosCob.funnelCuello.de} → {datosCob.funnelCuello.a}</strong> ({Math.round(datosCob.funnelCuello.conv)}% conversión, {Math.round(datosCob.funnelCuello.extra)} días extra)</> : "—"}</span>
             </>
           ) : (
             <>
-              <span>Mayor caída: <strong style={{ color: "#c2410c" }}>Sourcing → Filtro CV</strong> (50% queda fuera)</span>
-              <span>Cuello de botella: <strong style={{ color: "#c2410c" }}>Entrevista RH → Gerente</strong> (44% conversión, 5 días extra)</span>
+              <span>Mayor caída: <strong style={{ color: "#367f1f" }}>Sourcing → Filtro CV</strong> (50% queda fuera)</span>
+              <span>Cuello de botella: <strong style={{ color: "#367f1f" }}>Entrevista RH → Gerente</strong> (44% conversión, 5 días extra)</span>
             </>
           )}
         </div>
@@ -8731,13 +8732,13 @@ function Cobertura() {
               <div key={a.area} style={{ display: "grid", gridTemplateColumns: "130px 1fr 110px 90px", gap: 10, alignItems: "center", fontSize: 12 }}>
                 <div style={{ color: "#0f172a", fontWeight: 600 }}>{a.area}</div>
                 <div style={{ position: "relative", height: 18, background: "#f1f5f9", borderRadius: 3, overflow: "hidden" }}>
-                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(a.recibidas / maxPorArea) * 100}%`, background: "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)", borderRadius: 3 }} />
+                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(a.recibidas / maxPorArea) * 100}%`, background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 3 }} />
                   <div style={{ position: "absolute", left: 0, top: 2, bottom: 2, width: `${(a.cerradas / maxPorArea) * 100}%`, background: "linear-gradient(90deg, #64748b 0%, #475569 100%)", borderRadius: 3 }} />
                 </div>
                 <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#0f172a", fontWeight: 600 }}>
                   {a.cerradas}/{a.recibidas} ({pendientes} pend.)
                 </div>
-                <div style={{ textAlign: "right", fontSize: 11, color: a.dias > 45 ? "#c2410c" : "#475569", fontVariantNumeric: "tabular-nums" }}>
+                <div style={{ textAlign: "right", fontSize: 11, color: a.dias > 45 ? "#367f1f" : "#475569", fontVariantNumeric: "tabular-nums" }}>
                   {a.dias} días prom.
                 </div>
               </div>
@@ -8798,9 +8799,9 @@ function Cobertura() {
         const slaPct = Math.min(100, (v.abierta / sla) * 100);
         const slaColor = v.abierta > 60 ? "#b00020" : v.abierta > 30 ? "#d97706" : "#0a7d2c";
         const gradAvance = pctAvance >= 100
-          ? "linear-gradient(90deg, #71b248 0%, #5a9438 100%)"
+          ? "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)"
           : pctAvance >= 60
-          ? "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)"
+          ? "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)"
           : "linear-gradient(90deg, #64748b 0%, #475569 100%)";
         return (
           <div
@@ -8880,7 +8881,7 @@ function Cobertura() {
                       <div style={{ fontSize: 14, fontWeight: 700, marginTop: 2 }}>${v.bandaMin.toLocaleString("es-MX")}</div>
                     </div>
                     <div style={{ flex: 1, position: "relative", height: 8, background: "#f1f5f9", borderRadius: 4, overflow: "hidden" }}>
-                      <div style={{ position: "absolute", left: "33%", top: 0, bottom: 0, width: "34%", background: "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)", borderRadius: 4 }} />
+                      <div style={{ position: "absolute", left: "33%", top: 0, bottom: 0, width: "34%", background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 4 }} />
                     </div>
                     <div>
                       <div style={{ fontSize: 10, color: "#666", textTransform: "uppercase", letterSpacing: 0.4, fontWeight: 700 }}>Máx</div>
@@ -8949,13 +8950,13 @@ function Cobertura() {
                     <div key={idx} style={{
                       display: "flex", alignItems: "center", gap: 10,
                       padding: "8px 12px",
-                      background: isDone ? "#f6fbf6" : isCurrent ? "#fff7ed" : "#fafafa",
-                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#fed7aa" : "#e5e5e5"}`,
+                      background: isDone ? "#f6fbf6" : isCurrent ? "#f1f8ec" : "#fafafa",
+                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#cfe7c0" : "#e5e5e5"}`,
                       borderRadius: 4,
                     }}>
                       <div style={{
                         width: 20, height: 20, borderRadius: "50%",
-                        background: isDone ? "#0a7d2c" : isCurrent ? "#c2410c" : "#cbd5e1",
+                        background: isDone ? "#0a7d2c" : isCurrent ? "#367f1f" : "#cbd5e1",
                         color: "#fff",
                         fontSize: 11, fontWeight: 700,
                         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
@@ -8963,7 +8964,7 @@ function Cobertura() {
                         {isDone && !isCurrent ? "✓" : idx + 1}
                       </div>
                       <span style={{ fontSize: 13, fontWeight: isCurrent ? 700 : 500, color: "#0f172a", flex: 1 }}>{etapa}</span>
-                      {isCurrent && <span style={{ fontSize: 10, color: "#c2410c", fontWeight: 700, padding: "1px 6px", background: "#ffedd5", borderRadius: 10 }}>EN CURSO</span>}
+                      {isCurrent && <span style={{ fontSize: 10, color: "#367f1f", fontWeight: 700, padding: "1px 6px", background: "#e2f2d8", borderRadius: 10 }}>EN CURSO</span>}
                     </div>
                   );
                 })}
@@ -9360,7 +9361,7 @@ async function descargarPlantillaRotacion(carga, bajasEjemplo) {
   };
 
   const instrucciones = [
-    ["Plantilla de Altas y Bajas · Costo de rotación"],
+    ["Profit120 · Plantilla de Altas y Bajas · Costo de rotación"],
     [],
     ["Cómo llenarla"],
     ["1. Hoja \"Bajas\": una fila por colaborador que salió. Las columnas con * son obligatorias."],
@@ -9897,8 +9898,8 @@ function Rotacion() {
                 onDrop={(e) => { e.preventDefault(); setRotDrag(false); procesarArchivoRot(e.dataTransfer.files?.[0]); }}
                 onClick={() => rotInputRef.current?.click()}
                 style={{
-                  border: `2px dashed ${rotDrag ? "#c2410c" : "#cbd5e1"}`,
-                  background: rotDrag ? "#fff7ed" : "#f8fafc",
+                  border: `2px dashed ${rotDrag ? "#367f1f" : "#cbd5e1"}`,
+                  background: rotDrag ? "#f1f8ec" : "#f8fafc",
                   borderRadius: 10,
                   padding: "32px 16px",
                   textAlign: "center",
@@ -9906,7 +9907,7 @@ function Rotacion() {
                   transition: "all 0.15s",
                 }}
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={rotDrag ? "#c2410c" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={rotDrag ? "#367f1f" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
                 <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
                   {rotLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
                 </div>
@@ -10031,7 +10032,7 @@ function Rotacion() {
       </div>
 
       {datosRot && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#7c2d12" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#f1f8ec", border: "1px solid #cfe7c0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#2b5f18" }}>
           <span>
             Datos cargados desde Excel · <strong>{cargaRot.archivo}</strong> · {datosRot.totalBajas} bajas · {datosRot.altasTotal} altas · {datosRot.rango} · {cargaRot.fecha}
             {datosRot.estimadas > 0 && <> · {datosRot.estimadas} finiquito(s) estimado(s) con LFT</>}
@@ -12248,11 +12249,11 @@ function Seleccion({ onAbrirGuia }) {
     pctAvance: Math.round(((c.etapaActualIdx + 1) / etapas.length) * 100),
   }));
 
-  // Colores del branding (de las gráficas de Cobertura/Variaciones)
-  const colorNaranja = "linear-gradient(90deg, #ea580c 0%, #c2410c 100%)";
-  const colorGris = "linear-gradient(90deg, #64748b 0%, #475569 100%)";
-  const colorVerde = "linear-gradient(90deg, #71b248 0%, #5a9438 100%)";
-  const gradPorAvance = (pct) => pct >= 100 ? colorVerde : pct >= 60 ? colorNaranja : colorGris;
+  // Colores del branding Profit120
+  const colorAvance = "linear-gradient(90deg, #3f3f46 0%, #18181b 100%)";
+  const colorGris = "linear-gradient(90deg, #94a3b8 0%, #64748b 100%)";
+  const colorVerde = "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)";
+  const gradPorAvance = (pct) => pct >= 100 ? colorVerde : pct >= 60 ? colorAvance : colorGris;
 
   return (
     <div>
@@ -12264,7 +12265,7 @@ function Seleccion({ onAbrirGuia }) {
           onClick={onAbrirGuia}
           style={{
             ...S.btn,
-            background: "linear-gradient(135deg, #71b248 0%, #5a9438 100%)",
+            background: "linear-gradient(135deg, #6dbe45 0%, #367f1f 100%)",
             border: "none",
             color: "#fff",
             padding: "10px 18px",
@@ -12392,7 +12393,7 @@ function Seleccion({ onAbrirGuia }) {
                     {c.pctAvance >= 100
                       ? <span style={S.badge("#dcfce7")}>Onboarding</span>
                       : c.pctAvance >= 60
-                      ? <span style={S.badge("#ffedd5")}>Etapa final</span>
+                      ? <span style={S.badge("#e2f2d8")}>Etapa final</span>
                       : <span style={S.badge("#f1f5f9")}>En proceso</span>}
                   </div>
                   <div style={{ fontSize: 13, color: "#475569" }}>
@@ -12490,13 +12491,13 @@ function Seleccion({ onAbrirGuia }) {
                     <div key={step.idx} style={{
                       display: "flex", alignItems: "flex-start", gap: 10,
                       padding: "10px 12px",
-                      background: isDone ? "#f6fbf6" : isCurrent ? "#fff7ed" : "#fafafa",
-                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#fed7aa" : "#e5e5e5"}`,
+                      background: isDone ? "#f6fbf6" : isCurrent ? "#f1f8ec" : "#fafafa",
+                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#cfe7c0" : "#e5e5e5"}`,
                       borderRadius: 4,
                     }}>
                       <div style={{
                         width: 22, height: 22, borderRadius: "50%",
-                        background: isDone ? "#0a7d2c" : isCurrent ? "#c2410c" : "#cbd5e1",
+                        background: isDone ? "#0a7d2c" : isCurrent ? "#367f1f" : "#cbd5e1",
                         color: "#fff",
                         fontSize: 12, fontWeight: 700,
                         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
@@ -12506,7 +12507,7 @@ function Seleccion({ onAbrirGuia }) {
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <span style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{step.label}</span>
-                          {isCurrent && <span style={{ fontSize: 10, color: "#c2410c", fontWeight: 700, padding: "1px 6px", background: "#ffedd5", borderRadius: 10 }}>EN CURSO</span>}
+                          {isCurrent && <span style={{ fontSize: 10, color: "#367f1f", fontWeight: 700, padding: "1px 6px", background: "#e2f2d8", borderRadius: 10 }}>EN CURSO</span>}
                           {step.fecha && <span style={{ fontSize: 11, color: "#666" }}>· {step.fecha}</span>}
                           {step.responsable && <span style={{ fontSize: 11, color: "#666" }}>· {step.responsable}</span>}
                         </div>
@@ -12608,7 +12609,7 @@ const IconLock = ({ size = 11, color = "currentColor" }) => (
 // =============================================================
 // Casillas ordenadas por posición visual: índice 0..8, de arriba-izquierda
 // (potencial alto / desempeño bajo) a abajo-derecha (potencial bajo / desempeño alto).
-// Paleta homologada al branding cálido (naranjas / terracotas) con capas de
+// Paleta homologada al branding Profit120 (verdes / grafito) con capas de
 // transparencia y textura mediante gradientes radiales.
 const hexA = (hex, a) => {
   const h = hex.replace("#", "");
@@ -13247,7 +13248,7 @@ function Catalogos() {
 
   const moduloColor = {
     "Dashboard General": "#0f172a",
-    "1. Variaciones de Nómina": "#c2410c",
+    "1. Variaciones de Nómina": "#367f1f",
     "2. Rotación": "#b58900",
     "3. Cobertura de Plantilla": "#1d4ed8",
     "5. Clima Laboral": "#0a7d2c",
@@ -13323,7 +13324,7 @@ function Catalogos() {
                       <span style={S.badge("#f1f5f9")}>{b.tipo}</span>
                     </td>
                     <td style={S.td}>
-                      <div style={{ display: "inline-flex", alignItems: "center", gap: 2, flexWrap: "wrap", padding: "4px 8px", background: enEdicion ? "#fff7ed" : "#f8fafc", border: enEdicion ? "1px solid #fed7aa" : "1px solid transparent", borderRadius: 4, fontFamily: "ui-monospace, monospace", fontSize: 12, color: "#0f172a", lineHeight: 1.8 }}>
+                      <div style={{ display: "inline-flex", alignItems: "center", gap: 2, flexWrap: "wrap", padding: "4px 8px", background: enEdicion ? "#f1f8ec" : "#f8fafc", border: enEdicion ? "1px solid #cfe7c0" : "1px solid transparent", borderRadius: 4, fontFamily: "ui-monospace, monospace", fontSize: 12, color: "#0f172a", lineHeight: 1.8 }}>
                         {partesActuales.map((p, i) => p.tipo === "texto" ? (
                           <span key={i} style={{ whiteSpace: "pre" }}>{p.valor}</span>
                         ) : enEdicion ? (
@@ -13340,19 +13341,19 @@ function Catalogos() {
                             autoFocus={i === partesActuales.findIndex((pp) => pp.tipo === "numero")}
                             style={{
                               width: `${Math.max(String(p.valor).length + 1, 3)}ch`,
-                              padding: "1px 4px", border: "1.5px solid #c2410c",
+                              padding: "1px 4px", border: "1.5px solid #367f1f",
                               borderRadius: 3, fontSize: 12, fontFamily: "ui-monospace, monospace",
-                              fontWeight: 700, color: "#c2410c", background: "#fff",
+                              fontWeight: 700, color: "#367f1f", background: "#fff",
                               outline: "none", textAlign: "center",
                             }}
                           />
                         ) : (
-                          <span key={i} style={{ fontWeight: 700, color: "#c2410c" }}>{Number.isInteger(p.valor) ? p.valor.toLocaleString("es-MX") : p.valor}</span>
+                          <span key={i} style={{ fontWeight: 700, color: "#367f1f" }}>{Number.isInteger(p.valor) ? p.valor.toLocaleString("es-MX") : p.valor}</span>
                         ))}
                       </div>
                       {enEdicion && (
                         <div style={{ fontSize: 10, color: "#666", marginTop: 4, fontStyle: "italic" }}>
-                          Solo los números en naranja son editables. El texto y las unidades son fijos.
+                          Solo los números en verde son editables. El texto y las unidades son fijos.
                         </div>
                       )}
                     </td>
@@ -13488,37 +13489,18 @@ export default function SaaSRRHH() {
       {/* Topbar */}
       <div style={S.topbar} className="no-print">
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{
-            width: 38, height: 38, borderRadius: 9,
-            background: "linear-gradient(135deg, #ea580c 0%, #c2410c 100%)",
-            color: "#fff", fontWeight: 800, fontSize: 16,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            letterSpacing: "-0.04em",
-            boxShadow: "0 2px 8px rgba(194, 65, 12, 0.25)",
-          }}>
-            RH
-          </div>
+          <img src={logoProfit120} alt="Profit120" style={{ height: 30, width: "auto", display: "block" }} />
+          <div style={{ width: 1, height: 34, background: COLOR.border }} />
           <div>
-            <div style={{ ...S.title, textTransform: "none" }}>Bienvenida María</div>
-            <div style={S.subtitle}>Suite integral para Dirección y Gerencia de Recursos Humanos</div>
+            <div style={S.subtitle}>Rentabilidad de Recursos Humanos</div>
           </div>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
-          <button style={S.btnGhost}>Empresa: Demo S.A.</button>
-          <select
-            style={S.btnGhost}
-            value={periodo}
-            onChange={(e) => setPeriodo(e.target.value)}
-          >
-            {PERIODOS.map((p) => (
-              <option key={p} value={p}>Periodo: {p}</option>
-            ))}
-          </select>
           <button
             style={S.btn}
             onClick={() => {
               const tabActual = TABS.find((t) => t.id === tab)?.label || (tab === "catalogos" ? "Catálogos maestros" : "Vista");
-              document.title = `${tabActual} · ${periodo} · Tablero RRHH`;
+              document.title = `${tabActual} · ${periodo} · Profit120`;
               setTimeout(() => window.print(), 50);
             }}
             title="Imprimir / Exportar a PDF la pestaña actual"
@@ -13542,7 +13524,7 @@ export default function SaaSRRHH() {
             />
             {resultadosBusqueda && (
               <div style={{ fontSize: 10, color: "#64748b", marginTop: 4, fontWeight: 600, letterSpacing: 0.3 }}>
-                {resultadosBusqueda.length} resultado{resultadosBusqueda.length !== 1 ? "s" : ""} para "<span style={{ color: "#c2410c" }}>{filter}</span>"
+                {resultadosBusqueda.length} resultado{resultadosBusqueda.length !== 1 ? "s" : ""} para "<span style={{ color: "#367f1f" }}>{filter}</span>"
               </div>
             )}
           </div>
@@ -13577,7 +13559,7 @@ export default function SaaSRRHH() {
                       {t.matchedConcepts.length > 0 && (
                         <div style={{ marginTop: 3, display: "flex", flexWrap: "wrap", gap: 3 }}>
                           {t.matchedConcepts.slice(0, 3).map((c, i) => (
-                            <span key={i} style={{ fontSize: 9, padding: "1px 5px", background: "#fff7ed", color: "#c2410c", borderRadius: 3, fontWeight: 700, letterSpacing: 0.2 }}>{c}</span>
+                            <span key={i} style={{ fontSize: 9, padding: "1px 5px", background: "#f1f8ec", color: "#367f1f", borderRadius: 3, fontWeight: 700, letterSpacing: 0.2 }}>{c}</span>
                           ))}
                           {t.matchedConcepts.length > 3 && (
                             <span style={{ fontSize: 9, color: "#94a3b8" }}>+{t.matchedConcepts.length - 3}</span>
@@ -13646,7 +13628,7 @@ export default function SaaSRRHH() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
               <div style={{
                 width: 36, height: 36, borderRadius: "50%",
-                background: "linear-gradient(135deg, #ea580c 0%, #c2410c 100%)",
+                background: "linear-gradient(135deg, #6dbe45 0%, #367f1f 100%)",
                 color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <IconLock size={16} color="#fff" />
