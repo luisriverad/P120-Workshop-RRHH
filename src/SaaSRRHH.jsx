@@ -170,13 +170,11 @@ function ChartCopy({ children, label = "Gráfica" }) {
 
 const TABS = [
   { id: "nomina", label: "Variaciones de Nómina", num: "1" },
-  { id: "clima", label: "Clima Laboral", num: "2" },
-  { id: "denuncia", label: "Línea de Denuncia", num: "3" },
-  { id: "cobertura", label: "Cobertura de Plantilla", num: "4" },
-  { id: "seleccion", label: "Proceso de Selección", num: "5" },
-  { id: "rotacion", label: "Rotación", num: "6" },
-  { id: "capacitacion", label: "Capacitación", num: "7" },
-  { id: "desempeno", label: "Desempeño", num: "8" },
+  { id: "rotacion", label: "Rotación", num: "2" },
+  { id: "cobertura", label: "Cobertura de Plantilla", num: "3" },
+  { id: "desempeno", label: "Desempeño", num: "4" },
+  { id: "clima", label: "Clima Laboral", num: "5" },
+  { id: "capacitacion", label: "Capacitación", num: "6" },
 ];
 
 // ---------- estilos base — paleta cálida profesional, branding naranja de Cobertura ----------
@@ -931,6 +929,2681 @@ function SectionHead({ kicker, title, right }) {
 // =============================================================
 // 1. VARIACIONES AL COSTO DE NÓMINA POR COMPENSACIONES
 // =============================================================
+// =============================================================
+// AULA · El costo real de la compensación variable (módulo didáctico de Nómina)
+// =============================================================
+const AULA_RIESGOS = [
+  {
+    titulo: "Se vuelve derecho adquirido",
+    nivel: "Alto",
+    que: "Un bono que se paga igual, cada periodo y sin reglas escritas, deja de verse como \"premio\" y puede considerarse parte del salario. Quitarlo después se vuelve un conflicto.",
+    ejemplo: "Durante 18 meses se pagó un \"bono de fin de mes\" de $5,000 al equipo de Posventa. Al suspenderlo, el equipo lo reclama como parte de su sueldo.",
+    mitiga: "Reglas escritas por bono: métrica, meta, periodo, monto o fórmula y vigencia. Que se pague solo si se cumple la meta.",
+    base: "Art. 84 LFT (el salario incluye gratificaciones, primas, comisiones y cualquier pago por el trabajo).",
+  },
+  {
+    titulo: "Encarece la indemnización",
+    nivel: "Alto",
+    que: "Para indemnizar, la ley usa el salario integrado. Si la persona tiene variable, se toma el promedio de lo que ganó en los últimos 30 días trabajados.",
+    ejemplo: "Un asesor con base de $20,000 y $10,000 de comisión mensual se indemniza sobre $30,000, no sobre $20,000: 3 meses = $90,000 en lugar de $60,000.",
+    mitiga: "Provisionar el pasivo laboral con el salario integrado real, no con el base. Revisar la mezcla base/variable de puestos con alta rotación.",
+    base: "Arts. 48, 50 y 89 LFT.",
+  },
+  {
+    titulo: "Sube IMSS, INFONAVIT e impuesto estatal",
+    nivel: "Medio",
+    que: "Los pagos variables integran el Salario Base de Cotización. Cada peso variable paga cuotas patronales y además el impuesto sobre nómina del estado.",
+    ejemplo: "$100,000 de bonos en el mes generan cerca de $20,000 de cuotas y $3,000 de impuesto sobre nómina (con los supuestos del simulador).",
+    mitiga: "Presupuestar la variable siempre con su carga social. Comparar alternativas (por ejemplo, prestaciones que la ley excluye dentro de sus topes).",
+    base: "Arts. 27 y 30 LSS · leyes de hacienda estatales (2% a 4%).",
+  },
+  {
+    titulo: "Bola de nieve presupuestal",
+    nivel: "Medio",
+    que: "Lo variable se vuelve fijo en la práctica: nadie quiere ser quien lo quite. El costo crece cada año sin que se haya decidido aumentar la nómina.",
+    ejemplo: "Un exceso de $100,000 al mes sobre la política son $1.2M al año antes de cargas; con cargas, cerca de $1.5M.",
+    mitiga: "Límite de % variable por área y alerta cuando se rebasa (el semáforo de esta pantalla). Revisión trimestral de cada esquema.",
+    base: "Política interna de compensación.",
+  },
+  {
+    titulo: "Inequidad y daño al clima",
+    nivel: "Medio",
+    que: "Si dos personas con el mismo puesto y desempeño ganan distinto por bonos discrecionales, se percibe injusticia y puede haber reclamos.",
+    ejemplo: "Dos supervisores de turno con los mismos resultados: uno recibe bono mensual y el otro no. El segundo renuncia y menciona la desigualdad en su entrevista de salida.",
+    mitiga: "Criterios iguales para puestos iguales y bonos ligados a resultados medibles, no a la relación con el jefe.",
+    base: "Art. 86 LFT (a trabajo igual, salario igual).",
+  },
+  {
+    titulo: "Discrecionalidad y fraude",
+    nivel: "Alto",
+    que: "Bonos sin autorizador ni evidencia abren la puerta a favoritismos, pagos duplicados o a personas que no cumplieron la meta.",
+    ejemplo: "Un gerente autoriza su propio bono \"por proyecto especial\" sin documento de soporte. En auditoría nadie puede justificarlo.",
+    mitiga: "Flujo de autorización con dos niveles y evidencia (el tablero de Autorización de Bonos de abajo). Nadie aprueba su propio pago.",
+    base: "Control interno · Art. 27 fr. V LISR (deducible solo con CFDI de nómina y retención).",
+  },
+  {
+    titulo: "Incentivo mal diseñado",
+    nivel: "Medio",
+    que: "Lo que se mide es lo que se hace. Una comisión sobre volumen premia vender, aunque sea con descuento o a clientes que no pagan.",
+    ejemplo: "La comisión se paga sobre ventas facturadas. El equipo cierra el trimestre con descuentos agresivos: sube la venta y baja el margen.",
+    mitiga: "Pagar sobre margen o cobranza, con topes y con métricas de calidad (devoluciones, cartera vencida).",
+    base: "Diseño del esquema de compensación.",
+  },
+];
+
+const AULA_QUIZ = [
+  {
+    p: "Pagas un bono de $30,000. ¿Cuánto le cuesta realmente a la empresa?",
+    o: ["$30,000: es lo que dice el recibo", "$60,000: se duplica por impuestos", "Cerca de $36,900: se suman cuotas e impuesto sobre nómina"],
+    c: 2,
+    e: "Al bono se le suman cuotas patronales (IMSS, retiro, INFONAVIT, cerca de 20%) y el impuesto estatal sobre nómina (cerca de 3%). $30,000 × 1.23 ≈ $36,900. Si se vuelve recurrente, además sube el costo de una futura indemnización.",
+  },
+  {
+    p: "Un asesor gana $20,000 de base y lleva 2 años recibiendo $10,000 de comisión cada mes. Si se le despide sin causa, ¿sobre qué salario se calcula su indemnización?",
+    o: ["Solo sobre los $20,000 de base", "Sobre $30,000: base más el promedio de lo variable", "No le corresponde indemnización por ser comisionista"],
+    c: 1,
+    e: "Para indemnizar se usa el salario integrado. Si hay variable, se toma el promedio de los últimos 30 días trabajados (Art. 89 LFT). 3 meses de indemnización = $90,000, no $60,000.",
+  },
+  {
+    p: "Comercial tiene 37.5% de variable y su límite es 35%. ¿Qué significa?",
+    o: ["Que de cada $100 de nómina del área, $37.50 son variables: 2.5 puntos arriba de lo que permite la política", "Que la nómina de Comercial subió 2.5% este mes", "Que los vendedores ganan 37.5% más que el resto"],
+    c: 0,
+    e: "El % variable compara lo variable contra el total de la nómina del área. Estar arriba del límite significa que el área depende más de pagos variables de lo que la empresa decidió aceptar.",
+  },
+  {
+    p: "Hay un bono \"discrecional\" que se paga cada mes por el mismo monto. ¿Cuál es la mejor forma de proteger a la empresa?",
+    o: ["Seguir pagándolo igual, sin documentos, para no generar ruido", "Escribir sus reglas: métrica, meta, periodo, monto, autorizador y evidencia", "Pagarlo en efectivo para que no aparezca en nómina"],
+    c: 1,
+    e: "Con reglas escritas el bono es un premio por resultados, no un pago fijo disfrazado. Pagarlo fuera de nómina es un riesgo fiscal y laboral mucho mayor: no es deducible y no deja de ser salario.",
+  },
+  {
+    p: "Dos personas con el mismo puesto y desempeño: una recibe bono cada mes y la otra no. ¿Cuál es el riesgo principal?",
+    o: ["Ninguno, el bono es decisión del jefe", "Que la empresa pague más ISR", "Reclamo por desigualdad salarial y daño al clima del equipo"],
+    c: 2,
+    e: "A trabajo igual corresponde salario igual (Art. 86 LFT). Además, la percepción de injusticia es una de las causas más comunes de renuncia voluntaria.",
+  },
+  {
+    p: "¿Para qué sirve comparar contra la media móvil (MA) en esta pantalla?",
+    o: ["Para ver si el mes se sale de la tendencia reciente y detectar picos a tiempo", "Para calcular el ISR del mes", "Para fijar el sueldo base de cada puesto"],
+    c: 0,
+    e: "La media móvil es el promedio de los meses recientes. Si un mes se aleja más de lo esperado (por ejemplo ±2% en la base o ±3% en lo variable), hay que preguntar por qué antes de pagar.",
+  },
+];
+
+// Mide el ancho real de un contenedor para dibujar las gráficas SVG a escala 1:1
+// (así el texto conserva su tamaño en px en cualquier pantalla).
+function useAnchoSvg(inicial = 640) {
+  const [ancho, setAncho] = useState(inicial);
+  const obs = useRef(null);
+  const ref = useCallback((el) => {
+    if (obs.current) { obs.current.disconnect(); obs.current = null; }
+    if (!el) return;
+    const medir = (w) => { const n = Math.round(w); if (n > 0) setAncho((prev) => (Math.abs(prev - n) > 2 ? n : prev)); };
+    medir(el.getBoundingClientRect().width);
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(([e]) => medir(e.contentRect.width));
+      ro.observe(el);
+      obs.current = ro;
+    }
+  }, []);
+  return [ref, ancho];
+}
+
+// ---------- Piezas reutilizables de las Aulas (módulos didácticos) ----------
+function AulaShell({ titulo, pasos, paso, setPaso, children }) {
+  const ac = COLOR.accent;
+  return (
+    <>
+      <h3 style={S.h3}>{titulo}</h3>
+      <div style={{ ...S.card, padding: 0, overflow: "hidden" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", borderBottom: "1px solid " + COLOR.border, background: `linear-gradient(135deg, ${hexA(COLOR.accentLight, 0.08)} 0%, ${hexA(COLOR.accent, 0.02)} 100%)` }}>
+          {pasos.map((p, i) => {
+            const activo = paso === i;
+            return (
+              <button
+                key={p}
+                onClick={() => setPaso(i)}
+                style={{ padding: "12px 16px", border: "none", borderBottom: `3px solid ${activo ? ac : "transparent"}`, background: activo ? "#fff" : "transparent", fontFamily: FONT_STACK, fontSize: 12.5, fontWeight: activo ? 700 : 500, color: activo ? COLOR.ink : COLOR.textSoft, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}
+              >
+                <span style={{ width: 20, height: 20, borderRadius: 999, background: activo ? ac : "#e2e8f0", color: activo ? "#fff" : COLOR.textMuted, fontSize: 11, fontWeight: 700, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
+                {p}
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ padding: 20 }}>
+          {children}
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 18, paddingTop: 14, borderTop: "1px solid " + COLOR.borderSoft }}>
+            <button style={{ ...S.btnGhost, visibility: paso > 0 ? "visible" : "hidden" }} onClick={() => setPaso(paso - 1)}>← {pasos[paso - 1] || ""}</button>
+            {paso < pasos.length - 1 && <button style={S.btn} onClick={() => setPaso(paso + 1)}>Siguiente: {pasos[paso + 1]} →</button>}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function AulaConcepto({ n, titulo, children, formula, ejemploTxt }) {
+  const ac = COLOR.accent;
+  return (
+    <div style={{ border: "1px solid " + COLOR.border, background: "#fff", padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ width: 24, height: 24, borderRadius: 6, background: `linear-gradient(135deg, ${COLOR.accentLight} 0%, ${ac} 100%)`, color: "#fff", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{n}</span>
+        <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink }}>{titulo}</div>
+      </div>
+      <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55 }}>{children}</div>
+      {formula && <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12, background: COLOR.surfaceSoft, border: "1px dashed " + COLOR.border, padding: "8px 10px", color: COLOR.ink }}>{formula}</div>}
+      {ejemploTxt && <div style={{ fontSize: 12, color: COLOR.textSoft, background: COLOR.accentSoft, borderLeft: `3px solid ${ac}`, padding: "8px 10px", lineHeight: 1.5 }}>{ejemploTxt}</div>}
+    </div>
+  );
+}
+
+// Tarjetas de riesgo: [{ titulo, nivel: "Alto" | "Medio", que, ejemplo, mitiga, base }]
+function AulaRiesgos({ riesgos, intro }) {
+  const [abierto, setAbierto] = useState(null);
+  const ac = COLOR.accent;
+  return (
+    <div>
+      <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+        {intro || "Haz clic en una tarjeta para ver un ejemplo y cómo se controla."}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12 }}>
+        {riesgos.map((r, i) => {
+          const esAbierto = abierto === i;
+          const alto = r.nivel === "Alto";
+          return (
+            <div
+              key={r.titulo}
+              onClick={() => setAbierto(esAbierto ? null : i)}
+              style={{ border: `1px solid ${esAbierto ? ac : COLOR.border}`, background: "#fff", padding: 14, cursor: "pointer", boxShadow: esAbierto ? COLOR.shadowHover : COLOR.shadow, transition: "all 0.15s ease" }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 700, color: COLOR.ink }}>{i + 1}. {r.titulo}</div>
+                <span style={{ ...S.badge(alto ? "#fdecea" : "#fff7e0"), whiteSpace: "nowrap" }}>Riesgo {r.nivel.toLowerCase()}</span>
+              </div>
+              <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginTop: 8 }}>{r.que}</div>
+              {esAbierto ? (
+                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ fontSize: 12, background: COLOR.surfaceSoft, borderLeft: "3px solid #94a3b8", padding: "8px 10px", lineHeight: 1.5 }}><strong>Ejemplo:</strong> {r.ejemplo}</div>
+                  <div style={{ fontSize: 12, background: "#f0fdf4", borderLeft: "3px solid #0a7d2c", padding: "8px 10px", lineHeight: 1.5 }}><strong>Cómo se controla:</strong> {r.mitiga}</div>
+                  {r.base && <div style={{ fontSize: 11, color: COLOR.textMuted }}>Fundamento: {r.base}</div>}
+                </div>
+              ) : (
+                <div style={{ fontSize: 11, color: ac, fontWeight: 600, marginTop: 8 }}>Ver ejemplo y cómo se controla →</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// Quiz: [{ p: pregunta, o: [opciones], c: índice correcto, e: explicación }]
+function AulaQuiz({ preguntas, repaso }) {
+  const [respuestas, setRespuestas] = useState({});
+  const ac = COLOR.accent;
+  const contestadas = Object.keys(respuestas).length;
+  const aciertos = preguntas.filter((q, i) => respuestas[i] === q.c).length;
+  const total = preguntas.length;
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+        <div style={{ fontSize: 12.5, color: COLOR.text }}>Contesten en equipo y discutan la explicación de cada respuesta.</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: COLOR.ink }}>{aciertos} de {total} correctas · {contestadas} contestadas</span>
+          {contestadas > 0 && <button style={{ ...S.btnGhost, padding: "5px 10px" }} onClick={() => setRespuestas({})}>Reiniciar</button>}
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {preguntas.map((q, i) => {
+          const r = respuestas[i];
+          const listo = r !== undefined;
+          return (
+            <div key={i} style={{ border: "1px solid " + COLOR.border, background: "#fff", padding: 14 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: COLOR.ink, marginBottom: 10 }}>{i + 1}. {q.p}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {q.o.map((op, j) => {
+                  const esCorrecta = j === q.c;
+                  const elegida = r === j;
+                  let bg = "#fff", bc = COLOR.border, col = COLOR.text;
+                  if (listo && esCorrecta) { bg = "#f0fdf4"; bc = "#86efac"; col = "#14532d"; }
+                  else if (listo && elegida) { bg = "#fef2f2"; bc = "#fca5a5"; col = "#7f1d1d"; }
+                  return (
+                    <button
+                      key={j}
+                      disabled={listo}
+                      onClick={() => setRespuestas((prev) => ({ ...prev, [i]: j }))}
+                      style={{ textAlign: "left", padding: "9px 12px", border: `1px solid ${bc}`, background: bg, color: col, fontSize: 12.5, fontFamily: FONT_STACK, cursor: listo ? "default" : "pointer", borderRadius: 6, display: "flex", gap: 8 }}
+                    >
+                      <strong>{String.fromCharCode(65 + j)}.</strong>
+                      <span style={{ flex: 1 }}>{op}</span>
+                      {listo && esCorrecta && <strong>✓</strong>}
+                      {listo && elegida && !esCorrecta && <strong>✗</strong>}
+                    </button>
+                  );
+                })}
+              </div>
+              {listo && (
+                <div style={{ marginTop: 10, fontSize: 12, lineHeight: 1.55, background: COLOR.accentSoft, borderLeft: `3px solid ${ac}`, padding: "8px 10px", color: COLOR.inkSoft }}>
+                  <strong>{r === q.c ? "¡Correcto!" : "No exactamente."}</strong> {q.e}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {contestadas === total && (
+        <div style={{ ...S.alert(aciertos >= total - 1 ? "info" : "warn"), marginTop: 14, marginBottom: 0 }}>
+          <strong>Resultado: {aciertos} de {total}.</strong>{" "}
+          {aciertos === total ? "El equipo domina el tema." : aciertos >= total - 2 ? "Buen nivel. Repasen las preguntas que fallaron con la pestaña de riesgos." : (repaso || "Vale la pena repasar las pestañas anteriores antes de tomar la próxima decisión.")}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AulaVariaciones({ data = [] }) {
+  const [paso, setPaso] = useState(0);
+  const [svgRef, svgAncho] = useAnchoSvg();
+  // Simulador
+  const [monto, setMonto] = useState(30000);
+  const [recurrente, setRecurrente] = useState(true);
+  const [antig, setAntig] = useState(3);
+  const [carga, setCarga] = useState(20);
+  const [isn, setIsn] = useState(3);
+
+  const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+  const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
+  const factor = 1 + (carga + isn) / 100;
+  const ac = COLOR.accent;
+
+  const pasos = ["Lo básico", "El iceberg de un bono", "El exceso de este mes", "Riesgos que se asumen", "Pon a prueba al equipo"];
+
+  // ---------- datos reales del periodo ----------
+  const filas = data.map((r) => {
+    const variable = r.comisiones + r.bonos + r.destajos + r.otros;
+    const total = r.base + variable;
+    const L = (r.limite || 0) / 100;
+    const permitido = L < 1 ? (r.base * L) / (1 - L) : variable;
+    const exceso = Math.max(0, variable - permitido);
+    return { area: r.area, base: r.base, variable, total, pct: total ? (variable / total) * 100 : 0, limite: r.limite, permitido, exceso, anual: exceso * 12 * factor };
+  });
+  const ejemplo = [...filas].sort((a, b) => b.total - a.total)[0];
+  const totalExceso = filas.reduce((s, f) => s + f.exceso, 0);
+  const totalAnual = filas.reduce((s, f) => s + f.anual, 0);
+  const peor = [...filas].sort((a, b) => b.anual - a.anual)[0];
+  const sueldoRef = 25000;
+  const costoPlaza = sueldoRef * 12 * factor;
+
+  // ---------- Paso 0: lo básico ----------
+  const pasoBasico = () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+      <AulaConcepto n="1" titulo="Base vs. variable"
+        formula="Variable = comisiones + bonos + destajos + otros"
+        ejemploTxt={ejemplo && <>En <strong>{ejemplo.area}</strong> este mes: base {fmt(ejemplo.base)} y variable {fmt(ejemplo.variable)}.</>}>
+        La <strong>base</strong> es el sueldo fijo: se paga pase lo que pase. La <strong>variable</strong> depende de resultados o decisiones del mes. La variable motiva, pero también es la parte que más se sale de control.
+      </AulaConcepto>
+      <AulaConcepto n="2" titulo="% variable"
+        formula="% variable = variable ÷ (base + variable)"
+        ejemploTxt={ejemplo && <>{fmt(ejemplo.variable)} ÷ {fmt(ejemplo.total)} = <strong>{ejemplo.pct.toFixed(1)}%</strong>. De cada $100 de nómina de {ejemplo.area}, ${ejemplo.pct.toFixed(2)} son variables.</>}>
+        Dice qué tanto depende la nómina de un área de pagos variables. Es el número que se compara contra el límite de la política.
+      </AulaConcepto>
+      <AulaConcepto n="3" titulo="Límite de política y exceso"
+        formula="Variable permitida = base × límite ÷ (1 − límite)"
+        ejemploTxt={ejemplo && <>Con límite de {ejemplo.limite}%, {ejemplo.area} podría pagar hasta {fmt(ejemplo.permitido)} de variable. Paga {fmt(ejemplo.variable)}: {ejemplo.exceso > 0 ? <>se pasa por <strong>{fmt(ejemplo.exceso)}</strong> al mes.</> : <>está dentro de la política.</>}</>}>
+        Cada área tiene un tope de % variable. Arriba de ese tope, la empresa está asumiendo más costo y más riesgo de lo que decidió. Al dinero que rebasa el tope le llamamos <strong>exceso</strong>.
+      </AulaConcepto>
+      <AulaConcepto n="4" titulo="Media móvil (MA)"
+        formula="MA = promedio de los meses recientes"
+        ejemploTxt="Si la base suele moverse ±2% y este mes sube 6%, algo pasó: altas, aumentos o un error de captura. Se revisa antes de pagar.">
+        Compara el mes contra su propia tendencia. No dice si un número es bueno o malo, dice si es <strong>raro</strong>. Los semáforos de arriba usan este criterio.
+      </AulaConcepto>
+      <AulaConcepto n="5" titulo="Salario integrado"
+        formula="Salario integrado = base + prestaciones + variable habitual"
+        ejemploTxt="Base $20,000 + comisión promedio $10,000 → para IMSS e indemnizaciones la persona gana cerca de $30,000, no $20,000.">
+        Es el salario que la ley usa para cuotas del IMSS e indemnizaciones. Incluye la variable que se paga de forma habitual. Por eso <strong>la variable de hoy es el pasivo laboral de mañana</strong>.
+      </AulaConcepto>
+      <AulaConcepto n="6" titulo="Costo integral"
+        formula={`Costo integral = pago × (1 + cargas ${carga}% + ISN ${isn}%) = pago × ${factor.toFixed(2)}`}
+        ejemploTxt={`Un bono de ${fmt(30000)} cuesta ${fmt(30000 * factor)}.`}>
+        Lo que la empresa paga de verdad: el pago al colaborador más las cuotas patronales y el impuesto sobre nómina. Puedes ajustar los porcentajes en "El iceberg de un bono".
+      </AulaConcepto>
+    </div>
+  );
+
+  // ---------- Paso 1: iceberg ----------
+  const pasoIceberg = () => {
+    const extraDiario = recurrente ? monto / 30 : 0;
+    const visible = monto;
+    const capas = [
+      { label: "IMSS, retiro e INFONAVIT", v: monto * carga / 100, nota: `cuotas patronales · ${carga}% del bono` },
+      { label: "Impuesto sobre nómina", v: monto * isn / 100, nota: `estatal · ${isn}% del bono` },
+    ];
+    if (recurrente) {
+      capas.push({ label: "Otros 11 meses del año", v: monto * factor * 11, nota: "si se paga cada mes, con cargas" });
+      capas.push({ label: "Indemnización (3 meses)", v: 90 * extraDiario, nota: "si se despide sin causa · Arts. 48 y 89 LFT" });
+      capas.push({ label: `20 días/año × ${antig} años`, v: 20 * antig * extraDiario, nota: "si además se niega la reinstalación · Art. 50 LFT" });
+    }
+    const oculto = capas.reduce((s, c) => s + c.v, 0);
+    const total = visible + oculto;
+
+    // SVG
+    const W = Math.max(660, Math.min(780, svgAncho)), H = 380, top = 14, bottom = H - 10;
+    const waterY = Math.max(78, Math.min(150, top + (bottom - top) * (visible / total) * 2.2));
+    const disp = bottom - waterY;
+    const minH = 30;
+    const libres = disp - minH * capas.length;
+    const alturas = capas.map((c) => minH + (oculto > 0 ? (c.v / oculto) * Math.max(0, libres) : 0));
+    let y = waterY;
+    const bandas = alturas.map((h, i) => { const b = { y, h, ...capas[i] }; y += h; return b; });
+    const below = `128,${waterY} 262,${waterY} 330,${waterY + disp * 0.3} 312,${bottom - disp * 0.25} 220,${bottom} 110,${bottom - disp * 0.12} 58,${waterY + disp * 0.42}`;
+    const azules = ["#bfdbfe", "#93c5fd", "#60a5fa", "#3b82f6", "#2563eb"];
+
+    const slider = (label, value, set, min, max, step, show) => (
+      <label style={{ display: "block", fontSize: 12, color: COLOR.textSoft, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <span>{label}</span><strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{show(value)}</strong>
+        </div>
+        <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: ac }} />
+      </label>
+    );
+    const tipoBtn = (activo) => ({ ...S.btnGhost, flex: 1, padding: "7px 10px", background: activo ? ac : "#fff", color: activo ? "#fff" : COLOR.textSoft, borderColor: activo ? ac : COLOR.border, fontWeight: 700 });
+
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
+        <div>
+          <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+            Un bono es como un iceberg: el recibo muestra solo la punta. Mueve los controles y mira lo que queda debajo del agua.
+          </div>
+          {slider("Monto del bono", monto, setMonto, 5000, 150000, 1000, fmt)}
+          <div style={{ fontSize: 12, color: COLOR.textSoft, marginBottom: 6 }}>¿Cómo se paga?</div>
+          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+            <button style={tipoBtn(!recurrente)} onClick={() => setRecurrente(false)}>Una sola vez</button>
+            <button style={tipoBtn(recurrente)} onClick={() => setRecurrente(true)}>Cada mes</button>
+          </div>
+          {recurrente && slider("Antigüedad del colaborador", antig, setAntig, 1, 20, 1, (v) => `${v} año${v > 1 ? "s" : ""}`)}
+          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
+            <div style={{ marginTop: 10 }}>
+              {slider("Cuotas patronales (IMSS, retiro, INFONAVIT)", carga, setCarga, 10, 35, 1, (v) => v + "%")}
+              {slider("Impuesto sobre nómina estatal", isn, setIsn, 0, 4, 0.5, (v) => v + "%")}
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>Valores de referencia. Las cuotas reales dependen del salario, la prima de riesgo de trabajo y el estado. Valídalos con tu área fiscal.</div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Lo que se ve</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(visible)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>el bono en el recibo</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Costo real de este pago</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#1d4ed8", fontVariantNumeric: "tabular-nums" }}>{fmt(monto * factor)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>${factor.toFixed(2)} por cada $1 del recibo</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+              <div style={S.kpiLabel}>Compromiso total</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(total)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>{recurrente ? "un año de pagos + pasivo si sale" : "un solo pago con cargas"}</div>
+            </div>
+          </div>
+
+          <div ref={svgRef} style={{ border: "1px solid " + COLOR.border, background: "#fff" }}>
+          <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", maxWidth: W, height: "auto", display: "block", margin: "0 auto" }} role="img" aria-label="Iceberg del costo de un bono">
+            <defs>
+              <linearGradient id="aulaAgua" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#dbeafe" />
+                <stop offset="100%" stopColor="#bfdbfe" />
+              </linearGradient>
+              <clipPath id="aulaBajo"><polygon points={below} /></clipPath>
+            </defs>
+            <rect x="0" y={waterY} width={W} height={H - waterY} fill="url(#aulaAgua)" opacity="0.55" />
+            <line x1="0" y1={waterY} x2={W} y2={waterY} stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="6 4" />
+            <text x={W - 10} y={waterY - 6} textAnchor="end" fontSize="11" fill="#1d4ed8" fontWeight="700" letterSpacing="1">NIVEL DEL AGUA</text>
+            {/* Punta */}
+            <polygon points={`196,${top} 232,${top + 26} 262,${waterY} 128,${waterY} 158,${top + 34}`} fill="#fff" stroke="#94a3b8" strokeWidth="1.5" />
+            <text x="195" y={waterY - 14} textAnchor="middle" fontSize="14" fontWeight="700" fill={COLOR.ink}>{fmt(visible)}</text>
+            <line x1="262" y1={(top + waterY) / 2 + 6} x2="380" y2={(top + waterY) / 2 + 6} stroke="#cbd5e1" />
+            <text x="388" y={(top + waterY) / 2 + 2} fontSize="13" fontWeight="700" fill={COLOR.ink}>El bono</text>
+            <text x="388" y={(top + waterY) / 2 + 17} fontSize="11.5" fill={COLOR.textMuted}>lo que todos ven</text>
+            {/* Bajo el agua */}
+            <g clipPath="url(#aulaBajo)">
+              {bandas.map((b, i) => <rect key={i} x="0" y={b.y} width={W} height={b.h} fill={azules[i % azules.length]} />)}
+            </g>
+            <polygon points={below} fill="none" stroke="#3b82f6" strokeWidth="1.5" />
+            {bandas.map((b, i) => (
+              <g key={i}>
+                {i > 0 && <line x1="40" y1={b.y} x2={W - 10} y2={b.y} stroke="#ffffff" strokeOpacity="0.9" strokeDasharray="3 3" />}
+                <line x1="300" y1={b.y + b.h / 2} x2="380" y2={b.y + b.h / 2} stroke="#93c5fd" />
+                <text x="388" y={b.y + b.h / 2 - 2} fontSize="13" fontWeight="700" fill={COLOR.ink}>{b.label} · {fmtM(b.v)}</text>
+                <text x="388" y={b.y + b.h / 2 + 12} fontSize="11.5" fill={COLOR.textSoft}>{b.nota}</text>
+              </g>
+            ))}
+          </svg>
+          </div>
+
+          <div style={{ ...S.alert(recurrente ? "warn" : "info"), marginTop: 12, marginBottom: 0 }}>
+            {recurrente ? (
+              <>Pagar <strong>{fmt(monto)}</strong> cada mes cuesta <strong>{fmtM(monto * factor * 12)}</strong> al año con cargas. Y como se vuelve parte del salario integrado, si esta persona sale con {antig} año{antig > 1 ? "s" : ""} de antigüedad su liquidación puede subir hasta <strong>{fmtM(90 * extraDiario + 20 * antig * extraDiario)}</strong>. Ese pasivo no aparece en el recibo de nómina.</>
+            ) : (
+              <>Un pago único cuesta <strong>{fmt(monto * factor)}</strong> con cargas. Es el escenario más sano, siempre que tenga reglas, autorizador y evidencia. El riesgo aparece cuando "una sola vez" se repite cada mes. Cambia a "Cada mes" para verlo.</>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ---------- Paso 2: exceso real ----------
+  const pasoExceso = () => {
+    const maxAnual = Math.max(1, ...filas.map((f) => f.anual));
+    return (
+      <div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+          Con los números de la tabla de arriba: ¿cuánto dinero se está pagando <strong>por encima</strong> de la política, y cuánto costaría si se mantiene un año? (Cargas de {carga}% + ISN de {isn}%).
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Exceso del mes</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(totalExceso)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>variable pagada arriba del límite</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={S.kpiLabel}>Si se repite 12 meses</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(totalAnual)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>costo integral con cargas</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Equivale a</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{(totalAnual / costoPlaza).toFixed(1)} plazas</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>de {fmt(sueldoRef)} al mes durante un año</div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {filas.map((f) => (
+            <div key={f.area} style={{ display: "grid", gridTemplateColumns: "130px 120px 1fr 110px", gap: 10, alignItems: "center", fontSize: 12 }}>
+              <div style={{ fontWeight: 700, color: COLOR.ink }}>{f.area}</div>
+              <div style={{ color: f.exceso > 0 ? "#b00020" : "#0a7d2c", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
+                {f.pct.toFixed(1)}% <span style={{ color: COLOR.textMuted, fontWeight: 500 }}>vs {f.limite}%</span>
+              </div>
+              <div style={{ position: "relative", height: 20, background: "#f1f5f9" }}>
+                <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(f.anual / maxAnual) * 100}%`, background: `linear-gradient(90deg, ${COLOR.accentLight} 0%, ${ac} 100%)`, transition: "width 0.3s ease" }} />
+                {f.exceso > 0 && (f.anual / maxAnual > 0.35
+                  ? <span style={{ position: "absolute", left: 8, top: 3, fontSize: 11, fontWeight: 700, color: "#fff" }}>{fmt(f.exceso)} / mes</span>
+                  : <span style={{ position: "absolute", left: `calc(${(f.anual / maxAnual) * 100}% + 8px)`, top: 3, fontSize: 11, fontWeight: 700, color: COLOR.ink, whiteSpace: "nowrap" }}>{fmt(f.exceso)} / mes</span>)}
+                {f.exceso === 0 && <span style={{ position: "absolute", left: 8, top: 3, fontSize: 11, color: "#0a7d2c", fontWeight: 600 }}>Dentro de la política</span>}
+              </div>
+              <div style={{ textAlign: "right", fontWeight: 700, fontVariantNumeric: "tabular-nums", color: f.anual > 0 ? ac : COLOR.textMuted }}>{f.anual > 0 ? fmtM(f.anual) + "/año" : "—"}</div>
+            </div>
+          ))}
+        </div>
+
+        {peor && peor.anual > 0 && (
+          <div style={{ ...S.alert("warn"), marginTop: 16, marginBottom: 0 }}>
+            <strong>Para discutir en equipo:</strong> si nada cambia, el exceso de <strong>{peor.area}</strong> costará <strong>{fmtM(peor.anual)}</strong> en 12 meses. Es lo mismo que pagar {(peor.anual / costoPlaza).toFixed(1)} sueldos de {fmt(sueldoRef)} durante un año. ¿Ese dinero está comprando más resultados? ¿Quién autorizó pasar el límite y con qué evidencia?
+          </div>
+        )}
+        <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 10 }}>
+          Exceso = variable pagada − variable permitida, donde variable permitida = base × límite ÷ (1 − límite). No incluye el aumento del pasivo laboral (ver "El iceberg de un bono").
+        </div>
+      </div>
+    );
+  };
+
+  const contenido = [pasoBasico, pasoIceberg, pasoExceso, () => <AulaRiesgos riesgos={AULA_RIESGOS} intro="Cada peso variable trae riesgos que no se ven en el recibo. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />, () => <AulaQuiz preguntas={AULA_QUIZ} repaso={"Vale la pena repasar \"El iceberg de un bono\" y \"Riesgos que se asumen\" antes de autorizar el próximo bono."} />][paso]();
+
+  return (
+    <AulaShell titulo="Aula · El costo real de la compensación variable" pasos={pasos} paso={paso} setPaso={setPaso}>
+      {contenido}
+    </AulaShell>
+  );
+}
+
+// =============================================================
+// AULA · El costo de la silla vacía (módulo didáctico de Cobertura)
+// Uso (dentro de Cobertura(), justo antes de `<h3 style={S.h3}>Solicitudes — mes a mes y acumulado</h3>`):
+//   <AulaCobertura vacantes={vacantes} porArea={porArea} funnel={funnel} plantAut={plantAut} plantCub={plantCub} pctCob={pctCob} totalRecibidas={totalRecibidas} totalCerradas={totalCerradas} />
+// =============================================================
+const AULA_COB_RIESGOS = [
+  {
+    titulo: "Sobrecarga y desgaste del equipo",
+    nivel: "Alto",
+    que: "El trabajo de la vacante no desaparece: lo absorben los compañeros. Semanas de cargas excesivas generan cansancio, errores y más renuncias.",
+    ejemplo: "Un taller con 2 mecánicos menos reparte sus órdenes entre los demás durante 3 meses. Al cuarto mes renuncia otro mecánico por agotamiento: ahora son 3 vacantes.",
+    mitiga: "Medir la carga real del equipo mientras la vacante siga abierta, poner fecha límite a la cobertura temporal y priorizar las vacantes que sostienen a otros.",
+    base: "NOM-035-STPS-2018 (las cargas de trabajo excesivas son un factor de riesgo psicosocial).",
+  },
+  {
+    titulo: "Horas extra sin control",
+    nivel: "Medio",
+    que: "Cubrir la vacante con tiempo extra cuesta el doble por hora y, si se pasa de los límites legales, el triple.",
+    ejemplo: "Para no frenar la línea, dos operadores hacen 12 horas extra por semana durante 2 meses. Las horas arriba de 9 por semana se pagan al triple.",
+    mitiga: "Autorizar el tiempo extra por escrito, con tope semanal, y comparar su costo contra el de acelerar la contratación.",
+    base: "Arts. 66, 67 y 68 LFT (tiempo extra doble; triple lo que exceda 9 horas a la semana).",
+  },
+  {
+    titulo: "Contratar rápido y mal",
+    nivel: "Alto",
+    que: "La presión por cerrar la vacante lleva a saltarse pruebas o referencias. Una mala contratación cuesta más que la vacante abierta: sueldo, capacitación, errores y una nueva búsqueda.",
+    ejemplo: "Se contrata a un supervisor sin verificar referencias para cumplir el SLA. A los 4 meses sale por mal desempeño y la búsqueda empieza de cero.",
+    mitiga: "No eliminar etapas del proceso para ganar días; mejor acortar los tiempos entre etapas (agendas, respuestas, aprobaciones).",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Ventas y servicio que no regresan",
+    nivel: "Alto",
+    que: "En puestos de cara al cliente, cada día vacío es una cita no atendida o una venta que se lleva la competencia. Ese ingreso no se recupera al contratar.",
+    ejemplo: "Un asesor comercial genera en promedio $120,000 de margen al mes. Con la plaza vacía 60 días, la sucursal deja de ganar cerca de $240,000.",
+    mitiga: "Clasificar vacantes por impacto (críticas, importantes, normales) y dar prioridad y presupuesto de búsqueda a las críticas.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "El buen candidato se va",
+    nivel: "Medio",
+    que: "Los mejores candidatos tienen varias ofertas. Si el proceso tarda semanas entre entrevistas, aceptan otra.",
+    ejemplo: "La finalista para Contador General espera 3 semanas la aprobación de su oferta. Mientras tanto acepta otra propuesta y se pierde todo el proceso.",
+    mitiga: "Acordar tiempos máximos por etapa (por ejemplo 48 horas para dar respuesta) y tener la banda salarial aprobada antes de abrir la vacante.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Dependencia de headhunters",
+    nivel: "Medio",
+    que: "Las agencias resuelven rápido, pero cobran entre 15% y 25% del sueldo anual. Usarlas para todo encarece cada contratación y no construye fuentes propias de talento.",
+    ejemplo: "Se cubren 10 puestos al año con headhunter, con un sueldo promedio de $30,000: el costo en comisiones ronda $650,000.",
+    mitiga: "Reservar agencias para puestos difíciles o confidenciales; para el resto, referidos internos, bolsas universitarias y una base de candidatos propia.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Discriminación en el proceso",
+    nivel: "Alto",
+    que: "Filtrar candidatos por edad, género, estado civil, embarazo, apariencia o discapacidad está prohibido, aunque sea \"para cubrir más rápido\".",
+    ejemplo: "Una vacante se publica para \"hombres de 25 a 35 años\" o se pide prueba de no embarazo. Ambas prácticas exponen a la empresa a quejas y sanciones.",
+    mitiga: "Perfiles basados en competencias, anuncios revisados por RH y entrevistas estructuradas con las mismas preguntas para todos.",
+    base: "Art. 1 Constitucional · Art. 133 fr. I y XIV LFT.",
+  },
+];
+
+const AULA_COB_QUIZ = [
+  {
+    p: "Una vacante de $25,000 al mes lleva 60 días abierta. ¿Es cierto que la empresa \"se está ahorrando\" $50,000 de sueldo?",
+    o: ["Sí, es dinero que no sale de la nómina", "Solo si la vacante es de nivel operativo", "No: se pierde lo que esa persona produciría y se paga más tiempo extra a quienes la cubren"],
+    c: 2,
+    e: "El sueldo no pagado es un ahorro aparente. Una persona produce más de lo que gana (si no, no se contrataría) y su trabajo lo cubren otros con horas extra. En casi todos los puestos, la silla vacía cuesta más de lo que ahorra.",
+  },
+  {
+    p: "La plantilla autorizada es 248 y la cubierta 228. ¿Cuál es el % de cobertura?",
+    o: ["92%: 228 ÷ 248", "20%: las plazas que faltan", "108%: 248 ÷ 228"],
+    c: 0,
+    e: "% cobertura = plantilla cubierta ÷ plantilla autorizada. Faltan 20 personas, que equivalen al 8% de la plantilla.",
+  },
+  {
+    p: "El embudo muestra 286 candidatos para 6 contrataciones. Si el próximo trimestre necesitas contratar 12 personas, ¿cuántos candidatos necesitas atraer, más o menos?",
+    o: ["12, uno por plaza", "Cerca de 570", "Cerca de 290, los mismos de siempre"],
+    c: 1,
+    e: "La conversión es 6 ÷ 286 ≈ 2.1%. Para 12 contrataciones: 12 ÷ 0.021 ≈ 572 candidatos. Si no se amplían las fuentes, el embudo no alcanza.",
+  },
+  {
+    p: "Para cumplir el SLA de 30 días, un gerente propone saltarse la verificación de referencias. ¿Qué conviene?",
+    o: ["Aceptar: el SLA es lo más importante", "Mantener la etapa y acortar los tiempos de espera entre etapas", "Contratar y verificar después, si hay problemas"],
+    c: 1,
+    e: "Una mala contratación cuesta más que unos días extra de vacante. Los días se suelen perder esperando agendas o aprobaciones, no en las etapas mismas.",
+  },
+  {
+    p: "Un anuncio de vacante dice \"buscamos mujer de 25 a 30 años, sin hijos\". ¿Qué problema tiene?",
+    o: ["Ninguno, es el perfil del puesto", "Solo es un problema si alguien se queja", "Es discriminatorio: la ley prohíbe rechazar candidatos por edad, género o estado civil"],
+    c: 2,
+    e: "El Art. 1 Constitucional y el Art. 133 de la LFT prohíben negarse a contratar por edad, género, estado civil u otras condiciones. El perfil debe describir competencias, no características personales.",
+  },
+  {
+    p: "Tres compañeros cubren una vacante con horas extra durante 3 meses. ¿Cuál es el riesgo más importante?",
+    o: ["Desgaste del equipo y nuevas renuncias, además del costo de las horas extra", "Ninguno, si se les pagan las horas extra", "Que el puesto ya no se necesite"],
+    c: 0,
+    e: "Pagar las horas extra no elimina el desgaste. Las cargas excesivas son un factor de riesgo psicosocial (NOM-035) y una causa frecuente de renuncia: una vacante puede generar otras.",
+  },
+];
+
+function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0, plantCub = 0, pctCob = 0, totalRecibidas = 0, totalCerradas = 0 }) {
+  const [paso, setPaso] = useState(0);
+  const [svgRef, svgAncho] = useAnchoSvg();
+  // Supuestos del simulador (compartidos con "Con tus datos")
+  const [sueldo, setSueldo] = useState(25000);
+  const [dias, setDias] = useState(60);
+  const [multiplo, setMultiplo] = useState(2);
+  const [cubren, setCubren] = useState(40);
+  const [feePct, setFeePct] = useState(18);
+
+  const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+  const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
+  const ac = COLOR.accent;
+  const SLA = 30;
+
+  // Costo diario de una vacante con un sueldo dado
+  const costoDia = (s) => {
+    const diario = s / 30;
+    const noGenerado = diario * multiplo * (1 - cubren / 100); // trabajo que nadie hace
+    const extra = diario * (cubren / 100) * 2; // trabajo que cubren otros con horas extra al doble
+    const ahorro = diario; // sueldo que no se paga
+    return { noGenerado, extra, ahorro, neto: noGenerado + extra - ahorro };
+  };
+
+  const pasos = ["Lo básico", "El costo de la silla vacía", "Tus vacantes hoy", "Riesgos que se asumen", "Pon a prueba al equipo"];
+
+  // ---------- datos reales ----------
+  const abiertas = vacantes.filter((v) => (v.etapaActualIdx ?? 0) < 9);
+  const masVieja = [...abiertas].sort((a, b) => b.abierta - a.abierta)[0];
+  const base = funnel[1]?.n || 0;
+  const contratados = funnel[funnel.length - 1]?.n || 0;
+  const conversion = base > 0 ? contratados / base : 0;
+  const backlog = totalRecibidas - totalCerradas;
+  const faltan = Math.max(0, plantAut - plantCub);
+
+  // ---------- Paso 0: lo básico ----------
+  const pasoBasico = () => {
+    const cd = costoDia(sueldo);
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+        <AulaConcepto n="1" titulo="% de cobertura"
+          formula="% cobertura = plantilla cubierta ÷ plantilla autorizada"
+          ejemploTxt={<>{plantCub} ÷ {plantAut} = <strong>{Number(pctCob).toFixed(1)}%</strong>. Faltan <strong>{faltan}</strong> personas para tener la plantilla completa.</>}>
+          La <strong>plantilla autorizada</strong> son las plazas que el negocio aprobó para operar. La <strong>cubierta</strong> son las que tienen a alguien sentado. La diferencia es trabajo que alguien más está haciendo, o que no se está haciendo.
+        </AulaConcepto>
+        <AulaConcepto n="2" titulo="Días abierta y SLA"
+          formula="Días abierta = hoy − fecha de apertura"
+          ejemploTxt={masVieja ? <>La vacante más antigua es <strong>{masVieja.puesto}</strong> ({masVieja.area}): <strong>{masVieja.abierta} días</strong>, {masVieja.abierta > SLA ? `${masVieja.abierta - SLA} días arriba del SLA` : "dentro del SLA"}.</> : "No hay vacantes abiertas en este momento."}>
+          El <strong>SLA</strong> es el compromiso de tiempo para cubrir una vacante (aquí, {SLA} días). Más de 30 días es alerta; más de 60, crítica. Cada día extra tiene un costo, aunque no aparezca en ningún reporte.
+        </AulaConcepto>
+        <AulaConcepto n="3" titulo="Backlog de solicitudes"
+          formula="Backlog = solicitudes recibidas − solicitudes cerradas"
+          ejemploTxt={<>{totalRecibidas} recibidas − {totalCerradas} cerradas = <strong>{backlog}</strong> solicitudes pendientes acumuladas.</>}>
+          Si entran más solicitudes de las que se cierran, la fila crece mes a mes. Un backlog que sube indica que RH necesita más capacidad o que el proceso tiene un cuello de botella.
+        </AulaConcepto>
+        <AulaConcepto n="4" titulo="Conversión del embudo"
+          formula="Conversión = contratados ÷ candidatos atraídos"
+          ejemploTxt={base > 0 ? <>{contratados} ÷ {base} = <strong>{(conversion * 100).toFixed(1)}%</strong>. De cada 100 candidatos, se contratan {(conversion * 100).toFixed(1)}.</> : "Sin datos de embudo."}>
+          El embudo muestra cuántas personas pasan de una etapa a la siguiente. La conversión total dice qué tan grande debe ser la entrada para lograr las contrataciones que se necesitan.
+        </AulaConcepto>
+        <AulaConcepto n="5" titulo="Candidatos necesarios"
+          formula="Candidatos = contrataciones deseadas ÷ conversión"
+          ejemploTxt={conversion > 0 ? <>Para cubrir las {faltan} plazas que faltan: {faltan} ÷ {(conversion * 100).toFixed(1)}% ≈ <strong>{Math.ceil(faltan / conversion).toLocaleString("es-MX")} candidatos</strong>.</> : "Sin datos de embudo."}>
+          Es la cuenta al revés: si sé cuántas personas necesito contratar, sé cuántos candidatos tengo que atraer. Así se planea la búsqueda en lugar de esperar a ver quién llega.
+        </AulaConcepto>
+        <AulaConcepto n="6" titulo="Costo diario de la silla vacía"
+          formula="Costo diario = valor no generado + horas extra − sueldo no pagado"
+          ejemploTxt={<>Puesto de {fmt(sueldo)} al mes: cada día vacío cuesta cerca de <strong>{fmt(cd.neto)}</strong> (con los supuestos de la pestaña 2).</>}>
+          No pagar un sueldo parece ahorro, pero esa persona producía más de lo que ganaba, y su trabajo lo cubren otros con tiempo extra. El costo real es la diferencia.
+        </AulaConcepto>
+      </div>
+    );
+  };
+
+  // ---------- Paso 1: simulador de la silla vacía ----------
+  const pasoSilla = () => {
+    const cd = costoDia(sueldo);
+    const fee = sueldo * 12 * (feePct / 100);
+    const acumulado = cd.neto * dias;
+    const cruce = cd.neto > 0 ? Math.ceil(fee / cd.neto) : null;
+
+    // Gráfica: costo acumulado por día (0..120) vs costo del headhunter
+    const W = Math.max(520, svgAncho), H = 300, L = 64, R = 20, T = 20, B = 40;
+    const maxDia = 120;
+    const maxY = Math.max(fee * 1.15, cd.neto * maxDia, 1);
+    const x = (d) => L + (d / maxDia) * (W - L - R);
+    const y = (v) => T + (1 - v / maxY) * (H - T - B);
+    const ticksY = 4;
+    const fmtK = (v) => (v >= 1e6 ? "$" + (v / 1e6).toFixed(1) + "M" : "$" + Math.round(v / 1000) + "K");
+
+    const slider = (label, value, set, min, max, step, show) => (
+      <label style={{ display: "block", fontSize: 12, color: COLOR.textSoft, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <span>{label}</span><strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{show(value)}</strong>
+        </div>
+        <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: ac }} />
+      </label>
+    );
+
+    const barras = [
+      { label: "Trabajo que nadie hace", v: cd.noGenerado * dias, color: "#b00020" },
+      { label: "Horas extra de compañeros", v: cd.extra * dias, color: "#d97706" },
+      { label: "Sueldo que no se pagó", v: -cd.ahorro * dias, color: "#0a7d2c" },
+    ];
+    const maxBar = Math.max(...barras.map((b) => Math.abs(b.v)), 1);
+
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
+        <div>
+          <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+            Una vacante abierta parece ahorro: no se paga sueldo. Mueve los controles y mira lo que realmente se pierde cada día que la silla sigue vacía.
+          </div>
+          {slider("Sueldo mensual del puesto", sueldo, setSueldo, 10000, 80000, 1000, fmt)}
+          {slider("Días que lleva abierta", dias, setDias, 0, 120, 1, (v) => `${v} días`)}
+          {slider("Valor que genera el puesto", multiplo, setMultiplo, 1, 5, 0.5, (v) => `${v}× su sueldo`)}
+          {slider("Trabajo que cubren compañeros", cubren, setCubren, 0, 100, 5, (v) => `${v}%`)}
+          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
+            <div style={{ marginTop: 10 }}>
+              {slider("Comisión del headhunter", feePct, setFeePct, 10, 30, 1, (v) => `${v}% del sueldo anual`)}
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>
+                "Valor que genera" es cuánto produce el puesto comparado con lo que gana (un asesor comercial puede generar 3× o más; un puesto administrativo, cerca de 1.5×). Las horas extra se calculan al doble (Art. 67 LFT).
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Cada día vacía cuesta</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: cd.neto > 0 ? "#b00020" : "#0a7d2c", fontVariantNumeric: "tabular-nums" }}>{fmt(cd.neto)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>ya descontando el sueldo no pagado</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+              <div style={S.kpiLabel}>En {dias} días</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(acumulado)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>costo neto acumulado</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Headhunter</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#1d4ed8", fontVariantNumeric: "tabular-nums" }}>{fmt(fee)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>{cruce ? `la vacante lo iguala en el día ${cruce}` : "la vacante no llega a costarlo"}</div>
+            </div>
+          </div>
+
+          <div ref={svgRef} style={{ border: "1px solid " + COLOR.border, background: "#fff" }}>
+          <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }} role="img" aria-label="Costo acumulado de la vacante contra el costo de un headhunter">
+            {/* zonas de SLA */}
+            <rect x={x(0)} y={T} width={x(30) - x(0)} height={H - T - B} fill="#f0fdf4" />
+            <rect x={x(30)} y={T} width={x(60) - x(30)} height={H - T - B} fill="#fffbeb" />
+            <rect x={x(60)} y={T} width={x(maxDia) - x(60)} height={H - T - B} fill="#fef2f2" />
+            <text x={(x(0) + x(30)) / 2} y={T + 14} textAnchor="middle" fontSize="11" fontWeight="700" fill="#0a7d2c" letterSpacing="0.5">DENTRO DE SLA</text>
+            <text x={(x(30) + x(60)) / 2} y={T + 14} textAnchor="middle" fontSize="11" fontWeight="700" fill="#d97706" letterSpacing="0.5">ALERTA</text>
+            <text x={(x(60) + x(maxDia)) / 2} y={T + 14} textAnchor="middle" fontSize="11" fontWeight="700" fill="#b00020" letterSpacing="0.5">CRÍTICA</text>
+            {/* ejes */}
+            {Array.from({ length: ticksY + 1 }, (_, i) => {
+              const v = (maxY / ticksY) * i;
+              return (
+                <g key={i}>
+                  <line x1={L} y1={y(v)} x2={W - R} y2={y(v)} stroke="#e2e8f0" />
+                  <text x={L - 6} y={y(v) + 3} textAnchor="end" fontSize="11" fill="#94a3b8">{fmtK(v)}</text>
+                </g>
+              );
+            })}
+            {[0, 30, 60, 90, 120].map((d) => (
+              <text key={d} x={x(d)} y={H - B + 16} textAnchor="middle" fontSize="11" fill="#64748b">{d} días</text>
+            ))}
+            {/* headhunter */}
+            <line x1={L} y1={y(fee)} x2={W - R} y2={y(fee)} stroke="#1d4ed8" strokeWidth="2" strokeDasharray="6 4" />
+            <text x={W - R - 4} y={y(fee) - 6} textAnchor="end" fontSize="12" fontWeight="700" fill="#1d4ed8">Costo de un headhunter · {fmt(fee)}</text>
+            {/* costo acumulado */}
+            {cd.neto > 0 && (
+              <>
+                <polygon points={`${x(0)},${y(0)} ${x(maxDia)},${y(cd.neto * maxDia)} ${x(maxDia)},${y(0)}`} fill={hexA(COLOR.accent, 0.1)} />
+                <line x1={x(0)} y1={y(0)} x2={x(maxDia)} y2={y(cd.neto * maxDia)} stroke={ac} strokeWidth="2.5" />
+              </>
+            )}
+            {cruce && cruce <= maxDia && (
+              <g>
+                <circle cx={x(cruce)} cy={y(fee)} r="5" fill="#fff" stroke="#1d4ed8" strokeWidth="2" />
+                <text x={x(cruce)} y={y(fee) + 20} textAnchor="middle" fontSize="11.5" fontWeight="700" fill={COLOR.ink}>día {cruce}</text>
+              </g>
+            )}
+            {/* marcador de días actuales */}
+            <line x1={x(dias)} y1={T} x2={x(dias)} y2={H - B} stroke={COLOR.ink} strokeWidth="1.5" />
+            <circle cx={x(dias)} cy={y(Math.max(0, acumulado))} r="5" fill={ac} />
+            <text x={Math.max(x(dias) - 10, L + 90)} y={Math.max(y(Math.max(0, acumulado)) - 12, T + 30)} textAnchor="end" fontSize="12" fontWeight="700" fill={ac} stroke="#fff" strokeWidth="4" paintOrder="stroke">Hoy: {fmtM(acumulado)}</text>
+          </svg>
+        </div>
+
+          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+            {barras.map((b) => (
+              <div key={b.label} style={{ display: "grid", gridTemplateColumns: "190px 1fr 100px", gap: 10, alignItems: "center", fontSize: 12 }}>
+                <div style={{ color: COLOR.textSoft }}>{b.label}</div>
+                <div style={{ position: "relative", height: 14, background: "#f1f5f9" }}>
+                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(Math.abs(b.v) / maxBar) * 100}%`, background: b.color, opacity: 0.85, transition: "width 0.3s ease" }} />
+                </div>
+                <div style={{ textAlign: "right", fontWeight: 700, fontVariantNumeric: "tabular-nums", color: b.color }}>{b.v < 0 ? "−" : "+"}{fmtM(Math.abs(b.v))}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ ...S.alert(cd.neto > 0 ? "warn" : "info"), marginTop: 12, marginBottom: 0 }}>
+            {cd.neto > 0 ? (
+              <>Con {dias} días abierta, esta vacante ya le costó a la empresa <strong>{fmtM(acumulado)}</strong>, aunque no se haya pagado un solo peso de sueldo. {cruce && cruce <= dias ? <>Desde el <strong>día {cruce}</strong> ya costó más que pagarle a un headhunter para cubrirla.</> : cruce ? <>Si sigue abierta hasta el día {cruce}, habrá costado lo mismo que un headhunter.</> : null}</>
+            ) : (
+              <>Con estos supuestos el puesto genera poco valor extra y casi nadie cubre su trabajo, así que la vacante no cuesta más que su sueldo. Pregunta para el equipo: ¿entonces se necesita la plaza?</>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ---------- Paso 2: con tus datos ----------
+  const pasoDatos = () => {
+    const filas = abiertas.map((v) => {
+      const s = v.bandaMediana || sueldo;
+      const cd = costoDia(s);
+      return { ...v, sueldoRef: s, porDia: cd.neto, acumulado: Math.max(0, cd.neto * v.abierta) };
+    }).sort((a, b) => b.acumulado - a.acumulado);
+    const total = filas.reduce((s, f) => s + f.acumulado, 0);
+    const porDiaTotal = filas.reduce((s, f) => s + Math.max(0, f.porDia), 0);
+    const criticas = filas.filter((f) => f.abierta > 60).length;
+    const maxAc = Math.max(1, ...filas.map((f) => f.acumulado));
+    const peor = filas[0];
+    const areaLenta = [...porArea].sort((a, b) => b.dias - a.dias)[0];
+
+    return (
+      <div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+          Las vacantes abiertas de esta sección, con el sueldo medio de su banda y los supuestos de la pestaña anterior (valor del puesto {multiplo}×, {cubren}% cubierto por compañeros). ¿Cuánto llevan costando hasta hoy?
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Vacantes abiertas</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{filas.length}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>{criticas} con más de 60 días</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={S.kpiLabel}>Costo acumulado a hoy</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(total)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>neto del sueldo no pagado</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Cada día que pasa</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#b00020", fontVariantNumeric: "tabular-nums" }}>+{fmt(porDiaTotal)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>si ninguna se cubre</div>
+          </div>
+        </div>
+
+        {filas.length === 0 ? (
+          <div style={{ fontSize: 12.5, color: COLOR.textMuted }}>No hay vacantes abiertas. ¡Plantilla completa!</div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {filas.map((f) => {
+              const pct = (f.acumulado / maxAc) * 100;
+              const color = f.abierta > 60 ? "#b00020" : f.abierta > SLA ? "#d97706" : "#0a7d2c";
+              return (
+                <div key={f.id} style={{ display: "grid", gridTemplateColumns: "220px 80px 1fr 100px", gap: 10, alignItems: "center", fontSize: 12 }}>
+                  <div>
+                    <div style={{ fontWeight: 700, color: COLOR.ink }}>{f.puesto}</div>
+                    <div style={{ fontSize: 11, color: COLOR.textMuted }}>{f.area} · {fmt(f.sueldoRef)}/mes</div>
+                  </div>
+                  <div style={{ color, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{f.abierta} días</div>
+                  <div style={{ position: "relative", height: 20, background: "#f1f5f9" }}>
+                    <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${pct}%`, background: `linear-gradient(90deg, ${COLOR.accentLight} 0%, ${ac} 100%)`, transition: "width 0.3s ease" }} />
+                    <span style={{ position: "absolute", top: 3, fontSize: 11, fontWeight: 700, whiteSpace: "nowrap", ...(pct > 35 ? { left: 8, color: "#fff" } : { left: `calc(${pct}% + 8px)`, color: COLOR.ink }) }}>{fmt(f.porDia)} / día</span>
+                  </div>
+                  <div style={{ textAlign: "right", fontWeight: 700, fontVariantNumeric: "tabular-nums", color: ac }}>{fmtM(f.acumulado)}</div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {peor && peor.acumulado > 0 && (
+          <div style={{ ...S.alert("warn"), marginTop: 16, marginBottom: 0 }}>
+            <strong>Para discutir en equipo:</strong> la vacante de <strong>{peor.puesto}</strong> lleva {peor.abierta} días y ya costó cerca de <strong>{fmtM(peor.acumulado)}</strong>.
+            {areaLenta ? <> El área más lenta es <strong>{areaLenta.area}</strong>, con {areaLenta.dias} días promedio por solicitud.</> : null} ¿Qué etapa la está frenando? ¿Ya se pagó en días vacíos más de lo que costaría acelerar la búsqueda?
+          </div>
+        )}
+        <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 10 }}>
+          Costo por día = sueldo diario × (valor del puesto × trabajo no cubierto + 2 × trabajo cubierto con horas extra − 1). Es una estimación para la conversación, no una cifra contable. Ajusta los supuestos en "El costo de la silla vacía".
+        </div>
+      </div>
+    );
+  };
+
+  const contenido = [
+    pasoBasico,
+    pasoSilla,
+    pasoDatos,
+    () => <AulaRiesgos riesgos={AULA_COB_RIESGOS} intro="Una vacante abierta no es solo un número en el tablero: tiene efectos en el equipo, en los clientes y en la empresa. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaQuiz preguntas={AULA_COB_QUIZ} repaso={"Vale la pena repasar \"El costo de la silla vacía\" y \"Riesgos que se asumen\" antes de priorizar las próximas vacantes."} />,
+  ][paso]();
+
+  return (
+    <AulaShell titulo="Aula · El costo de la silla vacía" pasos={pasos} paso={paso} setPaso={setPaso}>
+      {contenido}
+    </AulaShell>
+  );
+}
+
+
+// =============================================================
+// AULA · Rotación — el costo real de que alguien se vaya (módulo didáctico)
+// Uso (dentro de Rotacion(), justo antes de `<h3 style={S.h3}>Anatomía del costo por baja</h3>`):
+//   <AulaRotacion bajas={bajasRecientes} porArea={bajas} mensual={rotacionMensual} totalBajas={totalBajas} costoTotal={costoTotal} pctAnual={pctAnual} rango={rangoMensual} />
+// =============================================================
+const AULA_ROT_RIESGOS = [
+  {
+    titulo: "Despido mal documentado",
+    nivel: "Alto",
+    que: "Si la empresa despide sin una causa clara y sin aviso por escrito, el despido se presume injustificado. La persona puede pedir reinstalación o indemnización, más salarios vencidos.",
+    ejemplo: "Se despide a un supervisor \"por bajo desempeño\" sin evaluaciones ni actas. En juicio no hay pruebas: se paga indemnización de 3 meses más hasta 12 meses de salarios vencidos.",
+    mitiga: "Documentar desempeño y faltas a tiempo (evaluaciones, actas, planes de mejora). Entregar el aviso de rescisión por escrito con la causa y la fecha.",
+    base: "Arts. 47 y 48 LFT.",
+  },
+  {
+    titulo: "Renuncia o convenio que no protege",
+    nivel: "Alto",
+    que: "Una renuncia forzada, firmada en blanco o un convenio sin el desglose de lo que se paga no protege a la empresa. La ley considera nula cualquier renuncia a derechos del trabajador.",
+    ejemplo: "Se pide a una persona firmar su renuncia \"para no afectar su historial\". Después demanda por despido injustificado y la renuncia no se sostiene.",
+    mitiga: "Renuncias voluntarias, escritas y firmadas por la persona. Convenios por escrito, con el detalle de cada concepto, ratificados ante el Centro de Conciliación.",
+    base: "Art. 33 LFT.",
+  },
+  {
+    titulo: "Finiquito mal calculado",
+    nivel: "Medio",
+    que: "Aunque la persona renuncie, se le deben las partes proporcionales: aguinaldo, vacaciones, prima vacacional y, en su caso, prima de antigüedad. Pagar de menos genera reclamos.",
+    ejemplo: "A una analista que renuncia en marzo no se le pagan los días de vacaciones pendientes del año anterior. Reclama y la empresa paga la diferencia más gastos.",
+    mitiga: "Usar un cálculo estándar de finiquito revisado por nómina y por RH, con recibo firmado por la persona.",
+    base: "Arts. 76, 80, 87 y 162 LFT.",
+  },
+  {
+    titulo: "Efecto contagio",
+    nivel: "Alto",
+    que: "Cuando se va alguien respetado, otros se preguntan si también deberían irse. Las renuncias llegan en cadena, a veces al mismo competidor.",
+    ejemplo: "Se va el asesor Sr. a un competidor y, en 3 meses, se lleva a su mentee Jr. El equipo pierde dos personas por una sola causa.",
+    mitiga: "Entrevista de permanencia con el equipo cercano después de cada baja clave. Revisar si la causa (sueldo, jefe, carrera) afecta a más personas.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Fuga de conocimiento y clientes",
+    nivel: "Medio",
+    que: "Lo que la persona sabía (procesos, contactos, contexto) se va con ella. Si atendía clientes, parte de la relación también.",
+    ejemplo: "Un gerente comercial con 8 años se va y 2 cuentas importantes migran parcialmente con él. Nadie más conocía a los contactos clave.",
+    mitiga: "Procesos documentados, cuentas con al menos dos personas de contacto y planes de sucesión para puestos críticos.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Rotación temprana: falla de selección",
+    nivel: "Medio",
+    que: "Si alguien se va antes de cumplir un año, casi siempre hubo un problema al contratarlo o al recibirlo: perfil equivocado, expectativas falsas o mala inducción.",
+    ejemplo: "Un operador sale al terminar su periodo de prueba porque no alcanzó la curva esperada. Nunca se le aplicó una prueba técnica antes de contratarlo.",
+    mitiga: "Pruebas técnicas antes de contratar, descripción de puesto honesta y onboarding con seguimiento a 30, 60 y 90 días.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Sobrecarga del equipo que se queda",
+    nivel: "Medio",
+    que: "Mientras la vacante está abierta, el trabajo lo absorben los demás. Más carga, más estrés y más riesgo de que alguien más renuncie.",
+    ejemplo: "La salida de la asistente de RH obliga a repartir 3 procesos críticos entre dos personas por 4 meses. Una de ellas empieza a buscar trabajo.",
+    mitiga: "Cubrir rápido las vacantes críticas, redistribuir con criterio y vigilar cargas de trabajo como factor de riesgo psicosocial.",
+    base: "NOM-035-STPS-2018 (factores de riesgo psicosocial).",
+  },
+];
+
+const AULA_ROT_QUIZ = [
+  {
+    p: "¿Cómo se calcula el % de rotación de un mes?",
+    o: ["Bajas del mes ÷ altas del mes", "Altas del mes − bajas del mes", "Bajas del mes ÷ plantilla promedio del mes"],
+    c: 2,
+    e: "La rotación compara cuántas personas salieron contra cuántas había en promedio. Si hubo 3 bajas con una plantilla de 248, la rotación del mes es 1.2%. Anualizada, ≈ 14.5%.",
+  },
+  {
+    p: "En el costo de una baja, ¿qué parte suele ser la más grande y la menos visible?",
+    o: ["La productividad perdida: el puesto vacío y la curva de aprendizaje del reemplazo", "El finiquito que se paga a la persona", "El anuncio de la vacante en bolsas de trabajo"],
+    c: 0,
+    e: "El finiquito y el reclutamiento se ven en contabilidad. Lo que no se ve es el trabajo que dejó de hacerse mientras el puesto estuvo vacío y los meses que tarda el reemplazo en rendir igual.",
+  },
+  {
+    p: "Una persona renuncia a los 8 meses de haber entrado. ¿Qué indica?",
+    o: ["Mala suerte: la gente joven cambia mucho de trabajo", "Probablemente un problema de selección o de inducción", "Nada: antes del año no cuenta como rotación"],
+    c: 1,
+    e: "La rotación temprana (antes de 1 año) es la señal más clara de que algo falló al contratar o al recibir a la persona. Además, la empresa pierde casi toda la inversión en reclutamiento y capacitación.",
+  },
+  {
+    p: "Para que la salida de alguien proteja a la empresa, ¿qué se necesita?",
+    o: ["Basta con un correo de la persona diciendo que se va", "Que el jefe firme la renuncia a nombre del colaborador", "Renuncia escrita y firmada voluntariamente por la persona, con finiquito completo; si hay convenio, ratificado ante el Centro de Conciliación"],
+    c: 2,
+    e: "La renuncia debe ser voluntaria y firmada por quien se va. Cualquier renuncia a derechos es nula (Art. 33 LFT), por eso los convenios se hacen por escrito, con desglose, y se ratifican.",
+  },
+  {
+    p: "En 6 meses salen 3 personas del mismo taller y las 3 mencionan el ambiente con el jefe directo. ¿Qué haces?",
+    o: ["Tratarlo como un patrón: revisar el liderazgo de ese jefe y el clima del taller", "Nada, es coincidencia", "Subir el sueldo a todo el taller"],
+    c: 0,
+    e: "Tres bajas con la misma causa y el mismo jefe no son casualidad. Subir sueldos no arregla un problema de liderazgo: la gente se va de los jefes, no solo de las empresas.",
+  },
+  {
+    p: "Alguien renuncia por una mejor oferta. ¿Conviene hacerle una contraoferta?",
+    o: ["Siempre: cuesta menos que reemplazarlo", "Puede retenerlo un tiempo, pero solo funciona si también se atiende la causa real", "Nunca: la ley lo prohíbe"],
+    c: 1,
+    e: "Muchas contraofertas solo retrasan la salida unos meses. Si el motivo es carrera, jefe o carga de trabajo, el dinero no lo resuelve. Y si el sueldo estaba bajo el mercado, probablemente el resto del equipo está igual.",
+  },
+];
+
+function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, costoTotal = 0, pctAnual = 0, rango = "" }) {
+  const [paso, setPaso] = useState(0);
+  const [svgRef, svgAncho] = useAnchoSvg();
+  // Simulador
+  const [sueldo, setSueldo] = useState(25000);
+  const [involuntaria, setInvoluntaria] = useState(false);
+  const [mesesVacante, setMesesVacante] = useState(2);
+  const [mesesCurva, setMesesCurva] = useState(4);
+  const [valor, setValor] = useState(2);
+  const [reclutaPct, setReclutaPct] = useState(15);
+  const [capacitaMeses, setCapacitaMeses] = useState(0.5);
+
+  const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+  const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
+  const ac = COLOR.accent;
+  const pasos = ["Lo básico", "La curva del reemplazo", "Con tus datos", "Riesgos que se asumen", "Pon a prueba al equipo"];
+
+  // ---------- datos reales ----------
+  const costoDe = (b) => b.costos.directo + b.costos.indirecto + b.costos.oculto + b.costos.hundido;
+  const n = bajas.length || 1;
+  const sum = (fn) => bajas.reduce((s, b) => s + fn(b), 0);
+  const tot = {
+    directo: sum((b) => b.costos.directo),
+    indirecto: sum((b) => b.costos.indirecto),
+    oculto: sum((b) => b.costos.oculto),
+    hundido: sum((b) => b.costos.hundido),
+  };
+  const costoBajas = tot.directo + tot.indirecto + tot.oculto + tot.hundido;
+  const pctNoVisible = costoBajas ? ((tot.oculto + tot.hundido) / costoBajas) * 100 : 0;
+  const voluntarias = bajas.filter((b) => b.tipo === "Voluntaria");
+  const tempranas = bajas.filter((b) => b.años < 1);
+  const prevenibleRe = /oferta|sueldo|mercado|ambiente|crecimiento|promoci|jefe|clima/i;
+  const prevenibles = voluntarias.filter((b) => prevenibleRe.test(b.motivo + " " + (b.motivoExtendido || "")));
+  const costoPrevenibles = prevenibles.reduce((s, b) => s + costoDe(b), 0);
+  const costoProm = costoBajas / n;
+  const masCara = [...bajas].sort((a, b) => costoDe(b) - costoDe(a))[0];
+  const areas = [...new Set(bajas.map((b) => b.area))].map((area) => {
+    const l = bajas.filter((b) => b.area === area);
+    const motivo = porArea.find((p) => p.area === area)?.motivo || "—";
+    return { area, n: l.length, costo: l.reduce((s, b) => s + costoDe(b), 0), motivo };
+  }).sort((a, b) => b.costo - a.costo);
+  const peorArea = areas[0];
+  const pctMensualProm = mensual.length ? mensual.reduce((s, m) => s + m.pct, 0) / mensual.length : 0;
+
+  // ---------- Paso 0: lo básico ----------
+  const pasoBasico = () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+      <AulaConcepto n="1" titulo="% de rotación"
+        formula="% rotación = bajas del periodo ÷ plantilla promedio"
+        ejemploTxt={<>Promedio mensual {rango ? `(${rango})` : ""}: <strong>{pctMensualProm.toFixed(1)}%</strong>. Anualizado: <strong>{pctAnual.toFixed(1)}%</strong>. De cada 100 personas, cerca de {Math.round(pctAnual)} se van en un año.</>}>
+        Mide qué tan rápido se "vacía" la plantilla. Un número alto significa que la empresa paga continuamente por reemplazar gente, en lugar de invertir en la que ya tiene.
+      </AulaConcepto>
+      <AulaConcepto n="2" titulo="Voluntaria vs. involuntaria"
+        formula="Voluntaria = la persona decide irse · Involuntaria = la empresa decide"
+        ejemploTxt={<>De {bajas.length} bajas: <strong>{voluntarias.length} voluntarias</strong> y {bajas.length - voluntarias.length} involuntarias.</>}>
+        La voluntaria suele ser la más cara porque se va gente que la empresa quería conservar. La involuntaria cuesta más en finiquito y riesgo legal, pero fue una decisión.
+      </AulaConcepto>
+      <AulaConcepto n="3" titulo="Costo por baja"
+        formula="Costo = finiquito + reemplazo + costo oculto + costo hundido"
+        ejemploTxt={<>Promedio por baja: <strong>{fmt(costoProm)}</strong>. Total del periodo: <strong>{fmtM(costoBajas)}</strong>. La más cara: {masCara ? <>{masCara.nombre} ({masCara.puesto}), {fmt(costoDe(masCara))}</> : "—"}.</>}>
+        Una baja no cuesta solo el finiquito. Hay que buscar, contratar y capacitar a alguien más, y mientras tanto el trabajo no se hace igual.
+      </AulaConcepto>
+      <AulaConcepto n="4" titulo="Costo oculto"
+        formula="Oculto = puesto vacío + curva de aprendizaje + errores + supervisión extra"
+        ejemploTxt={<>En tus datos, el costo oculto suma <strong>{fmtM(tot.oculto)}</strong>: {costoBajas ? ((tot.oculto / costoBajas) * 100).toFixed(0) : 0}% del costo total.</>}>
+        Es la productividad que se pierde y que nunca aparece en una factura. Suele ser la parte más grande del costo de una baja.
+      </AulaConcepto>
+      <AulaConcepto n="5" titulo="Costo hundido"
+        formula="Hundido = lo invertido en la persona que ya no se recupera"
+        ejemploTxt={<>En tus datos: <strong>{fmtM(tot.hundido)}</strong> en cursos, certificaciones y tiempo de mentores que se fueron con las personas.</>}>
+        Cursos, certificaciones, coaching y horas de los jefes. Cuando alguien se va, esa inversión se pierde y hay que volver a hacerla con el reemplazo.
+      </AulaConcepto>
+      <AulaConcepto n="6" titulo="Rotación temprana"
+        formula="Rotación temprana = bajas con menos de 1 año ÷ total de bajas"
+        ejemploTxt={<>{tempranas.length} de {bajas.length} bajas ({bajas.length ? ((tempranas.length / bajas.length) * 100).toFixed(0) : 0}%) tenían menos de un año en la empresa.</>}>
+        Si alguien se va antes del año, la empresa casi no recuperó lo que invirtió en contratarlo. Es la mejor señal para revisar el proceso de selección e inducción.
+      </AulaConcepto>
+    </div>
+  );
+
+  // ---------- Paso 1: curva del reemplazo ----------
+  const pasoCurva = () => {
+    const finiquito = involuntaria ? sueldo * 3.6 : sueldo * 0.6;
+    const reclutamiento = sueldo * 12 * (reclutaPct / 100);
+    const capacitacion = sueldo * capacitaMeses;
+    const vacio = mesesVacante * sueldo * Math.max(0, valor - 1);
+    const curva = mesesCurva * sueldo * valor * 0.375; // de 25% a 100% en línea recta
+    const partes = [
+      { k: "Finiquito / liquidación", v: finiquito, c: "#94a3b8", visible: true },
+      { k: "Reclutamiento", v: reclutamiento, c: "#64748b", visible: true },
+      { k: "Capacitación inicial", v: capacitacion, c: "#475569", visible: true },
+      { k: "Puesto vacío", v: vacio, c: COLOR.accentLight, visible: false },
+      { k: "Curva de aprendizaje", v: curva, c: ac, visible: false },
+    ];
+    const total = partes.reduce((s, p) => s + p.v, 0);
+    const noVisible = vacio + curva;
+    const mesRecupera = mesesVacante + mesesCurva;
+    const ahorroUnaDeCuatro = Math.round((totalBajas || 0) / 4) * total;
+
+    // SVG: productividad del puesto en el tiempo
+    const W = Math.max(520, svgAncho), H = 260, x0 = 46, x1 = W - 16, y0 = 24, y1 = H - 40;
+    const horizonte = Math.max(12, mesRecupera + 3);
+    const X = (m) => x0 + ((m + 1) / (horizonte + 1)) * (x1 - x0);
+    const Y = (p) => y1 - (p / 100) * (y1 - y0);
+    const linea = [
+      [-1, 100], [0, 100], [0, 0], [mesesVacante, 0], [mesesVacante, 25], [mesRecupera, 100], [horizonte, 100],
+    ];
+    const pts = linea.map(([m, p]) => `${X(m)},${Y(p)}`).join(" ");
+    const perdida = `${X(0)},${Y(100)} ${X(0)},${Y(0)} ${X(mesesVacante)},${Y(0)} ${X(mesesVacante)},${Y(25)} ${X(mesRecupera)},${Y(100)}`;
+
+    const slider = (label, value, set, min, max, step, show) => (
+      <label style={{ display: "block", fontSize: 12, color: COLOR.textSoft, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <span>{label}</span><strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{show(value)}</strong>
+        </div>
+        <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: ac }} />
+      </label>
+    );
+    const tipoBtn = (activo) => ({ ...S.btnGhost, flex: 1, padding: "7px 10px", background: activo ? ac : "#fff", color: activo ? "#fff" : COLOR.textSoft, borderColor: activo ? ac : COLOR.border, fontWeight: 700 });
+
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
+        <div>
+          <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+            Cuando alguien se va, el puesto no "se apaga y se prende". Primero queda vacío y luego el reemplazo tarda meses en rendir igual. Mueve los controles y mira el hueco que queda.
+          </div>
+          {slider("Sueldo mensual del puesto", sueldo, setSueldo, 10000, 80000, 1000, fmt)}
+          <div style={{ fontSize: 12, color: COLOR.textSoft, marginBottom: 6 }}>¿Cómo sale?</div>
+          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+            <button style={tipoBtn(!involuntaria)} onClick={() => setInvoluntaria(false)}>Renuncia</button>
+            <button style={tipoBtn(involuntaria)} onClick={() => setInvoluntaria(true)}>Despido</button>
+          </div>
+          {slider("Meses con el puesto vacío", mesesVacante, setMesesVacante, 0, 6, 0.5, (v) => `${v} mes${v === 1 ? "" : "es"}`)}
+          {slider("Meses para que el reemplazo rinda al 100%", mesesCurva, setMesesCurva, 1, 12, 1, (v) => `${v} mes${v === 1 ? "" : "es"}`)}
+          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
+            <div style={{ marginTop: 10 }}>
+              {slider("Valor que genera el puesto (veces su sueldo)", valor, setValor, 1, 5, 0.5, (v) => `${v}×`)}
+              {slider("Reclutamiento (% del sueldo anual)", reclutaPct, setReclutaPct, 0, 30, 1, (v) => v + "%")}
+              {slider("Capacitación inicial (meses de sueldo)", capacitaMeses, setCapacitaMeses, 0, 3, 0.25, (v) => `${v}`)}
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>
+                Finiquito aproximado: renuncia ≈ 0.6 sueldos (partes proporcionales); despido ≈ 3.6 sueldos (3 meses de indemnización más partes proporcionales). Mientras el puesto está vacío no se paga sueldo, por eso solo contamos el valor que deja de generar arriba de su sueldo. El reemplazo empieza al 25% y sube en línea recta.
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Lo que se ve</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(finiquito + reclutamiento + capacitacion)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>finiquito, reclutamiento y curso</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Lo que no se ve</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(noVisible)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>productividad perdida</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+              <div style={S.kpiLabel}>Costo total de la baja</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(total)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>= {(total / sueldo).toFixed(1)} meses de sueldo del puesto</div>
+            </div>
+          </div>
+
+          <div ref={svgRef} style={{ border: "1px solid " + COLOR.border, background: "#fff" }}>
+          <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }} role="img" aria-label="Productividad del puesto antes y después de la baja">
+            {[0, 25, 50, 75, 100].map((p) => (
+              <g key={p}>
+                <line x1={x0} x2={x1} y1={Y(p)} y2={Y(p)} stroke={p === 0 ? "#cbd5e1" : "#f1f5f9"} />
+                <text x={x0 - 6} y={Y(p) + 3} textAnchor="end" fontSize="11" fill="#94a3b8">{p}%</text>
+              </g>
+            ))}
+            {Array.from({ length: horizonte + 1 }, (_, m) => (
+              <text key={m} x={X(m)} y={y1 + 14} textAnchor="middle" fontSize="11" fill="#94a3b8">{m}</text>
+            ))}
+            <text x={(x0 + x1) / 2} y={H - 8} textAnchor="middle" fontSize="11" fill={COLOR.textMuted}>Meses desde que la persona se va</text>
+            <polygon points={perdida} fill={hexA(COLOR.accentLight, 0.22)} stroke="none" />
+            <polyline points={pts} fill="none" stroke={COLOR.ink} strokeWidth="2.2" strokeLinejoin="round" />
+            <line x1={X(0)} x2={X(0)} y1={y0 - 6} y2={y1} stroke="#b00020" strokeDasharray="4 3" />
+            <text x={X(0) + 4} y={y0 - 8} fontSize="11.5" fontWeight="700" fill="#b00020">Se va</text>
+            {mesesVacante > 0 && <text x={(X(0) + X(mesesVacante)) / 2} y={Y(0) - 8} textAnchor="middle" fontSize="11.5" fontWeight="700" fill={ac}>Vacante</text>}
+            <line x1={X(mesesVacante)} x2={X(mesesVacante)} y1={y0 - 6} y2={y1} stroke="#1d4ed8" strokeDasharray="4 3" />
+            <text x={X(mesesVacante) + 4} y={y0 + 6} fontSize="11.5" fontWeight="700" fill="#1d4ed8">Entra el reemplazo</text>
+            <text x={(X(mesesVacante) + X(mesRecupera)) / 2 - 6} y={Y(84)} textAnchor="middle" stroke="#fff" strokeWidth="3" paintOrder="stroke" fontSize="11.5" fontWeight="700" fill={ac}>Curva de aprendizaje</text>
+            <line x1={X(mesRecupera)} x2={X(mesRecupera)} y1={Y(100)} y2={y1} stroke="#0a7d2c" strokeDasharray="4 3" />
+            <text x={Math.min(X(mesRecupera) + 4, x1 - 120)} y={Y(100) + 14} fontSize="11.5" fontWeight="700" fill="#0a7d2c">Rinde al 100% (mes {mesRecupera})</text>
+          </svg>
+        </div>
+
+          {/* Barra de composición */}
+          <div style={{ marginTop: 12 }}>
+            <div style={{ display: "flex", height: 22, border: "1px solid " + COLOR.border }}>
+              {partes.filter((p) => p.v > 0).map((p) => (
+                <div key={p.k} title={`${p.k}: ${fmt(p.v)}`} style={{ width: `${(p.v / total) * 100}%`, background: p.c, transition: "width 0.3s ease" }} />
+              ))}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 14px", marginTop: 8, fontSize: 11.5, color: COLOR.textSoft }}>
+              {partes.map((p) => (
+                <span key={p.k} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ width: 10, height: 10, background: p.c, display: "inline-block" }} />
+                  {p.k} · <strong style={{ color: COLOR.ink }}>{fmt(p.v)}</strong>{!p.visible && <span style={{ color: ac }}> (no se ve)</span>}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ ...S.alert("warn"), marginTop: 12, marginBottom: 0 }}>
+            Perder a una persona con sueldo de <strong>{fmt(sueldo)}</strong> cuesta cerca de <strong>{fmt(total)}</strong>, y {total ? ((noVisible / total) * 100).toFixed(0) : 0}% de ese costo no aparece en ninguna factura. El puesto vuelve a rendir al 100% hasta el <strong>mes {mesRecupera}</strong>.
+            {totalBajas > 0 && <> Si con mejores jefes, sueldos o inducción se evitara 1 de cada 4 de tus {totalBajas} bajas, el ahorro sería del orden de <strong>{fmtM(ahorroUnaDeCuatro)}</strong>.</>}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ---------- Paso 2: con tus datos ----------
+  const pasoDatos = () => {
+    const comp = [
+      { k: "Finiquito / liquidación", v: tot.directo, c: "#94a3b8" },
+      { k: "Reemplazo", v: tot.indirecto, c: "#475569" },
+      { k: "Oculto", v: tot.oculto, c: COLOR.accentLight },
+      { k: "Hundido", v: tot.hundido, c: ac },
+    ];
+    const maxArea = Math.max(1, ...areas.map((a) => a.costo));
+    const maxMes = Math.max(1, ...mensual.map((m) => m.costo));
+    return (
+      <div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+          Con las bajas de esta sección: ¿cuánto nos está costando la rotación, dónde se concentra y cuánto de eso se pudo evitar?
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Costo de las bajas</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmtM(costoBajas)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>{bajas.length} bajas · {fmt(costoProm)} por baja</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Lo que no se ve</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{pctNoVisible.toFixed(0)}%</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>del costo es oculto o hundido</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={S.kpiLabel}>Probablemente evitable</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(costoPrevenibles)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>{prevenibles.length} renuncias por sueldo, jefe, ambiente o carrera</div>
+          </div>
+        </div>
+
+        <div style={{ ...S.kpiLabel, marginBottom: 6 }}>¿De qué está hecho el costo?</div>
+        <div style={{ display: "flex", height: 24, border: "1px solid " + COLOR.border, marginBottom: 8 }}>
+          {comp.filter((c) => c.v > 0).map((c) => (
+            <div key={c.k} title={`${c.k}: ${fmt(c.v)}`} style={{ width: `${(c.v / (costoBajas || 1)) * 100}%`, background: c.c }} />
+          ))}
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 14px", marginBottom: 18, fontSize: 11.5, color: COLOR.textSoft }}>
+          {comp.map((c) => (
+            <span key={c.k} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 10, height: 10, background: c.c, display: "inline-block" }} />
+              {c.k} · <strong style={{ color: COLOR.ink }}>{fmtM(c.v)}</strong> ({costoBajas ? ((c.v / costoBajas) * 100).toFixed(0) : 0}%)
+            </span>
+          ))}
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 3fr) minmax(0, 2fr)", gap: 18 }}>
+          <div>
+            <div style={{ ...S.kpiLabel, marginBottom: 8 }}>Costo por área</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {areas.map((a) => (
+                <div key={a.area} style={{ display: "grid", gridTemplateColumns: "110px 1fr 90px", gap: 10, alignItems: "center", fontSize: 12 }}>
+                  <div>
+                    <div style={{ fontWeight: 700, color: COLOR.ink }}>{a.area}</div>
+                    <div style={{ fontSize: 10.5, color: COLOR.textMuted }}>{a.n} baja{a.n !== 1 ? "s" : ""}</div>
+                  </div>
+                  <div style={{ position: "relative", height: 20, background: "#f1f5f9" }}>
+                    <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(a.costo / maxArea) * 100}%`, background: `linear-gradient(90deg, ${COLOR.accentLight} 0%, ${ac} 100%)` }} />
+                    <span style={{ position: "absolute", left: (a.costo / maxArea) > 0.55 ? 8 : `calc(${(a.costo / maxArea) * 100}% + 8px)`, top: 3, fontSize: 10.5, fontWeight: 600, color: (a.costo / maxArea) > 0.55 ? "#fff" : COLOR.textSoft, whiteSpace: "nowrap" }}>{a.motivo}</span>
+                  </div>
+                  <div style={{ textAlign: "right", fontWeight: 700, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(a.costo)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div style={{ ...S.kpiLabel, marginBottom: 8 }}>Costo mes a mes {rango ? `· ${rango}` : ""}</div>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 120, borderBottom: "2px solid " + COLOR.ink }}>
+              {mensual.map((m, i) => (
+                <div key={i} title={`${m.mes} ${m.anio}: ${fmt(m.costo)} · ${m.bajas} bajas`} style={{ flex: 1, height: `${Math.max(2, (m.costo / maxMes) * 100)}%`, background: `linear-gradient(180deg, ${COLOR.accentLight} 0%, ${ac} 100%)` }} />
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+              {mensual.map((m, i) => <div key={i} style={{ flex: 1, textAlign: "center", fontSize: 10, color: COLOR.textSoft }}>{m.mes}</div>)}
+            </div>
+          </div>
+        </div>
+
+        {peorArea && (
+          <div style={{ ...S.alert("warn"), marginTop: 16, marginBottom: 0 }}>
+            <strong>Para discutir en equipo:</strong> <strong>{peorArea.area}</strong> concentra <strong>{fmtM(peorArea.costo)}</strong> ({costoBajas ? ((peorArea.costo / costoBajas) * 100).toFixed(0) : 0}% del costo) y su motivo principal es "{peorArea.motivo}". {tempranas.length > 0 && <>Además, {tempranas.length} persona{tempranas.length !== 1 ? "s" : ""} se fue{tempranas.length !== 1 ? "ron" : ""} antes de cumplir un año. </>}¿Qué acción concreta, con responsable y fecha, evitaría la próxima baja de {peorArea.area}? ¿Cuánto cuesta esa acción comparada con {fmt(costoProm)} por baja?
+          </div>
+        )}
+        <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 10 }}>
+          "Probablemente evitable" = renuncias voluntarias cuyo motivo menciona sueldo, oferta, ambiente, jefe o crecimiento. Es una estimación para conversar, no un diagnóstico.
+        </div>
+      </div>
+    );
+  };
+
+  const contenido = [
+    pasoBasico,
+    pasoCurva,
+    pasoDatos,
+    () => <AulaRiesgos riesgos={AULA_ROT_RIESGOS} intro="Cada salida trae riesgos legales, de operación y de clima que no se ven en el finiquito. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaQuiz preguntas={AULA_ROT_QUIZ} repaso={"Vale la pena repasar \"La curva del reemplazo\" y \"Riesgos que se asumen\" antes de la próxima salida."} />,
+  ][paso]();
+
+  return (
+    <AulaShell titulo="Aula · El costo real de que alguien se vaya" pasos={pasos} paso={paso} setPaso={setPaso}>
+      {contenido}
+    </AulaShell>
+  );
+}
+
+// =============================================================
+// AULA · Desempeño (módulo didáctico de la sección 4. Desempeño)
+// Enfoque: rentabilidad. ¿Cuánto vale una Estrella, cuánto cuesta tolerar,
+// cuánto cuesta perder talento clave o ascender mal?
+// USO (sin cambios): al final de Desempeno():
+//      <AulaDesempeno colaboradores={colaboradores} />
+// Usa NINE_BOX y los compartidos AulaShell, AulaConcepto, AulaRiesgos, AulaQuiz.
+// Geometría del 9 box: id = fila*3 + columna. Fila 0 = potencial alto.
+// Columna 0 = desempeño bajo, columna 2 = desempeño alto.
+// =============================================================
+const AULA_DES_FACTOR = 1.23; // cargas sociales + ISN sobre sueldo
+const AULA_DES_NIVELES = ["Dirección", "Gerencia", "Supervisión", "Operativo"];
+const AULA_DES_MESES_REEMPLAZO = { "Dirección": 12, "Gerencia": 9, "Supervisión": 6, "Operativo": 4 };
+
+const AULA_DES_RIESGOS = [
+  {
+    titulo: "Perder al talento clave sin aviso",
+    nivel: "Alto",
+    que: "Las Estrellas y los de alto desempeño son los más buscados por el mercado. Reemplazar a uno cuesta entre 6 y 12 meses de su sueldo, más los resultados que se dejan de generar mientras alguien nuevo aprende.",
+    ejemplo: "La gerente que sostiene 30% de las ventas recibe una oferta 25% mayor. No había conversación de retención: renuncia y el área tarda 9 meses en recuperar su nivel.",
+    mitiga: "Conversación de carrera y retención al menos dos veces al año con cada Estrella. Un sucesor identificado para cada puesto crítico. Cuesta mucho menos retener que reemplazar.",
+    base: "Buenas prácticas de RH (retención y sucesión).",
+  },
+  {
+    titulo: "Separar por bajo desempeño sin evidencia",
+    nivel: "Alto",
+    que: "Estar en \"Bajo rendimiento\" no es, por sí solo, causa de despido sin responsabilidad para la empresa. Si el despido se declara injustificado, se paga indemnización y salarios vencidos.",
+    ejemplo: "Se despide a un operador de $20,000 al mes sin metas firmadas ni plan de mejora. Demanda y gana: 3 meses de indemnización ($60,000) más hasta 12 meses de salarios vencidos ($240,000).",
+    mitiga: "Plan de mejora (PIP) con metas, fechas y seguimiento por escrito. Asesoría legal antes de separar y, si procede, negociar una salida ordenada: casi siempre sale más barato.",
+    base: "Arts. 47, 48 y 50 LFT.",
+  },
+  {
+    titulo: "El mal ascenso",
+    nivel: "Alto",
+    que: "Ascender al mejor técnico o vendedor a jefe solo por sus resultados. Se pierde a un gran ejecutor y se gana un jefe sin preparación: el costo lo paga todo su equipo.",
+    ejemplo: "El mejor ejecutivo se vuelve gerente de 15 personas. Deja de vender, el equipo baja 10% su productividad y dos personas renuncian en el primer semestre.",
+    mitiga: "Ascender por potencial y no solo por desempeño (eje vertical del 9 box). Probar antes con un proyecto de liderazgo y acompañar el primer año con mentoría.",
+    base: "Buenas prácticas de RH (principio de Peter).",
+  },
+  {
+    titulo: "Pagar igual a todos",
+    nivel: "Medio",
+    que: "Si el aumento y el bono son iguales sin importar el desempeño, se subsidia al bajo desempeño con el dinero que debería retener a los mejores.",
+    ejemplo: "Todos reciben 5% de aumento. La Estrella, que genera el doble que el promedio, recibe lo mismo que quien está en plan de mejora. Seis meses después acepta otra oferta.",
+    mitiga: "Matriz de aumentos por desempeño: más a quien más aporta, cero o mínimo a quien no cumple. Explicar el criterio a todos.",
+    base: "Buenas prácticas de compensación.",
+  },
+  {
+    titulo: "Decidir con evaluaciones sesgadas",
+    nivel: "Medio",
+    que: "Efecto halo, sesgo de lo reciente o poner a todos en el centro. Cada error de evaluación se convierte en un aumento, un bono o un ascenso mal invertido.",
+    ejemplo: "Un ejecutivo carismático queda en \"Estrella\" con 70% de su cuota y recibe el bono más alto. Su compañera con 115% queda en \"Pilar\".",
+    mitiga: "Metas escritas, evidencia por criterio y una sesión de calibración entre jefes antes de cerrar aumentos, bonos o ascensos.",
+    base: "Buenas prácticas de RH (calibración).",
+  },
+  {
+    titulo: "Tolerar el bajo desempeño",
+    nivel: "Alto",
+    que: "No decidir también es una decisión: el trabajo que una persona no hace lo absorben los demás, y los primeros en cansarse son los mejores.",
+    ejemplo: "Un área tolera a 3 personas con bajo desempeño durante dos años. Los dos mejores del equipo renuncian por la carga extra. Reemplazarlos cuesta más que lo que costaba corregir a tiempo.",
+    mitiga: "Metas claras, retroalimentación mensual y un plan de mejora con fecha de cierre. Al final del plan se decide: mejora, cambio de puesto o salida ordenada.",
+    base: "Buenas prácticas de RH (gestión del desempeño).",
+  },
+  {
+    titulo: "Potencial sesgado por edad, género u origen",
+    nivel: "Medio",
+    que: "El potencial es la parte más subjetiva del 9 box. Si se cuela un prejuicio, la empresa invierte su desarrollo en las personas equivocadas y se expone a reclamos.",
+    ejemplo: "Se descarta a un supervisor de 52 años para un programa de liderazgo \"por su edad\". Se invierte en otra persona con menos resultados, que se va al año.",
+    mitiga: "Definir potencial con criterios observables (aprendizaje, agilidad, aspiración expresada) y revisar que la distribución no cambie por edad o género.",
+    base: "Art. 3 LFT (prohíbe la discriminación entre trabajadores).",
+  },
+];
+
+const AULA_DES_QUIZ = [
+  {
+    p: "Una persona cuesta $300,000 al año (sueldo y cargas) y su puesto debería generar 3 veces lo que cuesta. Si rinde al 60%, ¿cuánto valor deja de generar al año?",
+    o: ["$120,000: el 40% de su sueldo", "$360,000: el 40% de los $900,000 que debería generar", "Nada, porque su sueldo ya está pagado"],
+    c: 1,
+    e: "El costo de un bajo desempeño no es su sueldo: es el valor que el puesto deja de generar. $300,000 × 3 = $900,000 esperados; al 60% se pierden $360,000, más el retrabajo que absorben sus compañeros.",
+  },
+  {
+    p: "¿Cuánto suele costar reemplazar a una Estrella en un puesto de gerencia?",
+    o: ["Varios meses de su sueldo (búsqueda, vacante y curva de aprendizaje)", "Lo mismo que el anuncio de la vacante", "Nada: su sueldo se ahorra mientras está vacante"],
+    c: 0,
+    e: "Se suman búsqueda, entrevistas, el tiempo con la silla vacía y los meses que tarda alguien nuevo en rendir igual. Para gerencia, una referencia común es de 6 a 12 meses de sueldo.",
+  },
+  {
+    p: "Se despide \"por bajo desempeño\" a un operador de $20,000 al mes, sin metas firmadas ni plan de mejora. Demanda y gana. ¿De qué tamaño es el riesgo?",
+    o: ["Solo su finiquito", "Un mes de sueldo", "Indemnización de 3 meses más hasta 12 meses de salarios vencidos: cerca de $300,000"],
+    c: 2,
+    e: "El bajo desempeño no es por sí solo causa de rescisión. Si el despido es injustificado: 3 meses de salario más salarios vencidos de hasta 12 meses (Arts. 48 y 50 LFT). La evidencia y el plan de mejora protegen ese dinero.",
+  },
+  {
+    p: "La empresa gana 10 centavos de utilidad por cada peso que vende. Tolerar el bajo desempeño le cuesta $500,000 al año. ¿Cuánto hay que vender de más para reponerlo?",
+    o: ["$500,000", "$5,000,000", "$50,000"],
+    c: 1,
+    e: "Con 10% de margen, cada peso de costo se repone con 10 pesos de venta: $500,000 ÷ 0.10 = $5,000,000. Por eso ahorrar en RH por gestionar bien el desempeño vale tanto como vender mucho más.",
+  },
+  {
+    p: "Ascienden al mejor vendedor a gerente de 15 personas, sin preparación. ¿Cuál es el costo principal?",
+    o: ["Su nuevo sueldo de gerente", "Se pierden sus ventas y el equipo completo baja su productividad", "Ninguno: si vendía bien, dirigirá bien"],
+    c: 1,
+    e: "Es el principio de Peter: se pierde a un gran ejecutor y se gana un jefe sin preparación. Lo caro no es el sueldo: es el equipo de 15 rindiendo menos y las renuncias que provoca.",
+  },
+  {
+    p: "Todos reciben 5% de aumento sin importar su desempeño. ¿Qué es lo más probable?",
+    o: ["Que se pierda a los mejores, que generan más y reciben lo mismo", "Que todos mejoren su desempeño", "Que baje la rotación del equipo"],
+    c: 0,
+    e: "Pagar igual a quien aporta distinto es subsidiar al bajo desempeño con el dinero que debería retener a las Estrellas. Una matriz de aumentos por desempeño cuesta lo mismo y protege lo que más vale.",
+  },
+];
+
+function AulaDesempeno({ colaboradores = [] }) {
+  const [paso, setPaso] = useState(0);
+  // Simulador (compartido con "Con tus datos")
+  const [equipo, setEquipo] = useState(20);
+  const [pctBajo, setPctBajo] = useState(15);
+  const [productividad, setProductividad] = useState(60);
+  const [sueldo, setSueldo] = useState(20000);
+  const [horasRetrabajo, setHorasRetrabajo] = useState(5);
+  const [extraFuga, setExtraFuga] = useState(6);
+  const [mesesReemplazo, setMesesReemplazo] = useState(6);
+  const [multiplo, setMultiplo] = useState(3);
+  const [utilidad, setUtilidad] = useState(15000000);
+  const [margen, setMargen] = useState(10);
+  // Sueldos de referencia por nivel (para "Con tus datos")
+  const [sueldosNivel, setSueldosNivel] = useState({ "Dirección": 90000, "Gerencia": 60000, "Supervisión": 35000, "Operativo": 20000 });
+
+  const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+  const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
+  const ac = COLOR.accent;
+  const F = AULA_DES_FACTOR;
+  const pasos = ["Lo básico", "El costo de tolerar", "Con tus datos", "Riesgos que se asumen", "Pon a prueba al equipo"];
+
+  // ---------- datos reales del 9 box ----------
+  const col = (id) => id % 3; // 0 bajo, 1 medio, 2 alto desempeño
+  const fila = (id) => Math.floor(id / 3); // 0 potencial alto
+  const enBox = (id) => colaboradores.filter((c) => c.box === id);
+  const nombreCorto = (n) => n.split(" ").slice(0, 2).join(" ");
+  const nivelDe = (c) => {
+    const p = (c.puesto || "").toLowerCase();
+    if (p.startsWith("director")) return "Dirección";
+    if (p.includes("gerente")) return "Gerencia";
+    if ((c.aCargo || 0) > 0 || /jefe|supervis|coordin/.test(p)) return "Supervisión";
+    return "Operativo";
+  };
+  const perfDe = (box) => [productividad / 100, 1, 1.5][col(box)];
+  const personas = colaboradores.map((c) => {
+    const nivel = nivelDe(c);
+    const sueldoMes = sueldosNivel[nivel];
+    const costoAnual = sueldoMes * 12 * F;
+    const esperado = costoAnual * multiplo;
+    const aporte = esperado * perfDe(c.box) - costoAnual;
+    const reemplazo = sueldoMes * AULA_DES_MESES_REEMPLAZO[nivel];
+    const costoHoraEquipo = (sueldosNivel["Operativo"] / 192) * F;
+    const tolerar = col(c.box) === 0 ? esperado * (1 - productividad / 100) + horasRetrabajo * 52 * costoHoraEquipo : 0;
+    return { ...c, nivel, sueldoMes, costoAnual, esperado, aporte, reemplazo, tolerar };
+  });
+  const clave = personas.filter((p) => col(p.box) === 2);
+  const bajos = personas.filter((p) => col(p.box) === 0);
+  const valorRiesgoClave = clave.reduce((s, p) => s + p.reemplazo, 0);
+  const costoBajos = bajos.reduce((s, p) => s + p.tolerar, 0);
+  const estrella = personas.filter((p) => p.box === 2).sort((a, b) => b.sueldoMes - a.sueldoMes)[0];
+  const bajoEj = personas.find((p) => p.box === 6) || bajos[0];
+
+  const slider = (label, value, set, min, max, step, show) => (
+    <label style={{ display: "block", fontSize: 12, color: COLOR.textSoft, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+        <span>{label}</span><strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{show(value)}</strong>
+      </div>
+      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: ac }} />
+    </label>
+  );
+  const kpi = (label, valor, nota, color, destacado) => (
+    <div style={{ ...S.kpi, padding: 12, ...(destacado ? { background: COLOR.accentSoft, borderColor: "#fed7aa" } : {}) }}>
+      <div style={S.kpiLabel}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: color || COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{valor}</div>
+      <div style={{ fontSize: 11, color: COLOR.textMuted }}>{nota}</div>
+    </div>
+  );
+
+  // ---------- Paso 0: lo básico ----------
+  const pasoBasico = () => {
+    const costoOp = sueldosNivel["Operativo"] * 12 * F;
+    const esperadoOp = costoOp * multiplo;
+    const difTop = esperadoOp * 0.5;
+    const bajoPerdido = bajoEj ? bajoEj.esperado * (1 - productividad / 100) : esperadoOp * 0.4;
+    const equipoAsc = 15;
+    const costoAscenso = esperadoOp * 0.5 + equipoAsc * esperadoOp * 0.1;
+    const despido = sueldosNivel["Operativo"] * (3 + 12);
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+        <AulaConcepto n="1" titulo="Cada persona es una inversión"
+          formula={`Valor esperado = costo anual × ${multiplo} (múltiplo del puesto)`}
+          ejemploTxt={<>Un puesto operativo de {fmt(sueldosNivel["Operativo"])} al mes cuesta {fmt(costoOp)} al año con cargas. Para ser rentable debería generar cerca de <strong>{fmtM(esperadoOp)}</strong> en ventas, servicio o producción.</>}>
+          El sueldo no es el costo de una persona: es la inversión. La pregunta de rentabilidad es cuánto valor genera esa inversión. El múltiplo depende del negocio; ajústalo en "El costo de tolerar".
+        </AulaConcepto>
+        <AulaConcepto n="2" titulo="El mejor vs. el promedio"
+          formula="Valor extra del mejor = valor esperado × 50%"
+          ejemploTxt={<>Si alguien de alto desempeño rinde 50% más que el promedio en el mismo puesto operativo, aporta <strong>{fmtM(difTop)}</strong> más al año por el mismo sueldo.</>}>
+          En casi todos los puestos hay una gran diferencia de productividad entre los mejores y el promedio. Por eso las Estrellas valen mucho más de lo que cuestan, y perderlas es tan caro.
+        </AulaConcepto>
+        <AulaConcepto n="3" titulo="Lo que cuesta un bajo desempeño"
+          formula="Costo = valor esperado × (1 − rendimiento) + retrabajo de otros"
+          ejemploTxt={bajoEj ? <><strong>{nombreCorto(bajoEj.nombre)}</strong> ({bajoEj.puesto}) rindiendo al {productividad}%: el puesto deja de generar cerca de <strong>{fmtM(bajoPerdido)}</strong> al año, sin contar el retrabajo de sus compañeros.</> : null}>
+          No es su sueldo: es el valor que el puesto deja de generar, más las horas que otros dedican a corregir o cubrir. Ese costo no aparece en ningún reporte.
+        </AulaConcepto>
+        <AulaConcepto n="4" titulo="Reemplazar a una Estrella"
+          formula="Costo de reemplazo ≈ sueldo mensual × meses (según nivel)"
+          ejemploTxt={estrella ? <>Si se va <strong>{nombreCorto(estrella.nombre)}</strong> ({estrella.puesto}, nivel {estrella.nivel.toLowerCase()}), reemplazarla cuesta cerca de <strong>{fmtM(estrella.reemplazo)}</strong> ({AULA_DES_MESES_REEMPLAZO[estrella.nivel]} meses de sueldo), y su equipo de {estrella.aCargo} personas queda sin líder mientras tanto.</> : null}>
+          Búsqueda, entrevistas, la silla vacía y los meses que tarda alguien nuevo en rendir igual. Referencias usadas: operativo 4, supervisión 6, gerencia 9 y dirección 12 meses de sueldo.
+        </AulaConcepto>
+        <AulaConcepto n="5" titulo="El mal ascenso (principio de Peter)"
+          formula="Costo = valor que deja de aportar + equipo rindiendo menos"
+          ejemploTxt={<>Ascender al mejor ejecutivo a jefe de {equipoAsc} personas sin preparación: se pierde su aporte extra y, si el equipo baja 10% su productividad, el costo ronda <strong>{fmtM(costoAscenso)}</strong> al año.</>}>
+          La gente tiende a ascender hasta un puesto donde ya no es buena. Ascender solo por desempeño, sin mirar el potencial (eje vertical del 9 box), es una de las decisiones más caras de RH.
+        </AulaConcepto>
+        <AulaConcepto n="6" titulo="Evaluar mal también cuesta"
+          formula="Despido injustificado = 3 meses + hasta 12 meses de salarios vencidos"
+          ejemploTxt={<>Un operador de {fmt(sueldosNivel["Operativo"])} despedido "por bajo desempeño" sin evidencia puede costar cerca de <strong>{fmtM(despido)}</strong> si gana la demanda (Arts. 48 y 50 LFT).</>}>
+          Cada evaluación sin evidencia termina en un aumento, bono o ascenso mal invertido, o en una separación que no se puede defender. Las metas escritas y la calibración protegen ese dinero.
+        </AulaConcepto>
+      </div>
+    );
+  };
+
+  // ---------- Paso 1: simulador ----------
+  const pasoSimulador = () => {
+    const nBajos = Math.round((equipo * pctBajo) / 100);
+    const tops = Math.max(1, Math.round(equipo * 0.2));
+    const core = Math.max(0, equipo - nBajos - tops);
+    const costoAnualPersona = sueldo * 12 * F;
+    const costoProductividad = nBajos * costoAnualPersona * multiplo * (1 - productividad / 100);
+    const costoHora = sueldo / 192;
+    const costoRetrabajo = nBajos * horasRetrabajo * 52 * costoHora * F;
+    const probFuga = Math.min(90, 10 + extraFuga * (pctBajo / 10));
+    const fugas = tops * (probFuga / 100);
+    const fugasBase = tops * 0.1;
+    const costoFuga = Math.max(0, fugas - fugasBase) * sueldo * 1.5 * mesesReemplazo;
+    const totalCosto = costoProductividad + costoRetrabajo + costoFuga;
+    const fugasVisibles = Math.min(tops, Math.round(fugas));
+    const pctUtilidad = utilidad > 0 ? (totalCosto / utilidad) * 100 : 0;
+    const ventasNecesarias = margen > 0 ? totalCosto / (margen / 100) : 0;
+
+    // pictograma del equipo
+    const figuras = [];
+    for (let i = 0; i < tops; i++) figuras.push(i < fugasVisibles ? "fuga" : "top");
+    for (let i = 0; i < core; i++) figuras.push("core");
+    for (let i = 0; i < nBajos; i++) figuras.push("bajo");
+    const porFila = 10;
+    const filasP = Math.ceil(figuras.length / porFila);
+    const cw = 52, ch = 62;
+    const W = porFila * cw + 20, H = filasP * ch + 16;
+    const colores = { top: "#233a63", fuga: "#233a63", core: "#94a3b8", bajo: "#983838" };
+
+    const segmentos = [
+      { label: "Valor que el puesto no genera", v: costoProductividad, color: "#983838", nota: `${nBajos} persona${nBajos !== 1 ? "s" : ""} al ${productividad}% · múltiplo ${multiplo}×` },
+      { label: "Retrabajo que absorben los demás", v: costoRetrabajo, color: "#c2410c", nota: `${horasRetrabajo} h/semana por cada una` },
+      { label: "Renuncias extra de los mejores", v: costoFuga, color: "#233a63", nota: `${Math.max(0, fugas - fugasBase).toFixed(1)} renuncias más de lo normal · ${mesesReemplazo} meses de sueldo cada una` },
+    ];
+
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
+        <div>
+          <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+            No decidir también cuesta. Mueve los controles y mira cuánto de la utilidad se come un equipo donde el bajo desempeño se tolera en lugar de gestionarse.
+          </div>
+          {slider("Tamaño del equipo", equipo, setEquipo, 5, 50, 1, (v) => `${v} personas`)}
+          {slider("Bajo desempeño que se tolera", pctBajo, setPctBajo, 0, 40, 5, (v) => `${v}% del equipo`)}
+          {slider("Sueldo mensual promedio", sueldo, setSueldo, 8000, 60000, 1000, fmt)}
+          {slider("Utilidad anual de la empresa", utilidad, setUtilidad, 2000000, 60000000, 1000000, fmtM)}
+          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
+            <div style={{ marginTop: 10 }}>
+              {slider("Valor que genera un puesto", multiplo, setMultiplo, 1.5, 6, 0.5, (v) => `${v}× lo que cuesta`)}
+              {slider("Rendimiento de un bajo desempeño", productividad, setProductividad, 30, 90, 5, (v) => `${v}% de lo esperado`)}
+              {slider("Horas de retrabajo que genera a otros", horasRetrabajo, setHorasRetrabajo, 0, 15, 1, (v) => `${v} h/semana`)}
+              {slider("Probabilidad extra de renuncia de los mejores", extraFuga, setExtraFuga, 0, 15, 1, (v) => `+${v} pts por cada 10%`)}
+              {slider("Costo de reemplazar a uno de los mejores", mesesReemplazo, setMesesReemplazo, 1, 12, 1, (v) => `${v} meses de sueldo`)}
+              {slider("Margen de utilidad sobre ventas", margen, setMargen, 2, 30, 1, (v) => `${v}%`)}
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>Valores ilustrativos para el ejercicio. Los mejores se toman como 20% del equipo, con 10% de rotación normal, y ganan 1.5× el sueldo promedio. El costo anual incluye 23% de cargas.</div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+            {kpi("Costo anual de tolerar", fmtM(totalCosto), `${nBajos} de ${equipo} personas sin plan de mejora`, ac, true)}
+            {kpi("De la utilidad anual", `${pctUtilidad.toFixed(1)}%`, `de ${fmtM(utilidad)} de utilidad`, pctUtilidad >= 5 ? "#b00020" : COLOR.ink)}
+            {kpi("Ventas para reponerlo", fmtM(ventasNecesarias), `con ${margen}% de margen`, "#233a63")}
+          </div>
+
+          <div style={{ border: "1px solid " + COLOR.border, background: "#fff", padding: "12px 14px", marginBottom: 12 }}>
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", fontSize: 11, color: COLOR.textSoft, marginBottom: 6 }}>
+              <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#233a63", borderRadius: 2, marginRight: 4 }} />Los mejores</span>
+              <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#94a3b8", borderRadius: 2, marginRight: 4 }} />Desempeño medio</span>
+              <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#983838", borderRadius: 2, marginRight: 4 }} />Bajo desempeño tolerado</span>
+              <span><span style={{ display: "inline-block", width: 10, height: 10, border: "1.5px dashed #233a63", borderRadius: 2, marginRight: 4 }} />Se va del equipo</span>
+              <span style={{ marginLeft: "auto", fontWeight: 700, color: "#233a63" }}>Riesgo de perder a los mejores: {Math.round(probFuga)}% al año (normal 10%)</span>
+            </div>
+            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", maxWidth: W, height: "auto", display: "block", margin: "0 auto" }} role="img" aria-label="Pictograma del equipo">
+              {figuras.map((t, i) => {
+                const x = 10 + (i % porFila) * cw + cw / 2;
+                const y = 8 + Math.floor(i / porFila) * ch;
+                const c = colores[t];
+                const fuga = t === "fuga";
+                return (
+                  <g key={i} opacity={fuga ? 0.45 : 1}>
+                    <circle cx={x} cy={y + 12} r="9" fill={fuga ? "none" : c} stroke={c} strokeWidth="1.5" strokeDasharray={fuga ? "3 2" : undefined} />
+                    <path d={`M ${x - 15} ${y + 46} Q ${x - 15} ${y + 24} ${x} ${y + 24} Q ${x + 15} ${y + 24} ${x + 15} ${y + 46} Z`} fill={fuga ? "none" : c} stroke={c} strokeWidth="1.5" strokeDasharray={fuga ? "3 2" : undefined} />
+                    {fuga && <text x={x} y={y + 58} textAnchor="middle" fontSize="11" fontWeight="700" fill="#233a63">se va</text>}
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+
+          <div style={{ display: "flex", height: 30, overflow: "hidden", border: "1px solid " + COLOR.border }}>
+            {segmentos.filter((s) => s.v > 0).map((s) => (
+              <div key={s.label} title={`${s.label}: ${fmt(s.v)}`} style={{ width: `${(s.v / (totalCosto || 1)) * 100}%`, background: s.color, color: "#fff", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", whiteSpace: "nowrap", overflow: "hidden", transition: "width 0.3s ease" }}>
+                {s.v / (totalCosto || 1) > 0.14 ? fmtM(s.v) : ""}
+              </div>
+            ))}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
+            {segmentos.map((s) => (
+              <div key={s.label} style={{ display: "grid", gridTemplateColumns: "12px 1fr auto", gap: 8, alignItems: "baseline", fontSize: 12 }}>
+                <span style={{ width: 10, height: 10, background: s.color, borderRadius: 2, display: "inline-block" }} />
+                <span><strong style={{ color: COLOR.ink }}>{s.label}</strong> <span style={{ color: COLOR.textMuted }}>· {s.nota}</span></span>
+                <strong style={{ fontVariantNumeric: "tabular-nums", color: COLOR.ink }}>{fmt(s.v)}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ ...S.alert(pctUtilidad >= 5 ? "danger" : "warn"), marginTop: 12, marginBottom: 0 }}>
+            {nBajos === 0 ? (
+              <>Sin bajo desempeño tolerado, el equipo solo tiene la rotación normal. Gestionar a tiempo (metas claras, plan de mejora y seguimiento) es lo que mantiene la utilidad intacta.</>
+            ) : (
+              <>Tolerar a <strong>{nBajos}</strong> persona{nBajos !== 1 ? "s" : ""} con bajo desempeño le cuesta <strong>{fmtM(totalCosto)}</strong> al año a la empresa: <strong>{pctUtilidad.toFixed(1)}% de su utilidad</strong>. Para reponerlo habría que vender <strong>{fmtM(ventasNecesarias)}</strong> más. Gestionar el desempeño no es "tema de RH": es una de las formas más baratas de proteger la utilidad.</>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ---------- Paso 2: con tus datos ----------
+  const pasoDatos = () => {
+    const totalRiesgo = valorRiesgoClave + costoBajos;
+    const pctUtil = utilidad > 0 ? (totalRiesgo / utilidad) * 100 : 0;
+    const aportePorBox = NINE_BOX.map((b) => personas.filter((p) => p.box === b.id).reduce((s, p) => s + p.aporte, 0));
+    const maxAbs = Math.max(1, ...aportePorBox.map((v) => Math.abs(v)));
+    const filasTabla = [
+      ...clave.map((p) => ({ ...p, tipo: "clave", monto: p.reemplazo, que: `Reemplazo: ${AULA_DES_MESES_REEMPLAZO[p.nivel]} meses de sueldo` })),
+      ...bajos.map((p) => ({ ...p, tipo: "bajo", monto: p.tolerar, que: p.box === 0 ? "Potencial sin desarrollar: valor no generado al año" : "Costo anual de tolerar" })),
+    ].sort((a, b) => b.monto - a.monto);
+    const maxMonto = Math.max(1, ...filasTabla.map((f) => f.monto));
+    const top = filasTabla[0];
+    return (
+      <div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+          Con la matriz de arriba ({colaboradores.length} evaluados). ¿Cuánto dinero está en juego en tu 9 box? Si mueves a alguien de casilla, esta pestaña se actualiza.
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
+          {kpi("Talento clave en riesgo", fmtM(valorRiesgoClave), `costo de reemplazar a ${clave.length} personas de desempeño alto`, "#233a63")}
+          {kpi("Bajo desempeño", fmtM(costoBajos), `valor que no se genera al año · ${bajos.length} personas`, "#983838")}
+          {kpi("Dinero en juego", fmtM(totalRiesgo), `${pctUtil.toFixed(1)}% de una utilidad de ${fmtM(utilidad)}`, ac, true)}
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(260px, 340px) 1fr", gap: 20, alignItems: "start" }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 6 }}>Valor neto que aporta cada casilla al año</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 4 }}>
+              {NINE_BOX.map((b, i) => {
+                const v = aportePorBox[i];
+                const n = enBox(b.id).length;
+                const fuerte = Math.abs(v) / maxAbs > 0.5;
+                const base = v >= 0 ? "#233a63" : "#983838";
+                return (
+                  <div key={b.id} title={`${b.titulo}: ${n} persona(s)`} style={{ background: n ? hexA(base, 0.1 + 0.75 * (Math.abs(v) / maxAbs)) : "#f8fafc", border: "1px solid " + COLOR.border, padding: "8px 6px", textAlign: "center", minHeight: 66 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: fuerte ? "#fff" : v < 0 ? "#983838" : COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{n ? (v >= 0 ? "+" : "−") + fmtM(Math.abs(v)) : "—"}</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: fuerte ? "#fff" : COLOR.textSoft, lineHeight: 1.2, marginTop: 2 }}>{b.titulo}</div>
+                    <div style={{ fontSize: 10.5, color: fuerte ? "rgba(255,255,255,0.85)" : COLOR.textMuted }}>{n} pers.</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: COLOR.textMuted, marginTop: 4 }}>
+              <span>← Desempeño bajo</span><span>alto →</span>
+            </div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 6, lineHeight: 1.5 }}>
+              Valor neto = lo que genera la casilla (costo × {multiplo} × rendimiento) − lo que cuesta. Rendimiento: bajo {productividad}%, medio 100%, alto 150%.
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 8 }}>Quién concentra el dinero en juego</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+              {filasTabla.map((p) => (
+                <div key={p.id} style={{ display: "grid", gridTemplateColumns: "170px 1fr 100px", gap: 10, alignItems: "center", fontSize: 12 }}>
+                  <div>
+                    <div style={{ fontWeight: 700, color: COLOR.ink }}>{nombreCorto(p.nombre)}</div>
+                    <div style={{ fontSize: 11, color: COLOR.textMuted }}>{NINE_BOX[p.box].titulo} · {p.nivel}</div>
+                  </div>
+                  <div style={{ position: "relative", height: 20, background: "#f1f5f9" }} title={p.que}>
+                    <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(p.monto / maxMonto) * 100}%`, background: p.tipo === "clave" ? "#233a63" : "#983838", transition: "width 0.3s ease" }} />
+                    <span style={{ position: "absolute", left: (p.monto / maxMonto) > 0.55 ? 8 : `calc(${(p.monto / maxMonto) * 100}% + 8px)`, top: 3, fontSize: 11, color: (p.monto / maxMonto) > 0.55 ? "#fff" : COLOR.textSoft, whiteSpace: "nowrap" }}>{p.que}</span>
+                  </div>
+                  <div style={{ textAlign: "right", fontWeight: 700, fontVariantNumeric: "tabular-nums", color: p.tipo === "clave" ? "#233a63" : "#983838" }}>{fmtM(p.monto)}</div>
+                </div>
+              ))}
+            </div>
+            <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 12 }}>
+              <summary style={{ cursor: "pointer", fontWeight: 600 }}>Sueldos de referencia por nivel (ajústalos a tu empresa)</summary>
+              <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0 16px" }}>
+                {AULA_DES_NIVELES.map((n) => (
+                  <div key={n}>{slider(n, sueldosNivel[n], (v) => setSueldosNivel((prev) => ({ ...prev, [n]: v })), 8000, 200000, 1000, fmt)}</div>
+                ))}
+              </div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>El nivel se toma del puesto: Director → Dirección, Gerente → Gerencia, con gente a cargo o Jefe/Supervisor/Coordinador → Supervisión; el resto, Operativo.</div>
+            </details>
+          </div>
+        </div>
+
+        <div style={{ ...S.alert("warn"), marginTop: 16, marginBottom: 0 }}>
+          <strong>Para discutir en equipo:</strong> {top ? <>el mayor monto está en <strong>{nombreCorto(top.nombre)}</strong> ({fmtM(top.monto)}). </> : null}
+          Hoy hay <strong>{fmtM(totalRiesgo)}</strong> en juego, el {pctUtil.toFixed(1)}% de la utilidad. ¿Cuánto estamos invirtiendo en retener a las {clave.length} personas de desempeño alto y en corregir a las {bajos.length} de desempeño bajo? ¿Es proporcional a lo que nos jugamos?
+        </div>
+      </div>
+    );
+  };
+
+  const contenido = [
+    pasoBasico,
+    pasoSimulador,
+    pasoDatos,
+    () => <AulaRiesgos riesgos={AULA_DES_RIESGOS} intro="Cada decisión de desempeño mueve dinero: aumentos, bonos, ascensos, renuncias y demandas. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaQuiz preguntas={AULA_DES_QUIZ} repaso={"Vale la pena repasar \"Lo básico\" y \"El costo de tolerar\" antes de la próxima sesión de calibración."} />,
+  ][paso]();
+
+  return (
+    <AulaShell titulo="Aula · ¿Cuánto vale gestionar el desempeño?" pasos={pasos} paso={paso} setPaso={setPaso}>
+      {contenido}
+    </AulaShell>
+  );
+}
+
+// =============================================================
+// AULA · ¿El clima laboral le pega a la utilidad? (módulo didáctico de Clima Laboral)
+// Uso (al final de Clima(), justo antes del cierre `    </div>\n  );`):
+//   <AulaClima pulso={7.2} enps={18} promotores={42} detractores={24} respondieron={168} plantilla={248} />
+// Lee además los datos de módulo EVALUADOS_360, BAJAS_SALIDA e INSTRUMENTOS.
+// =============================================================
+
+// Plantilla de referencia por área (misma que Cobertura de Plantilla)
+const AULA_CLI_PLANTILLA_AREA = { Comercial: 73, Posventa: 55, Operaciones: 65, "Administración": 24, "Dirección": 5 };
+
+const AULA_CLI_RIESGOS = [
+  {
+    titulo: "Incumplir la NOM-035",
+    nivel: "Alto",
+    que: "La empresa está obligada a identificar y prevenir los factores de riesgo psicosocial (cargas excesivas, jornadas largas, violencia laboral, falta de control) y a promover un entorno organizacional favorable.",
+    ejemplo: "En una inspección, la empresa no puede mostrar su política de prevención ni los resultados del cuestionario de factores de riesgo. Además de la multa, el diagnóstico que no se hizo era justo el que explicaba la rotación de Posventa.",
+    mitiga: "Política escrita, cuestionario aplicado según el tamaño del centro de trabajo, resultados documentados y un plan de acción con responsables.",
+    base: "NOM-035-STPS-2018 · Art. 994 fr. V LFT (multas por no observar normas de seguridad e higiene).",
+  },
+  {
+    titulo: "Renuncia con indemnización por malos tratos",
+    nivel: "Alto",
+    que: "Si un jefe maltrata a su equipo, el trabajador puede dejar el empleo por causa imputable a la empresa y reclamar la indemnización como si lo hubieran despedido.",
+    ejemplo: "Tres personas del mismo taller renuncian y demandan señalando gritos y humillaciones del supervisor. La empresa paga tres indemnizaciones completas por una conducta que nadie atendió.",
+    mitiga: "Canal de denuncia confiable, investigación de quejas en días (no meses) y consecuencias reales para los jefes con conductas reportadas.",
+    base: "Arts. 51 fr. II y 52 LFT.",
+  },
+  {
+    titulo: "Acoso y hostigamiento sin protocolo",
+    nivel: "Alto",
+    que: "La ley exige tener un protocolo para prevenir la discriminación por género y atender casos de violencia, hostigamiento y acoso sexual. Sin él, cada caso se vuelve un riesgo legal y reputacional.",
+    ejemplo: "Una colaboradora reporta hostigamiento. No hay protocolo ni responsable; el caso llega a redes sociales antes que a RH.",
+    mitiga: "Protocolo publicado, comité o responsable designado, capacitación a mandos y seguimiento confidencial de cada caso.",
+    base: "Arts. 3 Bis y 132 fr. XXXI LFT.",
+  },
+  {
+    titulo: "Se van primero los mejores",
+    nivel: "Alto",
+    que: "Cuando el ambiente se deteriora, la gente con más opciones en el mercado es la primera en irse. Se quedan quienes no tienen a dónde ir.",
+    ejemplo: "Comercial pierde a su gerente regional y a dos asesores Sr. en un trimestre. Los motivos de salida mencionan techo de crecimiento y falta de reconocimiento, no solo sueldo.",
+    mitiga: "Entrevistas de permanencia con el talento clave (antes de que renuncie), planes de carrera y revisión trimestral de motivos de salida por jefe.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Encuesta sin acción",
+    nivel: "Medio",
+    que: "Preguntar y no hacer nada es peor que no preguntar: la gente aprende que su opinión no cuenta y la siguiente encuesta tiene menos respuestas y menos honestidad.",
+    ejemplo: "Se aplica la encuesta de compromiso, se presentan los resultados a Dirección y no se comunica ninguna acción. Seis meses después la tasa de respuesta cae de 81% a 55%.",
+    mitiga: "Regla de 30 días: compartir resultados y 2 o 3 acciones concretas con responsable y fecha. Medir de nuevo para cerrar el ciclo.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Romper el anonimato",
+    nivel: "Medio",
+    que: "Si alguien identifica quién respondió qué (por ejemplo, en áreas de 3 personas), se pierde la confianza y se expone a la empresa por el mal uso de datos personales.",
+    ejemplo: "Un gerente pide \"ver las respuestas de su equipo\" y, con solo 4 personas, adivina quién lo calificó mal. Al mes siguiente nadie contesta con honestidad.",
+    mitiga: "No mostrar resultados de grupos pequeños (mínimo 5 respuestas), aviso de privacidad claro y acceso restringido a los datos crudos.",
+    base: "Ley Federal de Protección de Datos Personales en Posesión de los Particulares.",
+  },
+  {
+    titulo: "El cliente lo nota",
+    nivel: "Medio",
+    que: "Un equipo desenganchado atiende peor: más errores, menos paciencia, menos ganas de resolver. El mal clima de adentro se convierte en quejas y clientes perdidos afuera.",
+    ejemplo: "En el taller con peor clima suben las quejas y las órdenes que regresan por retrabajo. El cliente no sabe del ambiente interno, solo sabe que no vuelve.",
+    mitiga: "Cruzar clima por área con indicadores de servicio (quejas, retrabajo, recompra) para que Dirección vea el impacto en ventas.",
+    base: "Buenas prácticas de RH.",
+  },
+];
+
+const AULA_CLI_QUIZ = [
+  {
+    p: "El eNPS de la empresa es +18 con 42% de promotores. ¿Qué porcentaje son detractores?",
+    o: ["18%", "24%", "58%"],
+    c: 1,
+    e: "eNPS = % promotores − % detractores. 42 − 24 = +18. Los pasivos (34%) no restan ni suman, pero son los más fáciles de convertir en promotores… o en detractores.",
+  },
+  {
+    p: "¿Por qué el mal clima casi nunca aparece en el estado de resultados?",
+    o: ["Porque no cuesta dinero, solo afecta el ánimo", "Porque RH lo registra como gasto de capacitación", "Porque su costo está repartido en productividad perdida, faltas, rotación y errores que nadie etiqueta como \"clima\""],
+    c: 2,
+    e: "No existe una cuenta contable llamada \"mal clima\". Su costo se esconde en horas pagadas sin rendir, reemplazos, horas extra y clientes perdidos. Por eso hay que estimarlo, como en el simulador.",
+  },
+  {
+    p: "Una persona desenganchada viene a trabajar todos los días pero rinde mucho menos. ¿Cómo se le llama a ese fenómeno?",
+    o: ["Presentismo", "Ausentismo", "Rotación silenciosa"],
+    c: 0,
+    e: "Presentismo es estar presente sin rendir (por malestar, enfermedad o desmotivación). Suele costar más que el ausentismo porque no se ve: la persona sí checa entrada.",
+  },
+  {
+    p: "Se aplicó la encuesta de compromiso hace 4 meses y no se ha comunicado ninguna acción. ¿Qué es lo más probable en la siguiente medición?",
+    o: ["Mejores resultados, porque la gente ya se acostumbró", "Los mismos resultados", "Menos respuestas y respuestas menos honestas"],
+    c: 2,
+    e: "Cuando no hay acción, la gente concluye que opinar no sirve. Baja la participación y suben las respuestas \"neutras\". La regla práctica: comunicar acciones en los siguientes 30 días.",
+  },
+  {
+    p: "Si un supervisor maltrata a su equipo y una persona renuncia por eso, ¿qué puede reclamar?",
+    o: ["La indemnización, como si la hubieran despedido injustificadamente", "Solo su finiquito", "Nada, porque fue ella quien renunció"],
+    c: 0,
+    e: "Los malos tratos del patrón o de sus representantes son causa para que el trabajador rescinda la relación sin responsabilidad y reclame indemnización (Arts. 51 fr. II y 52 LFT).",
+  },
+  {
+    p: "Dirección pregunta: \"¿Para qué invertir en clima si ya pagamos bien?\" ¿Cuál es el mejor argumento?",
+    o: ["Porque la NOM-035 obliga a hacer fiestas de fin de año", "Porque cada punto de desenganche cuesta productividad, faltas y rotación que se pueden estimar en pesos y en % de la utilidad", "Porque los empleados contentos piden menos aumentos"],
+    c: 1,
+    e: "El lenguaje de Dirección es la utilidad. Traducir el clima a pesos (como en \"La cascada de la utilidad\") convierte una conversación de \"ánimo\" en una de rentabilidad.",
+  },
+];
+
+function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, respondieron = 168, plantilla = 248 }) {
+  const [paso, setPaso] = useState(0);
+  const [svgRef, svgAncho] = useAnchoSvg();
+  // Simulador (también alimenta "Con tus datos")
+  const [gente, setGente] = useState(plantilla);
+  const [sueldo, setSueldo] = useState(22000);
+  const [pctDes, setPctDes] = useState(detractores);
+  const [meta, setMeta] = useState(Math.max(5, detractores - 10));
+  const [utilidad, setUtilidad] = useState(30000000);
+  // Supuestos
+  const [valorMult, setValorMult] = useState(2);
+  const [prodPerdida, setProdPerdida] = useState(30);
+  const [diasFalta, setDiasFalta] = useState(4);
+  const [presentismo, setPresentismo] = useState(3);
+  const [rotExtra, setRotExtra] = useState(6);
+  const [mesesBaja, setMesesBaja] = useState(6);
+
+  const ac = COLOR.accent;
+  const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+  const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
+  const CARGA = 1.35; // sueldo + prestaciones y cuotas
+
+  const pasos = ["Lo básico", "La cascada de la utilidad", "Con tus datos", "Riesgos que se asumen", "Pon a prueba al equipo"];
+
+  // ---------- Modelo de costo del mal clima ----------
+  const costoClima = (n, pct, s = sueldo) => {
+    const des = n * (pct / 100);
+    const valorAnual = s * 12 * valorMult;
+    const desenganche = des * valorAnual * (prodPerdida / 100);
+    const ausentismo = des * diasFalta * (s / 30) * CARGA;
+    const present = n * valorAnual * (presentismo / 100) * (pct / Math.max(1, detractores));
+    const rotacion = n * (rotExtra / 100) * (pct / Math.max(1, detractores)) * s * mesesBaja;
+    return { des, desenganche, ausentismo, presentismo: present, rotacion, total: desenganche + ausentismo + present + rotacion };
+  };
+  const actual = costoClima(gente, pctDes);
+  const mejor = costoClima(gente, meta);
+  const recupera = actual.total - mejor.total;
+  const potencial = utilidad + actual.total;
+  const pctUtilidad = potencial > 0 ? (actual.total / potencial) * 100 : 0;
+
+  // ---------- Datos reales del módulo ----------
+  const pasivos = Math.max(0, 100 - promotores - detractores);
+  const tasaResp = plantilla ? (respondieron / plantilla) * 100 : 0;
+  const salidas = typeof BAJAS_SALIDA !== "undefined" ? BAJAS_SALIDA : [];
+  const evaluados = typeof EVALUADOS_360 !== "undefined" ? EVALUADOS_360 : [];
+  const rotAnualVol = plantilla ? ((salidas.length * 4) / plantilla) * 100 : 0;
+  const pulsoInst = (typeof INSTRUMENTOS !== "undefined" ? INSTRUMENTOS : []).find((i) => i.id === "pulso-rapido");
+  const sinRecursos = pulsoInst?.resultado?.distribucion?.[1]?.barras?.find((b) => b.label === "No")?.pct ?? 29;
+
+  const pasoBasico = () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+      <AulaConcepto n="1" titulo="eNPS"
+        formula="eNPS = % promotores (9-10) − % detractores (0-6)"
+        ejemploTxt={<>Hoy: {promotores}% − {detractores}% = <strong>{enps >= 0 ? "+" : ""}{enps}</strong>. De cada 100 personas, {detractores} no recomendarían trabajar aquí. Con {plantilla} colaboradores son cerca de <strong>{Math.round(plantilla * detractores / 100)} personas</strong>.</>}>
+        Mide si tu gente recomendaría la empresa como lugar para trabajar. Es la forma más rápida de saber cuántas personas están <strong>en contra</strong>, no solo inconformes.
+      </AulaConcepto>
+      <AulaConcepto n="2" titulo="Pulso y compromiso"
+        formula="Compromiso = ganas de dar el extra + intención de quedarse"
+        ejemploTxt={<>Pulso semanal: <strong>{pulso} / 10</strong>, contestado por {respondieron} de {plantilla} ({tasaResp.toFixed(0)}%). Además, {sinRecursos}% dice que <strong>no tiene lo que necesita</strong> para hacer su trabajo: eso es productividad que se pierde por la empresa, no por la persona.</>}>
+        El pulso es una foto frecuente del ánimo. El compromiso es lo que de verdad mueve la productividad: la diferencia entre cumplir el mínimo y resolver el problema del cliente.
+      </AulaConcepto>
+      <AulaConcepto n="3" titulo="Ausentismo"
+        formula="Costo = días de falta × sueldo diario × 1.35 (con cargas)"
+        ejemploTxt={<>Si cada persona desenganchada falta {diasFalta} días más al año: {Math.round(plantilla * detractores / 100)} personas × {diasFalta} días × {fmt((sueldo / 30) * CARGA)} = <strong>{fmt(Math.round(plantilla * detractores / 100) * diasFalta * (sueldo / 30) * CARGA)}</strong> al año pagados sin trabajo.</>}>
+        Faltas no planeadas: incapacidades cortas, "asuntos personales", retardos. Se pagan igual y alguien más tiene que cubrir el hueco, muchas veces con horas extra.
+      </AulaConcepto>
+      <AulaConcepto n="4" titulo="Presentismo"
+        formula="Costo = personas × valor que generan × % del tiempo sin rendir"
+        ejemploTxt={<>Si toda la plantilla pierde {presentismo}% de su tiempo por malestar o distracción: {plantilla} × {fmt(sueldo * 12 * valorMult)} × {presentismo}% = <strong>{fmtM(plantilla * sueldo * 12 * valorMult * presentismo / 100)}</strong> al año.</>}>
+        Estar en el trabajo sin rendir. No aparece en ningún reporte porque la persona sí checa entrada. Suele costar más que el ausentismo precisamente porque no se ve.
+      </AulaConcepto>
+      <AulaConcepto n="5" titulo="Rotación voluntaria"
+        formula="% rotación voluntaria = renuncias del año ÷ plantilla"
+        ejemploTxt={<>{salidas.length} encuestas de salida en 90 días ≈ {salidas.length * 4} al año → <strong>{rotAnualVol.toFixed(1)}%</strong> de la plantilla. Con un costo de {mesesBaja} meses de sueldo por baja, son cerca de <strong>{fmtM(salidas.length * 4 * sueldo * mesesBaja)}</strong> al año.</>}>
+        Las renuncias son el síntoma más caro del mal clima. La gente no deja empresas: deja jefes, falta de crecimiento y ambientes que no tolera.
+      </AulaConcepto>
+      <AulaConcepto n="6" titulo="La cadena clima → utilidad"
+        formula="Clima → compromiso → productividad y servicio → ventas y utilidad"
+        ejemploTxt={<>Con los supuestos del simulador, el mal clima le cuesta a la empresa <strong>{fmtM(actual.total)}</strong> al año: el <strong>{pctUtilidad.toFixed(0)}%</strong> de la utilidad que podría tener.</>}>
+        El clima no es un tema de "ánimo": es el primer eslabón de una cadena que termina en el estado de resultados. Si se rompe al principio, se paga al final.
+      </AulaConcepto>
+    </div>
+  );
+
+  const slider = (label, value, set, min, max, step, show) => (
+    <label style={{ display: "block", fontSize: 12, color: COLOR.textSoft, marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+        <span>{label}</span><strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{show(value)}</strong>
+      </div>
+      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: ac }} />
+    </label>
+  );
+
+  const pasoCascada = () => {
+    const pasosC = [
+      { label: "Utilidad", sub: "posible", v: potencial, tipo: "total" },
+      { label: "Desenganche", sub: "productividad", v: -actual.desenganche, tipo: "baja" },
+      { label: "Presentismo", sub: "sin rendir", v: -actual.presentismo, tipo: "baja" },
+      { label: "Rotación", sub: "extra", v: -actual.rotacion, tipo: "baja" },
+      { label: "Ausentismo", sub: "faltas", v: -actual.ausentismo, tipo: "baja" },
+      { label: "Utilidad", sub: "real", v: utilidad, tipo: "final" },
+    ];
+    const W = Math.max(520, svgAncho), H = 320, L = 70, R = 16, T = 30, B = 52;
+    const maxV = Math.max(potencial, 1);
+    const minV = Math.min(0, utilidad);
+    const y = (v) => T + (H - T - B) * (1 - (v - minV) / (maxV - minV));
+    const n = pasosC.length;
+    const slot = (W - L - R) / n;
+    const bw = Math.min(90, slot * 0.6);
+    let acum = potencial;
+    const barras = pasosC.map((p, i) => {
+      const cx = L + slot * i + slot / 2;
+      let top, bot;
+      if (p.tipo === "total") { top = y(p.v); bot = y(0); }
+      else if (p.tipo === "final") { top = y(Math.max(0, p.v)); bot = y(Math.min(0, p.v)); }
+      else { const nuevo = acum + p.v; top = y(acum); bot = y(nuevo); acum = nuevo; }
+      return { ...p, cx, top, bot };
+    });
+    const colores = { total: "#334155", baja: ac, final: utilidad >= 0 ? "#0a7d2c" : "#b00020" };
+    const ticks = 4;
+
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
+        <div>
+          <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+            El mal clima no aparece como gasto en el estado de resultados, pero se come la utilidad por cuatro lados. Mueve los controles y mira cuánto queda.
+          </div>
+          {slider("Plantilla", gente, setGente, 20, 2000, 10, (v) => `${v} personas`)}
+          {slider("Sueldo mensual promedio", sueldo, setSueldo, 8000, 80000, 1000, fmt)}
+          {slider("Personas desenganchadas", pctDes, setPctDes, 0, 60, 1, (v) => `${v}% (${Math.round(gente * v / 100)})`)}
+          {slider("Utilidad anual actual", utilidad, setUtilidad, 1000000, 300000000, 1000000, fmtM)}
+          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
+            <div style={{ marginTop: 10 }}>
+              {slider("Valor que genera cada persona", valorMult, setValorMult, 1, 5, 0.5, (v) => `${v}× su sueldo`)}
+              {slider("Productividad que pierde un desenganchado", prodPerdida, setProdPerdida, 0, 60, 5, (v) => v + "%")}
+              {slider("Días de falta extra por desenganchado", diasFalta, setDiasFalta, 0, 15, 1, (v) => `${v} días/año`)}
+              {slider("Tiempo sin rendir (presentismo)", presentismo, setPresentismo, 0, 10, 0.5, (v) => v + "%")}
+              {slider("Rotación extra por mal clima", rotExtra, setRotExtra, 0, 20, 1, (v) => `${v} puntos`)}
+              {slider("Costo de cada baja", mesesBaja, setMesesBaja, 1, 12, 1, (v) => `${v} meses de sueldo`)}
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>Valores de referencia para conversar, no un cálculo contable. Presentismo y rotación escalan con el % de desenganchados (tomando {detractores}% como el nivel actual).</div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Costo anual del mal clima</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(actual.total)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmt(gente ? actual.total / gente : 0)} por colaborador</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+              <div style={S.kpiLabel}>Se come de la utilidad</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{pctUtilidad.toFixed(1)}%</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>de {fmtM(potencial)} posibles</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Si bajas a {meta}% desenganchados</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#0a7d2c", fontVariantNumeric: "tabular-nums" }}>+{fmtM(Math.max(0, recupera))}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>de utilidad recuperada al año</div>
+            </div>
+          </div>
+
+          <div ref={svgRef} style={{ border: "1px solid " + COLOR.border, background: "#fff" }}>
+            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }} role="img" aria-label="Cascada de la utilidad: del potencial a la real">
+              {Array.from({ length: ticks + 1 }, (_, i) => {
+                const v = minV + ((maxV - minV) * i) / ticks;
+                return (
+                  <g key={i}>
+                    <line x1={L} x2={W - R} y1={y(v)} y2={y(v)} stroke={COLOR.borderSoft} />
+                    <text x={L - 8} y={y(v) + 4} textAnchor="end" fontSize="11" fill={COLOR.textMuted}>{fmtM(v)}</text>
+                  </g>
+                );
+              })}
+              <line x1={L} x2={W - R} y1={y(0)} y2={y(0)} stroke="#94a3b8" />
+              {barras.map((b, i) => (
+                <g key={i}>
+                  {i > 0 && i < n - 1 && <line x1={barras[i - 1].cx + bw / 2} x2={b.cx - bw / 2} y1={b.top} y2={b.top} stroke="#94a3b8" strokeDasharray="3 3" />}
+                  {i === n - 1 && <line x1={barras[i - 1].cx + bw / 2} x2={b.cx - bw / 2} y1={barras[i - 1].bot} y2={barras[i - 1].bot} stroke="#94a3b8" strokeDasharray="3 3" />}
+                  <rect x={b.cx - bw / 2} y={Math.min(b.top, b.bot)} width={bw} height={Math.max(2, Math.abs(b.bot - b.top))} fill={colores[b.tipo]} rx="2" />
+                  <text x={b.cx} y={Math.min(b.top, b.bot) - 7} textAnchor="middle" fontSize="12" fontWeight="700" fill={b.tipo === "baja" ? ac : COLOR.ink}>
+                    {b.tipo === "baja" ? "−" + fmtM(Math.abs(b.v)) : fmtM(b.v)}
+                  </text>
+                  <text x={b.cx} y={H - B + 18} textAnchor="middle" fontSize="12" fontWeight="700" fill={COLOR.ink}>{b.label}</text>
+                  <text x={b.cx} y={H - B + 33} textAnchor="middle" fontSize="11" fill={COLOR.textMuted}>{b.sub}</text>
+                </g>
+              ))}
+            </svg>
+          </div>
+
+          <div style={{ marginTop: 12, padding: "10px 12px", border: "1px solid " + COLOR.border, background: COLOR.surfaceSoft }}>
+            {slider("Meta: bajar los desenganchados a", meta, setMeta, 0, Math.max(1, pctDes), 1, (v) => `${v}%`)}
+          </div>
+
+          <div style={{ ...S.alert("warn"), marginTop: 12, marginBottom: 0 }}>
+            Con <strong>{Math.round(actual.des)}</strong> personas desenganchadas, el mal clima se lleva <strong>{fmtM(actual.total)}</strong> al año: el <strong>{pctUtilidad.toFixed(1)}%</strong> de la utilidad posible. Bajar a {meta}% devolvería cerca de <strong>{fmtM(Math.max(0, recupera))}</strong> a la utilidad cada año, sin vender un peso más.
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const pasoDatos = () => {
+    const areas = Object.keys(AULA_CLI_PLANTILLA_AREA);
+    const filas = areas.map((area) => {
+      const lideres = evaluados.filter((e) => e.area === area);
+      const califs = lideres.flatMap((e) => (e.competencias || []).map((c) => c.equipo)).filter((x) => typeof x === "number");
+      const scoreEquipo = califs.length ? califs.reduce((a, b) => a + b, 0) / califs.length : null;
+      const ajuste = scoreEquipo ? Math.min(2, Math.max(0.5, 4 / scoreEquipo)) : 1;
+      const pctArea = Math.min(60, Math.max(3, detractores * ajuste));
+      const n = AULA_CLI_PLANTILLA_AREA[area];
+      const sal = salidas.filter((b) => b.area === area);
+      const des = n * pctArea / 100;
+      const valorAnual = sueldo * 12 * valorMult;
+      const costoDes = des * valorAnual * (prodPerdida / 100) + des * diasFalta * (sueldo / 30) * CARGA;
+      const costoSal = sal.length * 4 * sueldo * mesesBaja;
+      const motivos = {};
+      sal.forEach((b) => { motivos[b.razonPrelim] = (motivos[b.razonPrelim] || 0) + 1; });
+      const motivo = Object.entries(motivos).sort((a, b) => b[1] - a[1])[0]?.[0] || "—";
+      return { area, n, scoreEquipo, pctArea, salidas: sal.length, motivo, costoDes, costoSal, total: costoDes + costoSal, porPersona: (costoDes + costoSal) / n };
+    }).sort((a, b) => b.total - a.total);
+    const maxT = Math.max(1, ...filas.map((f) => f.total));
+    const totalAreas = filas.reduce((s, f) => s + f.total, 0);
+    const peor = filas[0];
+    const peorPorPersona = [...filas].sort((a, b) => b.porPersona - a.porPersona)[0];
+
+    return (
+      <div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+          Cruzamos tres fuentes de esta sección: cómo califican los equipos a sus líderes (evaluación 360°), las encuestas de salida de los últimos 90 días y el eNPS de la empresa. ¿Qué área le está costando más a la utilidad?
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Costo estimado por área</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(totalAreas)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>al año · desenganche + salidas</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={S.kpiLabel}>Área que más cuesta</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac }}>{peor?.area}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmtM(peor?.total || 0)} al año</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Más cara por persona</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4 }}>{peorPorPersona?.area}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmt(peorPorPersona?.porPersona || 0)} por colaborador</div>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "130px 150px 1fr 110px", gap: 10, fontSize: 10, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.6, marginBottom: 6 }}>
+          <div>Área</div><div>Líderes (equipo)</div><div>Costo anual estimado</div><div style={{ textAlign: "right" }}>Total</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {filas.map((f) => (
+            <div key={f.area} style={{ display: "grid", gridTemplateColumns: "130px 150px 1fr 110px", gap: 10, alignItems: "center", fontSize: 12 }}>
+              <div>
+                <div style={{ fontWeight: 700, color: COLOR.ink }}>{f.area}</div>
+                <div style={{ fontSize: 11, color: COLOR.textMuted }}>{f.n} personas · {f.salidas} salida{f.salidas !== 1 ? "s" : ""}</div>
+              </div>
+              <div style={{ color: f.scoreEquipo && f.scoreEquipo < 4 ? "#b00020" : COLOR.textSoft, fontVariantNumeric: "tabular-nums" }}>
+                {f.scoreEquipo ? <><strong>{f.scoreEquipo.toFixed(2)}</strong> / 5 · ~{f.pctArea.toFixed(0)}% desengan.</> : <>sin 360° · ~{f.pctArea.toFixed(0)}%</>}
+              </div>
+              <div>
+                <div style={{ height: 20, background: "#f1f5f9", display: "flex" }}>
+                  <div title={`Desenganche y faltas: ${fmt(f.costoDes)}`} style={{ width: `${(f.costoDes / maxT) * 100}%`, background: `linear-gradient(90deg, ${COLOR.accentLight} 0%, ${ac} 100%)` }} />
+                  <div title={`Salidas (anualizado): ${fmt(f.costoSal)}`} style={{ width: `${(f.costoSal / maxT) * 100}%`, background: "#334155" }} />
+                </div>
+                {f.motivo !== "—" && <div style={{ fontSize: 11, color: COLOR.textSoft, marginTop: 3 }}>Salen por: {f.motivo}</div>}
+              </div>
+              <div style={{ textAlign: "right", fontWeight: 700, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(f.total)}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 16, fontSize: 11, color: COLOR.textSoft, marginTop: 8 }}>
+          <span><span style={{ display: "inline-block", width: 10, height: 10, background: ac, marginRight: 5, verticalAlign: -1 }} />Desenganche y faltas</span>
+          <span><span style={{ display: "inline-block", width: 10, height: 10, background: "#334155", marginRight: 5, verticalAlign: -1 }} />Salidas (90 días × 4)</span>
+        </div>
+
+        {peor && (
+          <div style={{ ...S.alert("warn"), marginTop: 16, marginBottom: 0 }}>
+            <strong>Para discutir en equipo:</strong> <strong>{peor.area}</strong> le cuesta a la empresa cerca de <strong>{fmtM(peor.total)}</strong> al año en clima{peor.salidas ? <> y su principal motivo de salida es "{peor.motivo}"</> : null}. ¿Quién es el dueño de ese número? Si invirtiéramos el 10% de esa cifra ({fmtM(peor.total * 0.1)}) en liderazgo y en las causas de salida, ¿cuánto tendría que bajar el desenganche para pagarse solo?
+          </div>
+        )}
+        <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 10, lineHeight: 1.5 }}>
+          Estimación para conversar, no cifra contable. % desenganchados del área = {detractores}% (detractores de la empresa) ajustado por la calificación que el equipo da a sus líderes en el 360° (4.0 de 5 = sin ajuste). Plantilla por área de referencia; sueldo y supuestos de "La cascada de la utilidad".
+        </div>
+      </div>
+    );
+  };
+
+  const contenido = [
+    pasoBasico,
+    pasoCascada,
+    pasoDatos,
+    () => <AulaRiesgos riesgos={AULA_CLI_RIESGOS} intro="El mal clima no solo cuesta productividad: también abre riesgos legales, de reputación y de servicio. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaQuiz preguntas={AULA_CLI_QUIZ} repaso={"Vale la pena repasar \"La cascada de la utilidad\" antes de presentar el clima a Dirección."} />,
+  ][paso]();
+
+  return (
+    <AulaShell titulo="Aula · ¿El clima laboral le pega a la utilidad?" pasos={pasos} paso={paso} setPaso={setPaso}>
+      {contenido}
+    </AulaShell>
+  );
+}
+
+// =============================================================
+// AULA · Capacitación: ¿gasto o inversión? (módulo didáctico de Capacitación)
+// Uso (va HASTA ABAJO de Capacitacion(), justo antes del cierre final `    </div>\n  );`):
+//       <AulaCapacitacion cursos={cursos} incidencias={incidenciasCap} />
+// =============================================================
+const AULA_CAP_RIESGOS = [
+  {
+    titulo: "Capacitar sin medir",
+    nivel: "Alto",
+    que: "Si nadie define antes del curso qué número debe mejorar, después nadie puede demostrar que valió la pena. El dinero se gastó, pero no se sabe si se invirtió.",
+    ejemplo: "\"Excel avanzado para ventas\" costó $65,000 y lleva más de 170 días sin reporte de resultados. Nadie puede decir si recuperó un peso.",
+    mitiga: "Antes de aprobar: métrica, línea base, meta y fecha de medición (por ejemplo a 90 días). Sin esos cuatro datos, no se aprueba.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Capacitar y que se vaya",
+    nivel: "Alto",
+    que: "Lo invertido en una persona que renuncia es costo hundido: no se recupera, y a veces lo aprovecha la competencia que la contrata.",
+    ejemplo: "Beatriz Cordero tomó Power BI ($13,000 de su lugar) y renunció dos semanas después. Su parte del curso no regresó nada.",
+    mitiga: "Capacitar a quien tiene plan de carrera y riesgo de salida bajo; asignar proyecto de aplicación inmediato; revisar el riesgo de rotación antes de inscribir.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Olvidar el costo del tiempo",
+    nivel: "Medio",
+    que: "La factura del proveedor es solo una parte. Las horas que el equipo pasa en el aula son horas pagadas en las que no produce.",
+    ejemplo: "12 supervisores × 64 horas = 768 horas fuera de planta. Con sueldos de $25,000, son cerca de $100,000: más que la colegiatura.",
+    mitiga: "Presupuestar el curso con su costo real (colegiatura + horas + viáticos) y comparar formatos: en línea, por módulos o en horario de menor carga.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "No cumplir la obligación legal",
+    nivel: "Alto",
+    que: "En México capacitar no es opcional: la ley obliga a la empresa a dar capacitación y adiestramiento, y a entregar constancias de las habilidades adquiridas.",
+    ejemplo: "En una inspección o en un juicio laboral, la empresa no puede mostrar planes de capacitación ni constancias del personal que opera maquinaria.",
+    mitiga: "Llevar planes y programas de capacitación, constancias (formato DC-3) y registro de quién tomó qué curso y cuándo.",
+    base: "Arts. 132 fr. XV, 153-A y 153-V LFT.",
+  },
+  {
+    titulo: "Proveedor sin evaluar",
+    nivel: "Medio",
+    que: "Si no se califica al proveedor, se vuelve a contratar al mismo aunque haya salido mal. Se paga dos veces por el mismo error.",
+    ejemplo: "Un proveedor con calificación de 5.2 de 10 vuelve a aparecer en una propuesta nueva porque nadie revisó su historial.",
+    mitiga: "Calificar cada curso (participantes y solicitante) y tener una lista de proveedores con historial. Calificación baja = revisión del comité.",
+    base: "Buenas prácticas de compras y RH.",
+  },
+  {
+    titulo: "El curso como premio",
+    nivel: "Medio",
+    que: "Cuando el curso se da por antigüedad, por cercanía con el jefe o \"porque sobró presupuesto\", no responde a ninguna necesidad del negocio.",
+    ejemplo: "Se inscribe a todo un equipo a un diplomado caro en diciembre para \"no perder el presupuesto\". Nadie tiene un proyecto donde aplicarlo.",
+    mitiga: "Cada curso nace de una brecha medible del puesto o del negocio. El presupuesto que no se usa no es un problema; el que se usa sin propósito, sí.",
+    base: "Buenas prácticas de RH.",
+  },
+  {
+    titulo: "Convenio de permanencia mal planteado",
+    nivel: "Medio",
+    que: "Muchas empresas creen que pueden obligar a alguien a quedarse o a devolver el costo del curso. En México eso tiene límites importantes.",
+    ejemplo: "Se intenta descontar todo el curso del finiquito de quien renuncia. Los descuentos al salario están limitados por ley y el cobro puede no proceder.",
+    mitiga: "Revisarlo con un abogado laboral antes de firmarlo. La mejor protección es la aplicación inmediata y un plan de carrera, no la penalización.",
+    base: "Art. 5 Constitucional (nadie puede ser obligado a trabajar sin su consentimiento) · Art. 110 LFT (descuentos al salario).",
+  },
+];
+
+const AULA_CAP_QUIZ = [
+  {
+    p: "Un curso de $85,000 para 12 supervisores dura 64 horas en horario laboral. Con sueldos de $25,000 al mes, ¿cuánto cuesta realmente?",
+    o: ["$85,000: es lo que dice la factura", "Cerca de $97,000: factura más viáticos", "Cerca de $185,000: factura más las horas que no estuvieron en su puesto"],
+    c: 2,
+    e: "12 personas × 64 horas = 768 horas pagadas fuera del puesto. A $25,000 al mes (≈ $130 la hora) son unos $100,000. El costo real casi duplica la factura.",
+  },
+  {
+    p: "\"Cierre de ventas premium\" reporta un retorno de 3.4x. ¿Cuál es su ROI en porcentaje?",
+    o: ["240%: por cada $1 invertido regresan $3.40, y $2.40 son ganancia", "340%", "3.4%"],
+    c: 0,
+    e: "ROI = (beneficio − costo) ÷ costo. Si regresan $408,000 sobre $120,000, la ganancia es $288,000: ROI de 240%. El 3.4x es el múltiplo, no el ROI.",
+  },
+  {
+    p: "¿Qué nivel de evaluación responde la pregunta \"¿la empresa ganó dinero con este curso?\"",
+    o: ["Reacción: si a los participantes les gustó", "Resultados y ROI: si cambió un indicador del negocio y cuánto valió", "Aprendizaje: si aprobaron el examen"],
+    c: 1,
+    e: "Que guste y que se apruebe es necesario, pero no basta. Solo los niveles de resultados y ROI conectan el curso con ventas, productividad, calidad o rotación.",
+  },
+  {
+    p: "Una analista renuncia dos semanas después de terminar un curso de $13,000. ¿Qué pasa con ese dinero?",
+    o: ["Se descuenta completo de su finiquito", "Lo absorbe la persona que la reemplace", "Es costo hundido: no se recupera. Se previene capacitando con plan de aplicación y de retención"],
+    c: 2,
+    e: "Los descuentos al salario están limitados por la ley (Art. 110 LFT). En la práctica ese dinero se pierde; por eso importa a quién se capacita y qué proyecto aplica al regresar.",
+  },
+  {
+    p: "En México, ¿capacitar al personal es opcional para la empresa?",
+    o: ["Sí, es una prestación voluntaria", "No: la ley obliga a dar capacitación y adiestramiento y a entregar constancias", "Solo es obligatorio para empresas con más de 50 trabajadores"],
+    c: 1,
+    e: "La LFT obliga al patrón a capacitar y adiestrar a sus trabajadores (Art. 132 fr. XV y Art. 153-A) y a expedir constancias de habilidades (Art. 153-V).",
+  },
+  {
+    p: "¿Qué convierte un curso de \"gasto\" en \"inversión\"?",
+    o: ["Una métrica de negocio, su línea base, un plan de aplicación y una fecha para medir el resultado", "Que sea caro y de una institución reconocida", "Que todos los participantes lo terminen"],
+    c: 0,
+    e: "Sin métrica ni medición no hay forma de saber si regresó dinero. El prestigio del proveedor y la asistencia ayudan, pero no demuestran retorno.",
+  },
+];
+
+function AulaCapacitacion({ cursos = [], incidencias = [] }) {
+  const [paso, setPaso] = useState(0);
+  const [svgRef, svgAncho] = useAnchoSvg();
+  // Simulador (los supuestos de sueldo y valor se comparten con "Con tus datos")
+  const [colegiatura, setColegiatura] = useState(85000);
+  const [participantes, setParticipantes] = useState(12);
+  const [horas, setHoras] = useState(64);
+  const [sueldo, setSueldo] = useState(25000);
+  const [aplica, setAplica] = useState(60);
+  const [mejora, setMejora] = useState(10);
+  const [rotacion, setRotacion] = useState(18);
+  const [valor, setValor] = useState(2);
+  const [viaticos, setViaticos] = useState(1500);
+
+  const fmt = (v) => (v < 0 ? "−$" : "$") + Math.round(Math.abs(v)).toLocaleString("es-MX");
+  const fmtM = (v) => (Math.abs(v) >= 1e6 ? (v < 0 ? "−$" : "$") + (Math.abs(v) / 1e6).toFixed(2) + "M" : fmt(v));
+  const fmtK = (v) => (v < 0 ? "−$" : "$") + Math.round(Math.abs(v) / 1000) + "K";
+  const ac = COLOR.accent;
+  const HORAS_MES = 192; // 48 h/semana × 4
+
+  const pasos = ["Lo básico", "¿Gasto o inversión?", "Con tus datos", "Riesgos que se asumen", "Pon a prueba al equipo"];
+
+  // ---------- datos reales ----------
+  const multiplo = (c) => { const n = parseFloat(String(c.roi || "").replace(",", ".")); return Number.isFinite(n) ? n : null; };
+  const costoHoras = (c) => (c.participantes?.total || 0) * (c.horasTotales || 0) * (sueldo / HORAS_MES);
+  const lider = cursos.find((c) => c.id === "CAP-01") || cursos[0];
+  const ventas = cursos.find((c) => c.id === "CAP-02") || [...cursos].sort((a, b) => (multiplo(b) || 0) - (multiplo(a) || 0))[0];
+  const sinRoi = incidencias.filter((i) => i.estado !== "Cerrada" && i.estado !== "Cerrado");
+  const dineroSinRoi = sinRoi.reduce((s, i) => s + (i.costoCurso || 0), 0);
+  const noMedidos = incidencias.filter((i) => /roi/i.test(i.tipo || "")).length;
+  const powerBi = incidencias.find((i) => /power bi/i.test(i.cursoNombre || ""));
+
+  // ---------- simulador ----------
+  const sim = (pctVa) => {
+    const tiempo = participantes * horas * (sueldo / HORAS_MES);
+    const otros = participantes * viaticos;
+    const inversion = colegiatura + tiempo + otros;
+    const beneficioPersona = sueldo * valor * (mejora / 100) * (aplica / 100); // por mes, a plena aplicación
+    const sobrevive = Math.pow(1 - pctVa / 100, 1 / 12);
+    const serie = [{ m: 0, acum: -inversion }];
+    let acum = -inversion;
+    let beneficio12 = 0;
+    for (let m = 1; m <= 24; m++) {
+      const rampa = m === 1 ? 0.4 : m === 2 ? 0.7 : 1; // tarda en aplicarse
+      const b = participantes * Math.pow(sobrevive, m) * beneficioPersona * rampa;
+      acum += b;
+      if (m <= 12) beneficio12 += b;
+      serie.push({ m, acum });
+    }
+    const payback = serie.find((p) => p.m > 0 && p.acum >= 0)?.m ?? null;
+    const seVan12 = participantes * (1 - Math.pow(sobrevive, 12));
+    return { tiempo, otros, inversion, serie, payback, roi12: (beneficio12 - inversion) / inversion, beneficio12, seVan12, hundido: (inversion / participantes) * seVan12 };
+  };
+
+  // ---------- Paso 0: lo básico ----------
+  const pasoBasico = () => {
+    const hL = lider ? costoHoras(lider) : 0;
+    const realL = lider ? lider.costo + hL : 0;
+    const mV = ventas ? multiplo(ventas) : null;
+    const benefL = lider && multiplo(lider) ? lider.costo * multiplo(lider) : 0;
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
+        <AulaConcepto n="1" titulo="Costo real de un curso"
+          formula="Costo real = colegiatura + horas fuera del puesto + viáticos"
+          ejemploTxt={lider && <>"{lider.nombre}": factura de {fmt(lider.costo)}. Pero son {lider.participantes?.total} personas × {lider.horasTotales} horas = {(lider.participantes?.total || 0) * (lider.horasTotales || 0)} horas fuera del puesto (≈ {fmt(hL)}). Costo real: <strong>{fmt(realL)}</strong>.</>}>
+          La factura del proveedor es solo la punta. Las horas que el equipo pasa en el aula también se pagan, y en ese tiempo no produce.
+        </AulaConcepto>
+        <AulaConcepto n="2" titulo="ROI"
+          formula="ROI = (beneficio − costo) ÷ costo"
+          ejemploTxt={ventas && mV && <>"{ventas.nombre}" reporta {ventas.roi}: sobre {fmt(ventas.costo)} regresarían {fmt(ventas.costo * mV)}. La ganancia es {fmt(ventas.costo * (mV - 1))}, un ROI de <strong>{Math.round((mV - 1) * 100)}%</strong> (no de {Math.round(mV * 100)}%).</>}>
+          Dice cuánto gana la empresa por cada peso invertido, ya descontado lo que costó. Un ROI de 0% significa que solo se recuperó lo invertido.
+        </AulaConcepto>
+        <AulaConcepto n="3" titulo="Payback (recuperación)"
+          formula="Meses para recuperar = inversión ÷ beneficio mensual"
+          ejemploTxt={lider && benefL > 0 && <>Si "{lider.nombre}" genera {fmt(benefL)} en un año ({fmt(benefL / 12)} al mes), se recupera en {(lider.costo / (benefL / 12)).toFixed(1)} meses contando solo la factura… y en <strong>{(realL / (benefL / 12)).toFixed(1)} meses</strong> con el costo real.</>}>
+          El tiempo que tarda el curso en regresar lo que costó. Mientras no llega, el curso es gasto; después, empieza a ser ganancia.
+        </AulaConcepto>
+        <AulaConcepto n="4" titulo="Los 5 niveles de evaluación"
+          formula="Reacción → Aprendizaje → Aplicación → Resultados → ROI"
+          ejemploTxt={<>De las {incidencias.length} incidencias de capacitación de esta sección, <strong>{noMedidos}</strong> son por ROI no medido, y suman {fmt(dineroSinRoi)} en cursos con incidencia abierta.</>}>
+          ¿Les gustó? ¿Aprendieron? ¿Lo usan en su puesto? ¿Cambió un indicador? ¿Cuánto valió ese cambio? La mayoría de las empresas se queda en el primer nivel.
+        </AulaConcepto>
+        <AulaConcepto n="5" titulo="Costo hundido"
+          formula="Costo hundido = inversión por persona × personas que se van"
+          ejemploTxt={powerBi ? <>"{powerBi.cursoNombre}" costó {fmt(powerBi.costoCurso)} para 4 personas. Beatriz renunció dos semanas después: <strong>{fmt(powerBi.costoCurso / 4)}</strong> que no regresan.</> : "Si 1 de cada 5 participantes se va en el año, 20% de la inversión se pierde."}>
+          Lo invertido en alguien que se va ya no se recupera. Por eso la rotación es el peor enemigo del ROI de capacitación.
+        </AulaConcepto>
+        <AulaConcepto n="6" titulo="Proteger la inversión"
+          formula="Protección = aplicar rápido + retener a quien se capacitó"
+          ejemploTxt={"Un convenio para \"devolver el curso\" tiene límites en México: nadie puede ser obligado a quedarse y los descuentos al salario están acotados. Revísalo con un abogado laboral."}>
+          La mejor garantía no es una penalización, es que la persona aplique lo aprendido en un proyecto real en los primeros 60–90 días y tenga razones para quedarse.
+        </AulaConcepto>
+      </div>
+    );
+  };
+
+  // ---------- Paso 1: simulador ----------
+  const pasoSimulador = () => {
+    const con = sim(rotacion);
+    const sin = sim(0);
+    const W = Math.max(520, svgAncho), H = 300, L = 70, R = 20, T = 22, B = 38;
+    const todos = [...con.serie, ...sin.serie].map((p) => p.acum);
+    const yMin = Math.min(...todos) * 1.1;
+    const yMax = Math.max(0, ...todos) * 1.1 || 1;
+    const x = (m) => L + (m / 24) * (W - L - R);
+    const y = (v) => T + ((yMax - v) / (yMax - yMin)) * (H - T - B);
+    const linea = (serie) => serie.map((p, i) => `${i ? "L" : "M"}${x(p.m).toFixed(1)},${y(p.acum).toFixed(1)}`).join(" ");
+    const pasos5 = 5;
+    const ticks = Array.from({ length: pasos5 + 1 }, (_, i) => yMin + ((yMax - yMin) * i) / pasos5);
+    const roiPct = (r) => (r >= 0 ? "+" : "") + Math.round(r * 100) + "%";
+
+    const slider = (label, value, set, min, max, step, show) => (
+      <label style={{ display: "block", fontSize: 12, color: COLOR.textSoft, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <span>{label}</span><strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{show(value)}</strong>
+        </div>
+        <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: ac }} />
+      </label>
+    );
+    const partes = [
+      { label: "Colegiatura (la factura)", v: colegiatura, color: "#94a3b8" },
+      { label: "Horas fuera del puesto", v: con.tiempo, color: ac },
+      { label: "Viáticos y otros", v: con.otros, color: "#475569" },
+    ];
+
+    return (
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
+        <div>
+          <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+            Un curso es gasto el día que se paga y solo se vuelve inversión si regresa más de lo que costó. Mueve los controles y mira cuándo (y si) se recupera.
+          </div>
+          {slider("Colegiatura del curso", colegiatura, setColegiatura, 10000, 300000, 5000, fmt)}
+          {slider("Participantes", participantes, setParticipantes, 1, 30, 1, (v) => `${v} persona${v > 1 ? "s" : ""}`)}
+          {slider("Horas fuera del puesto (cada uno)", horas, setHoras, 4, 120, 4, (v) => `${v} h`)}
+          {slider("Sueldo mensual promedio", sueldo, setSueldo, 8000, 80000, 1000, fmt)}
+          {slider("Mejora esperada en su productividad", mejora, setMejora, 0, 30, 1, (v) => `${v}%`)}
+          {slider("Participantes que aplican lo aprendido", aplica, setAplica, 0, 100, 5, (v) => `${v}%`)}
+          {slider("Rotación anual de los capacitados", rotacion, setRotacion, 0, 60, 1, (v) => `${v}%`)}
+          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
+            <div style={{ marginTop: 10 }}>
+              {slider("Valor que genera el puesto", valor, setValor, 1, 5, 0.5, (v) => `${v}× su sueldo`)}
+              {slider("Viáticos y otros por persona", viaticos, setViaticos, 0, 20000, 500, fmt)}
+              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>Beneficio mensual por persona = sueldo × valor del puesto × mejora × % que aplica. Los primeros dos meses rinde menos mientras se aplica. Valores de referencia para conversar, no una proyección financiera.</div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Inversión real</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(con.inversion)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>{(con.inversion / colegiatura).toFixed(1)}× lo que dice la factura</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+              <div style={S.kpiLabel}>ROI a 12 meses</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: con.roi12 >= 0 ? "#0a7d2c" : "#b00020", fontVariantNumeric: "tabular-nums" }}>{roiPct(con.roi12)}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>sin rotación sería {roiPct(sin.roi12)}</div>
+            </div>
+            <div style={{ ...S.kpi, padding: 12 }}>
+              <div style={S.kpiLabel}>Se recupera en</div>
+              <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: con.payback ? COLOR.ink : "#b00020", fontVariantNumeric: "tabular-nums" }}>{con.payback ? `${con.payback} meses` : "No en 24 meses"}</div>
+              <div style={{ fontSize: 11, color: COLOR.textMuted }}>{sin.payback ? `sin rotación: ${sin.payback} meses` : "ni sin rotación"}</div>
+            </div>
+          </div>
+
+          <div ref={svgRef} style={{ border: "1px solid " + COLOR.border, background: "#fff" }}>
+            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }} role="img" aria-label="Flujo acumulado de la inversión en capacitación">
+              {/* zonas */}
+              <rect x={L} y={T} width={W - L - R} height={Math.max(0, y(0) - T)} fill="#f0fdf4" />
+              <rect x={L} y={y(0)} width={W - L - R} height={Math.max(0, H - B - y(0))} fill="#fef2f2" />
+              <text x={L + 8} y={T + 16} fontSize="11" fontWeight="700" fill="#0a7d2c" letterSpacing="1">INVERSIÓN (YA REGRESÓ MÁS DE LO QUE COSTÓ)</text>
+              <text x={W - R - 8} y={H - B - 8} textAnchor="end" fontSize="11" fontWeight="700" fill="#b00020" letterSpacing="1">GASTO (AÚN NO SE RECUPERA)</text>
+              {ticks.map((t, i) => (
+                <g key={i}>
+                  <line x1={L} y1={y(t)} x2={W - R} y2={y(t)} stroke="#eef2f6" />
+                  <text x={L - 8} y={y(t) + 4} textAnchor="end" fontSize="11" fill={COLOR.textMuted}>{fmtK(t)}</text>
+                </g>
+              ))}
+              <line x1={L} y1={y(0)} x2={W - R} y2={y(0)} stroke={COLOR.ink} strokeWidth="1.5" />
+              {[0, 3, 6, 9, 12, 15, 18, 21, 24].map((m) => (
+                <text key={m} x={x(m)} y={H - B + 18} textAnchor="middle" fontSize="11" fill={COLOR.textMuted}>{m === 0 ? "Hoy" : `mes ${m}`}</text>
+              ))}
+              <line x1={x(12)} y1={T} x2={x(12)} y2={H - B} stroke="#cbd5e1" strokeDasharray="4 4" />
+              {/* curvas */}
+              <path d={linea(sin.serie)} fill="none" stroke="#94a3b8" strokeWidth="2" strokeDasharray="6 4" />
+              <path d={linea(con.serie)} fill="none" stroke={ac} strokeWidth="3" />
+              <circle cx={x(0)} cy={y(-con.inversion)} r="5" fill={ac} />
+              <text x={x(0) + 10} y={y(-con.inversion) + 4} fontSize="12" fontWeight="700" fill={ac} stroke="#fff" strokeWidth="3" paintOrder="stroke">Se paga hoy: {fmt(con.inversion)}</text>
+              {con.payback && (
+                <g>
+                  <circle cx={x(con.payback)} cy={y(0)} r="6" fill="#fff" stroke="#0a7d2c" strokeWidth="2.5" />
+                  <text x={x(con.payback) - 10} y={y(0) - 10} textAnchor="end" fontSize="12" fontWeight="700" fill="#0a7d2c" stroke="#fff" strokeWidth="3" paintOrder="stroke">Se recupera: mes {con.payback}</text>
+                </g>
+              )}
+              <text x={W - R - 4} y={y(con.serie[24].acum) - 8} textAnchor="end" fontSize="12" fontWeight="700" fill={ac} stroke="#fff" strokeWidth="3" paintOrder="stroke">Con {rotacion}% de rotación</text>
+              {rotacion > 0 && <text x={W - R - 4} y={y(sin.serie[24].acum) - 8} textAnchor="end" fontSize="12" fontWeight="600" fill="#64748b" stroke="#fff" strokeWidth="3" paintOrder="stroke">Si nadie se fuera</text>}
+            </svg>
+          </div>
+
+          <div style={{ marginTop: 12 }}>
+            <div style={{ display: "flex", height: 14, overflow: "hidden" }}>
+              {partes.map((p) => <div key={p.label} title={p.label} style={{ width: `${(p.v / con.inversion) * 100}%`, background: p.color }} />)}
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px", marginTop: 6, fontSize: 12, color: COLOR.textSoft }}>
+              {partes.map((p) => (
+                <span key={p.label} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ width: 10, height: 10, background: p.color, display: "inline-block" }} />
+                  {p.label} · <strong style={{ color: COLOR.ink }}>{fmt(p.v)}</strong> ({Math.round((p.v / con.inversion) * 100)}%)
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ ...S.alert(con.roi12 >= 0 ? "info" : "warn"), marginTop: 12, marginBottom: 0 }}>
+            La factura dice {fmt(colegiatura)}, pero el curso cuesta <strong>{fmt(con.inversion)}</strong>.{" "}
+            {con.payback ? <>Se recupera en el <strong>mes {con.payback}</strong>; a partir de ahí es ganancia.</> : <>Con estos supuestos <strong>no se recupera en 24 meses</strong>: hoy es gasto, no inversión.</>}{" "}
+            {rotacion > 0 && <>La rotación de {rotacion}% hace que se vayan cerca de {con.seVan12.toFixed(1)} participantes en el año: <strong>{fmt(con.hundido)}</strong> de costo hundido, y el ROI baja de {roiPct(sin.roi12)} a {roiPct(con.roi12)}.</>}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ---------- Paso 2: con tus datos ----------
+  const pasoDatos = () => {
+    const filas = cursos.map((c) => {
+      const m = multiplo(c);
+      const horasC = costoHoras(c);
+      const real = c.costo + horasC;
+      const beneficio = m != null ? c.costo * m : null;
+      return {
+        id: c.id, nombre: c.nombre, area: c.solicita, est: c.est, factura: c.costo, horasC, real,
+        participantes: c.participantes?.total || 0, multiplo: m, beneficio,
+        roiFactura: m != null ? m - 1 : null,
+        roiReal: beneficio != null ? (beneficio - real) / real : null,
+        neto: beneficio != null ? beneficio - real : null,
+      };
+    }).sort((a, b) => (b.neto ?? -Infinity) - (a.neto ?? -Infinity));
+    const totalFactura = filas.reduce((s, f) => s + f.factura, 0);
+    const totalReal = filas.reduce((s, f) => s + f.real, 0);
+    const totalNeto = filas.reduce((s, f) => s + (f.neto || 0), 0);
+    const maxAbs = Math.max(1, ...filas.map((f) => Math.abs(f.neto || 0)));
+    const peor = filas[filas.length - 1];
+    const pct = (r) => (r == null ? "—" : (r >= 0 ? "+" : "") + Math.round(r * 100) + "%");
+
+    return (
+      <div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
+          Con los cursos de esta sección: ¿cuánto cuestan de verdad y cuánto ROI les queda cuando se suman las horas fuera del puesto? (Sueldo promedio de {fmt(sueldo)}; ajústalo en "¿Gasto o inversión?").
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Facturas de cursos</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(totalFactura)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>lo que ve Finanzas</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#fed7aa" }}>
+            <div style={S.kpiLabel}>Inversión real</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(totalReal)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>+{fmt(totalReal - totalFactura)} en horas fuera del puesto</div>
+          </div>
+          <div style={{ ...S.kpi, padding: 12 }}>
+            <div style={S.kpiLabel}>Sin ROI demostrado</div>
+            <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#b00020", fontVariantNumeric: "tabular-nums" }}>{fmt(dineroSinRoi)}</div>
+            <div style={{ fontSize: 11, color: COLOR.textMuted }}>{sinRoi.length} cursos con incidencia abierta</div>
+          </div>
+        </div>
+
+        <div style={{ fontSize: 10, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 8 }}>Valor que crea (o destruye) cada curso · con costo real</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {filas.map((f) => {
+            const pos = (f.neto || 0) >= 0;
+            const w = (Math.abs(f.neto || 0) / maxAbs) * 40;
+            return (
+              <div key={f.id} style={{ display: "grid", gridTemplateColumns: "200px 1fr 190px", gap: 16, alignItems: "center", fontSize: 12 }}>
+                <div>
+                  <div style={{ fontWeight: 700, color: COLOR.ink }}>{f.nombre}</div>
+                  <div style={{ fontSize: 11, color: COLOR.textMuted }}>{f.area} · {f.participantes} personas · {f.est}</div>
+                </div>
+                <div style={{ position: "relative", height: 22, background: "#f8fafc" }}>
+                  <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 1, background: COLOR.ink }} />
+                  {f.neto != null && (
+                    <div style={{ position: "absolute", top: 3, bottom: 3, left: pos ? "50%" : `${50 - w}%`, width: `${w}%`, background: pos ? "linear-gradient(90deg, #22c55e 0%, #0a7d2c 100%)" : "linear-gradient(90deg, #b00020 0%, #ef4444 100%)" }} />
+                  )}
+                  <span style={{ position: "absolute", top: 4, fontSize: 11, fontWeight: 700, color: COLOR.ink, whiteSpace: "nowrap", ...(pos ? { left: `calc(${50 + w}% + 6px)` } : { right: `calc(${50 + w}% + 6px)` }) }}>
+                    {f.neto == null ? "sin ROI estimado" : fmtK(f.neto)}
+                  </span>
+                </div>
+                <div style={{ textAlign: "right", fontSize: 11.5, color: COLOR.textSoft, fontVariantNumeric: "tabular-nums" }}>
+                  ROI {pct(f.roiFactura)} con factura → <strong style={{ color: (f.roiReal ?? 0) >= 0 ? "#0a7d2c" : "#b00020" }}>{pct(f.roiReal)}</strong> real
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {sinRoi.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 8 }}>Dinero invertido sin resultado demostrado</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {sinRoi.map((i) => (
+                <div key={i.id} style={{ border: "1px solid " + COLOR.border, background: "#fff", padding: "8px 10px", fontSize: 12, minWidth: 200, flex: "1 1 200px" }}>
+                  <div style={{ fontWeight: 700, color: COLOR.ink }}>{i.cursoNombre}</div>
+                  <div style={{ color: COLOR.textMuted, fontSize: 11 }}>{i.tipo} · {i.diasVencido} días</div>
+                  <div style={{ fontWeight: 700, color: "#b00020", marginTop: 2 }}>{fmt(i.costoCurso || 0)}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div style={{ ...S.alert("warn"), marginTop: 16, marginBottom: 0 }}>
+          <strong>Para discutir en equipo:</strong> sumando las horas fuera del puesto, el portafolio de cursos {totalNeto >= 0 ? <>crea cerca de <strong>{fmtM(totalNeto)}</strong> de valor</> : <>destruye cerca de <strong>{fmtM(-totalNeto)}</strong> de valor</>} (si los ROI declarados se cumplen).{" "}
+          {peor && peor.roiReal != null && <>"{peor.nombre}" es el de menor retorno real ({pct(peor.roiReal)}). </>}
+          Además hay <strong>{fmt(dineroSinRoi)}</strong> en cursos que nadie ha medido. ¿Aprobarían otro curso a esas áreas antes de ver esos resultados?
+        </div>
+        <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 10 }}>
+          Beneficio = factura × múltiplo de ROI declarado en cada curso. Costo real = factura + participantes × horas × sueldo por hora ({fmt(sueldo / HORAS_MES)}). Es una estimación para conversar, no una cifra contable.
+        </div>
+      </div>
+    );
+  };
+
+  const contenido = [
+    pasoBasico,
+    pasoSimulador,
+    pasoDatos,
+    () => <AulaRiesgos riesgos={AULA_CAP_RIESGOS} intro="Cada peso en capacitación puede volverse inversión o gasto hundido. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaQuiz preguntas={AULA_CAP_QUIZ} repaso={"Vale la pena repasar \"¿Gasto o inversión?\" y \"Riesgos que se asumen\" antes de aprobar el próximo curso."} />,
+  ][paso]();
+
+  return (
+    <AulaShell titulo="Aula · Capacitación: ¿gasto o inversión?" pasos={pasos} paso={paso} setPaso={setPaso}>
+      {contenido}
+    </AulaShell>
+  );
+}
+
 function Nomina({ periodo = PERIODO_DEFAULT }) {
   const [chartView, setChartView] = useState(null); // null | "month" | "ytd"
   const [bonos, setBonos] = useState(() => monthlyBonos[periodo] || []);
@@ -2258,6 +4931,8 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         </tbody>
       </table>
 
+      <AulaVariaciones data={data} />
+
       <h3 style={S.h3}>Autorización de Bonos</h3>
       <div style={S.card}>
         <p style={S.hint}>
@@ -2782,7 +5457,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
 }
 
 // =============================================================
-// 2. CLIMA LABORAL
+// 5. CLIMA LABORAL
 // =============================================================
 const INSTRUMENTOS = [
   {
@@ -4346,12 +7021,14 @@ function Clima() {
           </div>
         </div>
       )}
+
+      <AulaClima pulso={7.2} enps={18} promotores={42} detractores={24} respondieron={168} plantilla={248} />
     </div>
   );
 }
 
 // =============================================================
-// 3. LÍNEA DE DENUNCIA
+// LÍNEA DE DENUNCIA (fuera del menú)
 // =============================================================
 const INCIDENCIAS = [
   {
@@ -5139,11 +7816,333 @@ function Denuncia() {
   );
 }
 
+// ---------- Cobertura: plantilla Excel ----------
+// Hojas: Plantilla por área (autorizada vs cubierta), Solicitudes (una fila por vacante)
+// y Embudo (cantidad por etapa). Todas opcionales: la que falte conserva los datos de ejemplo.
+const COB_STORAGE_KEY = "rrhh.cobertura.v1";
+const leerCargaCob = () => {
+  try { return JSON.parse(localStorage.getItem(COB_STORAGE_KEY) || "null"); } catch { return null; }
+};
+const guardarCargaCob = (carga) => {
+  try {
+    if (carga) localStorage.setItem(COB_STORAGE_KEY, JSON.stringify(carga));
+    else localStorage.removeItem(COB_STORAGE_KEY);
+  } catch { /* sin almacenamiento */ }
+};
+
+const ETAPAS_RECLUTAMIENTO = [
+  "Solicitud (vacante autorizada)",
+  "Sourcing y atracción",
+  "Filtro de CV",
+  "Entrevista RH",
+  "Pruebas (técnicas / psicométricas)",
+  "Entrevista con área solicitante",
+  "Entrevista final / Dirección",
+  "Oferta económica",
+  "Verificación de referencias",
+  "Contratación",
+  "Onboarding 30-60-90+",
+];
+
+const COB_COLS_PLANTILLA = [
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 22 },
+  { key: "autorizada", header: "Plantilla autorizada", req: true, tipo: "numero", ancho: 20 },
+  { key: "cubierta", header: "Plantilla cubierta", req: true, tipo: "numero", ancho: 20 },
+];
+const COB_COLS_SOLICITUDES = [
+  { key: "folio", header: "Folio", req: true, tipo: "texto", ancho: 12 },
+  { key: "puesto", header: "Puesto", req: true, tipo: "texto", ancho: 30 },
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 16 },
+  { key: "gerencia", header: "Gerencia", tipo: "texto", ancho: 24 },
+  { key: "solicita", header: "Solicita", tipo: "texto", ancho: 20 },
+  { key: "jefe", header: "Jefe directo", tipo: "texto", ancho: 22 },
+  { key: "motivo", header: "Motivo de la vacante", tipo: "texto", ancho: 40 },
+  { key: "fechaApertura", header: "Fecha de apertura", req: true, tipo: "fecha", ancho: 16 },
+  { key: "fechaObjetivo", header: "Fecha objetivo", tipo: "fecha", ancho: 15 },
+  { key: "fechaCierre", header: "Fecha de cierre", tipo: "fecha", ancho: 15 },
+  { key: "etapa", header: "Etapa actual", tipo: "texto", ancho: 30 },
+  { key: "candidatos", header: "Candidatos", tipo: "numero", ancho: 12 },
+  { key: "bandaMin", header: "Banda mínima", tipo: "monto", ancho: 14 },
+  { key: "bandaMax", header: "Banda máxima", tipo: "monto", ancho: 14 },
+  { key: "canal", header: "Canal de reclutamiento", tipo: "texto", ancho: 30 },
+  { key: "responsable", header: "Responsable RH", tipo: "texto", ancho: 24 },
+  { key: "observaciones", header: "Observaciones", tipo: "texto", ancho: 50 },
+];
+const COB_COLS_EMBUDO = [
+  { key: "etapa", header: "Etapa", req: true, tipo: "texto", ancho: 32 },
+  { key: "n", header: "Cantidad", req: true, tipo: "numero", ancho: 12 },
+  { key: "dias", header: "Días promedio", tipo: "numero", ancho: 15 },
+];
+
+const etapaIdxDe = (texto, cerrada) => {
+  const t = normalizarTexto(texto || "");
+  if (!t) return cerrada ? 9 : 0;
+  const exacta = ETAPAS_RECLUTAMIENTO.findIndex((e) => normalizarTexto(e) === t);
+  if (exacta >= 0) return exacta;
+  const claves = [["solicitud", 0], ["sourcing", 1], ["filtro", 2], ["cv", 2], ["prueba", 4], ["final", 6], ["direccion", 6], ["area", 5], ["gerente", 5], ["entrevista", 3], ["oferta", 7], ["referencia", 8], ["contrat", 9], ["onboarding", 10]];
+  const k = claves.find(([c]) => t.includes(c));
+  return k ? k[1] : cerrada ? 9 : 0;
+};
+
+async function leerPlantillaCobertura(file) {
+  const XLSX = await import("xlsx");
+  const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+  const buscar = (clave) => wb.SheetNames.find((n) => normalizarTexto(n).startsWith(clave));
+  const errores = [];
+  const avisos = [];
+  const res = { plantilla: null, solicitudes: null, embudo: null };
+
+  const hPlantilla = buscar("plantilla");
+  if (hPlantilla) {
+    const r = leerHojaRot(XLSX, wb.Sheets[hPlantilla], COB_COLS_PLANTILLA, hPlantilla);
+    errores.push(...r.errores);
+    const vistos = new Set();
+    r.filas.forEach((f) => {
+      if (vistos.has(f.area.toLowerCase())) errores.push(`${hPlantilla}, fila ${f._linea}: el área "${f.area}" está repetida.`);
+      vistos.add(f.area.toLowerCase());
+      if (f.cubierta > f.autorizada) avisos.push(`${hPlantilla}, fila ${f._linea}: ${f.area} tiene más plantilla cubierta que autorizada.`);
+    });
+    if (r.filas.length) res.plantilla = r.filas.map(({ _linea, ...x }) => x);
+  }
+
+  const hSol = buscar("solicitud");
+  if (hSol) {
+    const r = leerHojaRot(XLSX, wb.Sheets[hSol], COB_COLS_SOLICITUDES, hSol);
+    errores.push(...r.errores);
+    const vistos = new Set();
+    r.filas.forEach((f) => {
+      if (vistos.has(f.folio.toLowerCase())) errores.push(`${hSol}, fila ${f._linea}: el folio ${f.folio} está repetido.`);
+      vistos.add(f.folio.toLowerCase());
+      if (f.fechaCierre && f.fechaApertura && f.fechaCierre < f.fechaApertura) errores.push(`${hSol}, fila ${f._linea}: la fecha de cierre es anterior a la de apertura.`);
+    });
+    if (r.filas.length) res.solicitudes = r.filas.map(({ _linea, ...x }) => x);
+  }
+
+  const hEmb = buscar("embudo");
+  if (hEmb) {
+    const r = leerHojaRot(XLSX, wb.Sheets[hEmb], COB_COLS_EMBUDO, hEmb);
+    errores.push(...r.errores);
+    if (r.filas.length) res.embudo = r.filas.map(({ _linea, ...x }) => x);
+  }
+
+  if (!res.plantilla && !res.solicitudes && !res.embudo && !errores.length) {
+    errores.push('No encontré datos en las hojas "Plantilla por área", "Solicitudes" o "Embudo". Usa la plantilla descargada.');
+  } else {
+    if (!res.plantilla) avisos.push("Sin datos de plantilla por área: los indicadores de cobertura conservan los datos actuales.");
+    if (!res.solicitudes) avisos.push("Sin solicitudes: las gráficas y vacantes conservan los datos actuales.");
+    if (!res.embudo) avisos.push("Sin embudo: el embudo de reclutamiento conserva los datos actuales.");
+  }
+  return { ...res, errores, avisos };
+}
+
+// Convierte la carga en las estructuras que usa la vista de Cobertura.
+function construirCobertura(carga, hoy = new Date()) {
+  const out = {};
+  const corte = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+  const dias = (a, b) => Math.max(0, Math.round((b - a) / 864e5));
+
+  if (carga.plantilla?.length) {
+    const autorizada = carga.plantilla.reduce((s, r) => s + (r.autorizada || 0), 0);
+    const cubierta = carga.plantilla.reduce((s, r) => s + (r.cubierta || 0), 0);
+    out.plantilla = { autorizada, cubierta, pct: autorizada ? (cubierta / autorizada) * 100 : 0, areas: carga.plantilla.length };
+  }
+
+  if (carga.solicitudes?.length) {
+    const sol = carga.solicitudes.map((s) => {
+      const ap = fechaDeIso(s.fechaApertura);
+      const cerrada = !!s.fechaCierre;
+      const d = dias(ap, cerrada ? fechaDeIso(s.fechaCierre) : corte);
+      const etapaActualIdx = etapaIdxDe(s.etapa, cerrada);
+      return { ...s, cerrada, diasAbierta: d, etapaActualIdx };
+    });
+
+    // Serie mensual (últimos 12 meses con movimiento)
+    const meses = {};
+    sol.forEach((s) => {
+      const ka = s.fechaApertura.slice(0, 7);
+      (meses[ka] ||= { recibidas: 0, cerradas: 0 }).recibidas++;
+      if (s.fechaCierre) { const kc = s.fechaCierre.slice(0, 7); (meses[kc] ||= { recibidas: 0, cerradas: 0 }).cerradas++; }
+    });
+    const ordenadas = Object.keys(meses).sort();
+    const claves = [];
+    let [y, m] = ordenadas[0].split("-").map(Number);
+    const fin = ordenadas[ordenadas.length - 1];
+    while (true) {
+      const k = `${y}-${String(m).padStart(2, "0")}`;
+      claves.push(k);
+      if (k >= fin) break;
+      m++; if (m > 12) { m = 1; y++; }
+    }
+    out.mensual = claves.slice(-12).map((k) => {
+      const [yy, mm] = k.split("-").map(Number);
+      const mes = MESES_CORTOS[mm - 1];
+      return { mes: `${mes.charAt(0).toUpperCase() + mes.slice(1)} ${String(yy).slice(2)}`, recibidas: meses[k]?.recibidas || 0, cerradas: meses[k]?.cerradas || 0 };
+    });
+
+    out.porArea = [...new Set(sol.map((s) => s.area))].map((area) => {
+      const l = sol.filter((s) => s.area === area);
+      return { area, recibidas: l.length, cerradas: l.filter((s) => s.cerrada).length, dias: Math.round(l.reduce((a, s) => a + s.diasAbierta, 0) / l.length) };
+    }).sort((a, b) => b.recibidas - a.recibidas);
+
+    out.vacantes = sol
+      .filter((s) => !s.cerrada || s.etapaActualIdx === ETAPAS_RECLUTAMIENTO.length - 1)
+      .sort((a, b) => b.diasAbierta - a.diasAbierta)
+      .map((s) => ({
+        id: s.folio, puesto: s.puesto, area: s.area, gerenciaFuncional: s.gerencia || s.area,
+        solicita: s.solicita || "—", solicitanteNombre: s.solicita || "—", solicitantePuesto: "—",
+        jefeDirectoFuturo: s.jefe || "—",
+        fechaApertura: fechaCortaIso(s.fechaApertura), fechaObjetivo: s.fechaObjetivo ? fechaCortaIso(s.fechaObjetivo) : "—",
+        abierta: s.diasAbierta,
+        etapa: s.etapa || ETAPAS_RECLUTAMIENTO[s.etapaActualIdx], etapaActualIdx: s.etapaActualIdx,
+        candidatos: s.candidatos || 0,
+        razon: s.motivo || "—", aprobadoPor: "—",
+        bandaMin: s.bandaMin || 0, bandaMediana: Math.round(((s.bandaMin || 0) + (s.bandaMax || 0)) / 2), bandaMax: s.bandaMax || 0,
+        bonoFirmaTarget: 0, bonoTrimestralTarget: 0, prestaciones: "—",
+        canalReclutamiento: s.canal || "—", responsableRH: s.responsable || "—",
+        jobPostings: [], candidatosTop: [],
+        observaciones: s.observaciones || "—",
+      }));
+    out.abiertas = sol.filter((s) => !s.cerrada).length;
+    out.cerradas = sol.length - out.abiertas;
+    out.mas60 = sol.filter((s) => !s.cerrada && s.diasAbierta > 60).length;
+    out.totalSolicitudes = sol.length;
+  }
+
+  if (carga.embudo?.length) {
+    out.funnel = carga.embudo.map((e) => ({ etapa: e.etapa, n: e.n || 0, diasNum: e.dias, dias: e.dias != null ? `${Math.round(e.dias)} días promedio` : "—" }));
+    // Mayor caída (menor conversión) y cuello de botella (mayor salto de días) a partir de la base
+    let caida = null;
+    let cuello = null;
+    for (let i = 2; i < out.funnel.length; i++) {
+      const a = out.funnel[i - 1];
+      const b = out.funnel[i];
+      if (a.n > 0) {
+        const conv = (b.n / a.n) * 100;
+        if (!caida || conv < caida.conv) caida = { de: a.etapa, a: b.etapa, conv };
+      }
+      if (a.diasNum != null && b.diasNum != null) {
+        const extra = b.diasNum - a.diasNum;
+        if (!cuello || extra > cuello.extra) cuello = { de: a.etapa, a: b.etapa, extra, conv: a.n > 0 ? (b.n / a.n) * 100 : 0 };
+      }
+    }
+    out.funnelCaida = caida;
+    out.funnelCuello = cuello;
+  }
+  return out;
+}
+
+// Descarga la plantilla con los datos actuales (cargados o de ejemplo).
+async function descargarPlantillaCobertura(carga, ejemplo) {
+  const XLSX = await import("xlsx");
+  const iso = (s) => { const d = leerFechaCelda(XLSX, s); return d ? isoDeFecha(d) : ""; };
+  const plantilla = carga?.plantilla || ejemplo.plantilla;
+  const solicitudes = carga?.solicitudes || ejemplo.vacantes.map((v) => ({
+    folio: v.id, puesto: v.puesto, area: v.area, gerencia: v.gerenciaFuncional, solicita: v.solicitanteNombre || v.solicita,
+    jefe: v.jefeDirectoFuturo, motivo: v.razon, fechaApertura: iso(v.fechaApertura), fechaObjetivo: iso(v.fechaObjetivo),
+    fechaCierre: v.fechaCierre ? iso(v.fechaCierre) : "", etapa: ETAPAS_RECLUTAMIENTO[v.etapaActualIdx], candidatos: v.candidatos,
+    bandaMin: v.bandaMin, bandaMax: v.bandaMax, canal: v.canalReclutamiento, responsable: v.responsableRH, observaciones: v.observaciones,
+  }));
+  const embudo = carga?.embudo || ejemplo.funnel.map((f) => {
+    const d = parseInt(String(f.dias), 10);
+    return { etapa: f.etapa, n: f.n, dias: Number.isFinite(d) ? d : null };
+  });
+
+  const serial = (s) => { const [y, m, d] = s.split("-").map(Number); return (Date.UTC(y, m - 1, d) - Date.UTC(1899, 11, 30)) / 864e5; };
+  const hojaDe = (cols, filas) => {
+    const aoa = [cols.map((c) => c.header + (c.req ? " *" : ""))];
+    filas.forEach((f) => aoa.push(cols.map((c) => {
+      const v = f[c.key];
+      if (v == null || v === "") return null;
+      if (c.tipo === "fecha") return serial(v);
+      return c.tipo === "texto" ? String(v) : Number(v);
+    })));
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws["!cols"] = cols.map((c) => ({ wch: c.ancho }));
+    for (let r = 1; r < aoa.length; r++) {
+      cols.forEach((c, ci) => {
+        const cell = ws[XLSX.utils.encode_cell({ r, c: ci })];
+        if (!cell) return;
+        if (c.tipo === "fecha") cell.z = "dd/mm/yyyy";
+        if (c.tipo === "monto") cell.z = '"$"#,##0';
+      });
+    }
+    ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: cols.length - 1 } }) };
+    return ws;
+  };
+
+  const instrucciones = [
+    ["Plantilla de Cobertura de Plantilla"],
+    [],
+    ["Cómo llenarla (las columnas con * son obligatorias; puedes subir solo las hojas que quieras actualizar)"],
+    ["1. Hoja \"Plantilla por área\": plantilla autorizada y cubierta de cada área. Con esto se calculan Plantilla autorizada, Cubierta y % cobertura."],
+    ["2. Hoja \"Solicitudes\": una fila por vacante (requisición)."],
+    ["   · Fecha de cierre vacía = vacante abierta. Los días abiertos se cuentan hasta hoy."],
+    ["   · Con esto se arman las gráficas mes a mes, solicitudes por área, vacantes abiertas y Vacantes > 60 días."],
+    ["   · Etapa actual (opcional), una de: " + ETAPAS_RECLUTAMIENTO.join(" · ")],
+    ["3. Hoja \"Embudo\": cantidad de casos y días promedio por etapa. La primera fila son las solicitudes recibidas y la segunda es la base (candidatos sourceados)."],
+    ["4. Fechas en formato dd/mm/aaaa. Montos en pesos, sin texto."],
+    ["5. Guarda el archivo y súbelo en Cobertura de Plantilla con el botón \"Cargar plantilla\"."],
+  ];
+  const wsInstr = XLSX.utils.aoa_to_sheet(instrucciones);
+  wsInstr["!cols"] = [{ wch: 140 }];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, wsInstr, "Instrucciones");
+  XLSX.utils.book_append_sheet(wb, hojaDe(COB_COLS_PLANTILLA, plantilla), "Plantilla por área");
+  XLSX.utils.book_append_sheet(wb, hojaDe(COB_COLS_SOLICITUDES, solicitudes), "Solicitudes");
+  XLSX.utils.book_append_sheet(wb, hojaDe(COB_COLS_EMBUDO, embudo), "Embudo");
+  XLSX.writeFile(wb, "Plantilla Cobertura de Plantilla.xlsx");
+}
+
 // =============================================================
-// 4. COBERTURA DE PLANTILLA
+// 3. COBERTURA DE PLANTILLA
 // =============================================================
 function Cobertura() {
   const [vacanteAbierta, setVacanteAbierta] = useState(null);
+
+  // Carga de Excel (si no hay, se usan los datos de ejemplo)
+  const [cargaCob, setCargaCob] = useState(leerCargaCob);
+  const [cobCargaOpen, setCobCargaOpen] = useState(false);
+  const [cobDrag, setCobDrag] = useState(false);
+  const [cobPrev, setCobPrev] = useState(null); // { archivo, plantilla, solicitudes, embudo, errores, avisos }
+  const [cobLeyendo, setCobLeyendo] = useState(false);
+  const cobInputRef = useRef(null);
+  const datosCob = useMemo(() => {
+    try { return cargaCob ? construirCobertura(cargaCob) : null; } catch { return null; }
+  }, [cargaCob]);
+  const procesarArchivoCob = async (file) => {
+    if (!file) return;
+    const vacio = { archivo: file.name, plantilla: null, solicitudes: null, embudo: null, avisos: [] };
+    if (!/\.(xlsx|xls)$/i.test(file.name)) {
+      setCobPrev({ ...vacio, errores: ["Formato no válido. Sube un archivo .xlsx o .xls."] });
+      return;
+    }
+    setCobLeyendo(true);
+    try {
+      setCobPrev({ archivo: file.name, ...(await leerPlantillaCobertura(file)) });
+    } catch {
+      setCobPrev({ ...vacio, errores: ["No se pudo leer el archivo. Verifica que sea la plantilla en Excel."] });
+    } finally {
+      setCobLeyendo(false);
+    }
+  };
+  const cobPrevValido = !!cobPrev && cobPrev.errores.length === 0 && !!(cobPrev.plantilla || cobPrev.solicitudes || cobPrev.embudo);
+  const cerrarCobCarga = () => { setCobCargaOpen(false); setCobPrev(null); setCobDrag(false); };
+  const aplicarCob = () => {
+    if (!cobPrevValido) return;
+    // Las hojas que no vienen en el archivo conservan lo cargado antes
+    const next = {
+      archivo: cobPrev.archivo, fecha: new Date().toLocaleString("es-MX"),
+      plantilla: cobPrev.plantilla || cargaCob?.plantilla || null,
+      solicitudes: cobPrev.solicitudes || cargaCob?.solicitudes || null,
+      embudo: cobPrev.embudo || cargaCob?.embudo || null,
+    };
+    setCargaCob(next);
+    guardarCargaCob(next);
+    setVacanteAbierta(null);
+    cerrarCobCarga();
+  };
+  const restaurarCob = () => { setCargaCob(null); guardarCargaCob(null); setVacanteAbierta(null); };
 
   const etapasReclutamiento = [
     "Solicitud (vacante autorizada)",
@@ -5159,7 +8158,7 @@ function Cobertura() {
     "Onboarding 30-60-90+",
   ];
 
-  const vacantes = [
+  const vacantesDemo = [
     {
       id: "REQ-101", puesto: "Asesor Comercial Sr.", area: "Comercial", gerenciaFuncional: "Comercial Centro",
       solicita: "G. Pérez", solicitanteNombre: "Guillermo Pérez", solicitantePuesto: "Gerente Comercial Centro",
@@ -5297,7 +8296,9 @@ function Cobertura() {
     },
   ];
 
-  const solicitudesMensuales = [
+  const vacantes = datosCob?.vacantes || vacantesDemo;
+
+  const solicitudesMensualesDemo = [
     { mes: "Jul 26", recibidas: 2, cerradas: 3 },
     { mes: "Ago 26", recibidas: 4, cerradas: 2 },
     { mes: "Sep 26", recibidas: 5, cerradas: 4 },
@@ -5305,6 +8306,7 @@ function Cobertura() {
     { mes: "Nov 26", recibidas: 6, cerradas: 4 },
     { mes: "Dic 26", recibidas: 4, cerradas: 2 },
   ];
+  const solicitudesMensuales = datosCob?.mensual || solicitudesMensualesDemo;
   const totalRecibidas = solicitudesMensuales.reduce((a, m) => a + m.recibidas, 0);
   const totalCerradas = solicitudesMensuales.reduce((a, m) => a + m.cerradas, 0);
   const maxBar = Math.max(...solicitudesMensuales.flatMap((m) => [m.recibidas, m.cerradas]));
@@ -5322,7 +8324,7 @@ function Cobertura() {
   const maxAcum = Math.max(...acumulado.map((m) => m.acumRecibidas));
   const yMaxAcum = Math.max(Math.ceil((maxAcum + 2) / 5) * 5, 10);
 
-  const funnel = [
+  const funnelDemo = [
     { etapa: "Solicitudes recibidas", n: 27, dias: "—" },
     { etapa: "Candidatos sourceados", n: 286, dias: "3 días promedio" },
     { etapa: "Filtro de CV aprobado", n: 142, dias: "5 días promedio" },
@@ -5332,11 +8334,12 @@ function Cobertura() {
     { etapa: "Oferta enviada", n: 8, dias: "26 días promedio" },
     { etapa: "Contratación efectiva", n: 6, dias: "33 días promedio" },
   ];
+  const funnel = datosCob?.funnel || funnelDemo;
   const topFunnel = Math.max(1, funnel[1]?.n ?? 1); // Para escala de barras: usamos sourceados como referencia
   const totalContratados = funnel[funnel.length - 1].n;
   const tasaGlobal = funnel[1]?.n > 0 ? ((totalContratados / funnel[1].n) * 100).toFixed(1) : "0.0";
 
-  const porArea = [
+  const porAreaDemo = [
     { area: "Comercial",      recibidas: 8, cerradas: 6, dias: 28 },
     { area: "Posventa",       recibidas: 6, cerradas: 4, dias: 38 },
     { area: "Operaciones",    recibidas: 5, cerradas: 3, dias: 52 },
@@ -5344,6 +8347,31 @@ function Cobertura() {
     { area: "Dirección",      recibidas: 2, cerradas: 1, dias: 67 },
     { area: "RH",             recibidas: 2, cerradas: 1, dias: 22 },
   ];
+
+  const porArea = datosCob?.porArea || porAreaDemo;
+
+  // Plantilla por área de ejemplo (suma 248 autorizada / 228 cubierta)
+  const plantillaDemo = [
+    { area: "Comercial", autorizada: 80, cubierta: 73 },
+    { area: "Posventa", autorizada: 60, cubierta: 55 },
+    { area: "Operaciones", autorizada: 70, cubierta: 65 },
+    { area: "Administración", autorizada: 26, cubierta: 24 },
+    { area: "Dirección", autorizada: 6, cubierta: 5 },
+    { area: "RH", autorizada: 6, cubierta: 6 },
+  ];
+  const descargarCob = () => descargarPlantillaCobertura(cargaCob, {
+    plantilla: plantillaDemo,
+    vacantes: vacantesDemo.map((v) => (v.id === "REQ-104" ? { ...v, fechaCierre: "01-abr-2026" } : v)),
+    funnel: funnelDemo,
+  });
+
+  // KPIs: del Excel cargado o de ejemplo
+  const plantAut = datosCob?.plantilla?.autorizada ?? 248;
+  const plantCub = datosCob?.plantilla?.cubierta ?? 228;
+  const pctCob = datosCob?.plantilla ? datosCob.plantilla.pct : 92;
+  const vac60 = datosCob?.mas60 ?? 2;
+  const luzCob = pctCob >= 95 ? "green" : pctCob >= 90 ? "yellow" : "red";
+  const luz60 = vac60 === 0 ? "green" : "red";
 
   return (
     <div>
@@ -5353,36 +8381,177 @@ function Cobertura() {
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Plantilla autorizada</div>
-            <div style={S.kpiValue}>248</div>
-            <div style={S.kpiBenchmark("green")}>Plan anual 2026: 248</div>
+            <div style={S.kpiValue}>{plantAut}</div>
+            <div style={S.kpiBenchmark("green")}>{datosCob?.plantilla ? `Suma de ${datosCob.plantilla.areas} áreas` : "Plan anual 2026: 248"}</div>
           </div>
           <TrafficLight light="green" />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Cubierta</div>
-            <div style={S.kpiValue}>228</div>
-            <div style={S.kpiBenchmark("yellow")}>Objetivo: 248 (autorizado)</div>
+            <div style={S.kpiValue}>{plantCub}</div>
+            <div style={S.kpiBenchmark(luzCob)}>Objetivo: {plantAut} (autorizado)</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzCob} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>% cobertura</div>
-            <div style={S.kpiValue}>92%</div>
-            <div style={S.kpiBenchmark("yellow")}>Meta: ≥95% · Crítico: &lt;90%</div>
+            <div style={S.kpiValue}>{Math.round(pctCob)}%</div>
+            <div style={S.kpiBenchmark(luzCob)}>Meta: ≥95% · Crítico: &lt;90%</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzCob} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Vacantes &gt; 60 días</div>
-            <div style={S.kpiValue}>2</div>
-            <div style={S.kpiBenchmark("red")}>Meta: 0 · Alerta: ≥1</div>
+            <div style={S.kpiValue}>{vac60}</div>
+            <div style={S.kpiBenchmark(luz60)}>Meta: 0 · Alerta: ≥1</div>
           </div>
-          <TrafficLight light="red" />
+          <TrafficLight light={luz60} />
         </div>
       </div>
+
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end", marginTop: 12, marginBottom: 8 }}>
+        <button
+          style={{ ...S.btnGhost, display: "inline-flex", alignItems: "center", gap: 6 }}
+          onClick={descargarCob}
+          title="Descarga un Excel con hojas de Plantilla por área, Solicitudes y Embudo para llenarlo"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+          Descarga plantilla
+        </button>
+        <button
+          style={{ ...S.btn, display: "inline-flex", alignItems: "center", gap: 6 }}
+          onClick={() => setCobCargaOpen(true)}
+          title="Sube el Excel llenado para actualizar Cobertura de Plantilla"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+          Cargar plantilla
+        </button>
+      </div>
+
+      {datosCob && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#7c2d12" }}>
+          <span>
+            Datos cargados desde Excel · <strong>{cargaCob.archivo}</strong>
+            {datosCob.plantilla && <> · {datosCob.plantilla.areas} áreas</>}
+            {datosCob.totalSolicitudes != null && <> · {datosCob.totalSolicitudes} solicitudes</>}
+            {datosCob.funnel && <> · embudo de {datosCob.funnel.length} etapas</>}
+            {" "}· {cargaCob.fecha}
+          </span>
+          <button style={{ ...S.btnGhost, padding: "4px 10px", fontSize: 12 }} onClick={restaurarCob}>
+            Restaurar datos originales
+          </button>
+        </div>
+      )}
+
+      {cobCargaOpen && (() => {
+        const prev = cobPrevValido ? construirCobertura(cobPrev) : null;
+        return (
+          <div
+            style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}
+            onClick={cerrarCobCarga}
+          >
+            <div
+              style={{ background: "#fff", borderRadius: 12, width: 640, maxWidth: "100%", maxHeight: "90vh", overflow: "auto", padding: 24, boxShadow: "0 20px 50px rgba(15,23,42,0.25)" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                <div>
+                  <div style={{ fontSize: 17, fontWeight: 700, color: "#0f172a" }}>Cargar plantilla</div>
+                  <div style={{ fontSize: 12, color: "#475569", marginTop: 2 }}>Cobertura · hojas <strong>Plantilla por área</strong>, <strong>Solicitudes</strong> y <strong>Embudo</strong></div>
+                </div>
+                <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={cerrarCobCarga}>✕</button>
+              </div>
+
+              <div
+                onDragOver={(e) => { e.preventDefault(); setCobDrag(true); }}
+                onDragLeave={() => setCobDrag(false)}
+                onDrop={(e) => { e.preventDefault(); setCobDrag(false); procesarArchivoCob(e.dataTransfer.files?.[0]); }}
+                onClick={() => cobInputRef.current?.click()}
+                style={{
+                  border: `2px dashed ${cobDrag ? "#c2410c" : "#cbd5e1"}`,
+                  background: cobDrag ? "#fff7ed" : "#f8fafc",
+                  borderRadius: 10,
+                  padding: "32px 16px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cobDrag ? "#c2410c" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
+                  {cobLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
+                </div>
+                <div style={{ fontSize: 12, color: "#64748b", marginTop: 4 }}>o haz clic para seleccionarlo · .xlsx o .xls</div>
+                <input
+                  ref={cobInputRef}
+                  type="file"
+                  accept=".xlsx,.xls"
+                  style={{ display: "none" }}
+                  onChange={(e) => { procesarArchivoCob(e.target.files?.[0]); e.target.value = ""; }}
+                />
+              </div>
+
+              {cobPrev && (
+                <div style={{ marginTop: 16 }}>
+                  <div style={{ fontSize: 12, color: "#475569", marginBottom: 8 }}>
+                    Archivo: <strong>{cobPrev.archivo}</strong>
+                  </div>
+                  {cobPrev.errores.length > 0 && (
+                    <div style={{ background: "#fdecea", border: "1px solid #f5c2c0", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#8a1c1c", marginBottom: 10 }}>
+                      <strong>Corrige estos puntos y vuelve a subir el archivo:</strong>
+                      <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                        {cobPrev.errores.slice(0, 8).map((er, i) => <li key={i}>{er}</li>)}
+                        {cobPrev.errores.length > 8 && <li>… y {cobPrev.errores.length - 8} más</li>}
+                      </ul>
+                    </div>
+                  )}
+                  {prev && (
+                    <table style={{ ...S.table, fontSize: 12 }}>
+                      <tbody>
+                        {prev.plantilla && (
+                          <tr><td style={S.td}>Plantilla ({prev.plantilla.areas} áreas)</td><td style={{ ...S.td, textAlign: "right" }}><strong>{prev.plantilla.cubierta}</strong> cubierta de <strong>{prev.plantilla.autorizada}</strong> autorizada · <strong>{prev.plantilla.pct.toFixed(1)}%</strong></td></tr>
+                        )}
+                        {prev.totalSolicitudes != null && (
+                          <tr><td style={S.td}>Solicitudes</td><td style={{ ...S.td, textAlign: "right" }}><strong>{prev.totalSolicitudes}</strong> · {prev.abiertas} abiertas · {prev.cerradas} cerradas · {prev.mas60} con más de 60 días</td></tr>
+                        )}
+                        {prev.funnel && (
+                          <tr><td style={S.td}>Embudo</td><td style={{ ...S.td, textAlign: "right" }}><strong>{prev.funnel.length}</strong> etapas · {prev.funnel[prev.funnel.length - 1]?.n ?? 0} contrataciones</td></tr>
+                        )}
+                      </tbody>
+                    </table>
+                  )}
+                  {cobPrev.avisos.length > 0 && (
+                    <ul style={{ fontSize: 12, color: "#64748b", margin: "8px 0 0", paddingLeft: 18 }}>
+                      {cobPrev.avisos.slice(0, 6).map((a, i) => <li key={i}>{a}</li>)}
+                      {cobPrev.avisos.length > 6 && <li>… y {cobPrev.avisos.length - 6} avisos más</li>}
+                    </ul>
+                  )}
+                </div>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
+                <button style={{ ...S.btnGhost, fontSize: 12 }} onClick={descargarCob}>
+                  ¿No tienes la plantilla? Descárgala
+                </button>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button style={S.btnGhost} onClick={cerrarCobCarga}>Cancelar</button>
+                  <button
+                    style={{ ...S.btn, opacity: cobPrevValido ? 1 : 0.45, cursor: cobPrevValido ? "pointer" : "not-allowed" }}
+                    disabled={!cobPrevValido}
+                    onClick={aplicarCob}
+                  >
+                    Aplicar a Cobertura
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
 
       <h3 style={S.h3}>Solicitudes — mes a mes y acumulado</h3>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
@@ -5390,7 +8559,7 @@ function Cobertura() {
         <ChartCopy label="Solicitudes mensuales recibidas vs cerradas"><div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, padding: "20px 22px 16px", boxShadow: "0 1px 2px rgba(15, 23, 42, 0.04)" }}>
           <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 10, marginBottom: 14 }}>
             <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: 1.2, textTransform: "uppercase", color: "#64748b" }}>
-              Mensual · últimos 7 meses
+              Mensual · últimos {solicitudesMensuales.length} meses
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 2 }}>
               <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>Recibidas vs Cerradas</div>
@@ -5537,8 +8706,17 @@ function Cobertura() {
           })}
         </div>
         <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 14, paddingTop: 10, display: "flex", justifyContent: "space-between", fontSize: 11, color: "#475569" }}>
-          <span>Mayor caída: <strong style={{ color: "#c2410c" }}>Sourcing → Filtro CV</strong> (50% queda fuera)</span>
-          <span>Cuello de botella: <strong style={{ color: "#c2410c" }}>Entrevista RH → Gerente</strong> (44% conversión, 5 días extra)</span>
+          {datosCob?.funnel ? (
+            <>
+              <span>Mayor caída: {datosCob.funnelCaida ? <><strong style={{ color: "#c2410c" }}>{datosCob.funnelCaida.de} → {datosCob.funnelCaida.a}</strong> ({Math.round(100 - datosCob.funnelCaida.conv)}% queda fuera)</> : "—"}</span>
+              <span>Cuello de botella: {datosCob.funnelCuello ? <><strong style={{ color: "#c2410c" }}>{datosCob.funnelCuello.de} → {datosCob.funnelCuello.a}</strong> ({Math.round(datosCob.funnelCuello.conv)}% conversión, {Math.round(datosCob.funnelCuello.extra)} días extra)</> : "—"}</span>
+            </>
+          ) : (
+            <>
+              <span>Mayor caída: <strong style={{ color: "#c2410c" }}>Sourcing → Filtro CV</strong> (50% queda fuera)</span>
+              <span>Cuello de botella: <strong style={{ color: "#c2410c" }}>Entrevista RH → Gerente</strong> (44% conversión, 5 días extra)</span>
+            </>
+          )}
         </div>
       </div></ChartCopy>
 
@@ -5804,12 +8982,416 @@ function Cobertura() {
           </div>
         );
       })()}
+
+      <AulaCobertura vacantes={vacantes} porArea={porArea} funnel={funnel} plantAut={plantAut} plantCub={plantCub} pctCob={pctCob} totalRecibidas={totalRecibidas} totalCerradas={totalCerradas} />
     </div>
   );
 }
 
+// ---------- Rotación: plantilla Excel de altas y bajas ----------
+// Hojas: Bajas (costo de salida), Altas (costo de reemplazo, ligado con "Reemplaza a")
+// y Plantilla (headcount mensual para el % de rotación).
+const ROT_STORAGE_KEY = "rrhh.rotacion.altasBajas.v1";
+const leerCargaRot = () => {
+  try { return JSON.parse(localStorage.getItem(ROT_STORAGE_KEY) || "null"); } catch { return null; }
+};
+const guardarCargaRot = (carga) => {
+  try {
+    if (carga) localStorage.setItem(ROT_STORAGE_KEY, JSON.stringify(carga));
+    else localStorage.removeItem(ROT_STORAGE_KEY);
+  } catch { /* sin almacenamiento */ }
+};
+
+const MESES_CORTOS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const SALARIO_MINIMO_DIARIO = 315.04; // 2026, zona general
+const FACTOR_INTEGRACION = 1.0493; // aguinaldo 15 días + prima vacacional 25% sobre 12 días
+const PLANTILLA_DEFAULT = 248;
+
+const ROT_COLS_BAJAS = [
+  { key: "empNo", header: "No. empleado", req: true, tipo: "texto", ancho: 14 },
+  { key: "nombre", header: "Nombre", req: true, tipo: "texto", ancho: 26 },
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 16 },
+  { key: "puesto", header: "Puesto", tipo: "texto", ancho: 26 },
+  { key: "jefe", header: "Jefe directo", tipo: "texto", ancho: 24 },
+  { key: "fechaIngreso", header: "Fecha de ingreso", req: true, tipo: "fecha", ancho: 15 },
+  { key: "fechaBaja", header: "Fecha de baja", req: true, tipo: "fecha", ancho: 15 },
+  { key: "tipo", header: "Tipo de baja", req: true, tipo: "texto", ancho: 14 },
+  { key: "motivo", header: "Motivo", tipo: "texto", ancho: 30 },
+  { key: "comentarios", header: "Comentarios", tipo: "texto", ancho: 50 },
+  { key: "sueldo", header: "Sueldo mensual", req: true, tipo: "monto", ancho: 15 },
+  { key: "sueldoIntegrado", header: "Sueldo integrado mensual", tipo: "monto", ancho: 17 },
+  { key: "liquidacion", header: "Costo finiquito / liquidación", tipo: "monto", ancho: 18 },
+  { key: "oculto", header: "Costo oculto", tipo: "monto", ancho: 14 },
+  { key: "hundido", header: "Costo hundido", tipo: "monto", ancho: 14 },
+];
+const ROT_COLS_ALTAS = [
+  { key: "empNo", header: "No. empleado", req: true, tipo: "texto", ancho: 14 },
+  { key: "nombre", header: "Nombre", req: true, tipo: "texto", ancho: 30 },
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 16 },
+  { key: "puesto", header: "Puesto", tipo: "texto", ancho: 26 },
+  { key: "fechaAlta", header: "Fecha de alta", req: true, tipo: "fecha", ancho: 15 },
+  { key: "sueldo", header: "Sueldo mensual", tipo: "monto", ancho: 15 },
+  { key: "reemplazaA", header: "Reemplaza a (No. empleado)", tipo: "texto", ancho: 20 },
+  { key: "reclutamiento", header: "Costo de reclutamiento", tipo: "monto", ancho: 17 },
+  { key: "capacitacion", header: "Costo de capacitación inicial", tipo: "monto", ancho: 18 },
+  { key: "otrosAlta", header: "Otros costos de contratación", tipo: "monto", ancho: 18 },
+];
+const ROT_COLS_PLANTILLA = [
+  { key: "anio", header: "Año", req: true, tipo: "numero", ancho: 10 },
+  { key: "mes", header: "Mes", req: true, tipo: "numero", ancho: 10 },
+  { key: "plantilla", header: "Plantilla promedio", req: true, tipo: "numero", ancho: 18 },
+];
+
+const isoDeFecha = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const fechaDeIso = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const fechaCortaIso = (s) => { const d = fechaDeIso(s); return `${String(d.getDate()).padStart(2, "0")}-${MESES_CORTOS[d.getMonth()]}-${d.getFullYear()}`; };
+const mesDeTexto = (v) => {
+  if (typeof v === "number") return v >= 1 && v <= 12 ? Math.round(v) : null;
+  const t = normalizarTexto(v);
+  if (/^\d+$/.test(String(v).trim())) { const n = Number(String(v).trim()); return n >= 1 && n <= 12 ? n : null; }
+  const i = MESES_CORTOS.findIndex((m) => t.startsWith(m));
+  return i >= 0 ? i + 1 : null;
+};
+
+// Acepta fechas de Excel (número de serie), dd/mm/aaaa, aaaa-mm-dd o 22-mar-2026.
+function leerFechaCelda(XLSX, v) {
+  let d = null;
+  if (typeof v === "number" && v > 0) {
+    const p = XLSX?.SSF?.parse_date_code(v);
+    if (p) d = new Date(p.y, p.m - 1, p.d);
+  } else {
+    const t = String(v ?? "").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    let m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) d = new Date(+m[1], +m[2] - 1, +m[3]);
+    else if ((m = t.match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{2,4})$/))) d = new Date(+m[3] < 100 ? 2000 + +m[3] : +m[3], +m[2] - 1, +m[1]);
+    else if ((m = t.match(/^(\d{1,2})[\s/-]+([a-z]{3})[a-z]*\.?[\s/-]+(?:de\s+)?(\d{4})$/))) {
+      const i = MESES_CORTOS.indexOf(m[2]);
+      if (i >= 0) d = new Date(+m[3], i, +m[1]);
+    }
+  }
+  if (!d || isNaN(d) || d.getFullYear() < 1950 || d.getFullYear() > 2100) return null;
+  return d;
+}
+
+// Días de vacaciones por año de servicio (LFT, reforma 2023)
+const diasVacaciones = (anio) => (anio <= 5 ? 10 + 2 * anio : 20 + 2 * Math.ceil((anio - 5) / 5));
+
+// Estimación de finiquito / liquidación cuando no viene capturada en el Excel.
+function estimarLiquidacion(b) {
+  const diario = b.sueldo / 30;
+  const sdi = b.sueldoIntegrado / 30;
+  const baja = fechaDeIso(b.fechaBaja);
+  const ingreso = fechaDeIso(b.fechaIngreso);
+  const inicio = Math.max(new Date(baja.getFullYear(), 0, 1), ingreso);
+  const diasAnio = Math.max(0, (baja - inicio) / 864e5) + 1;
+  const aguinaldo = (15 * diario * diasAnio) / 365;
+  const vacaciones = diasVacaciones(Math.floor(b.años) + 1) * (b.años - Math.floor(b.años)) * diario * 1.25;
+  const involuntaria = b.tipo === "Involuntaria";
+  const primaAntiguedad = involuntaria || b.años >= 15 ? 12 * Math.min(diario, 2 * SALARIO_MINIMO_DIARIO) * b.años : 0;
+  const indemnizacion = involuntaria ? 90 * sdi : 0;
+  return Math.round((aguinaldo + vacaciones + primaAntiguedad + indemnizacion) / 100) * 100;
+}
+
+function leerHojaRot(XLSX, hoja, cols, nombreHoja) {
+  const rows = XLSX.utils.sheet_to_json(hoja, { header: 1, defval: "", blankrows: false, raw: true });
+  const claves = cols.map((c) => normalizarTexto(c.header));
+  const coincide = (v) => { const n = normalizarTexto(v); return n && claves.some((k) => n === k || n.startsWith(k)); };
+  const headerIdx = rows.findIndex((r) => r.filter(coincide).length >= Math.min(2, cols.length));
+  if (headerIdx < 0) return { filas: [], errores: [`Hoja "${nombreHoja}": no encontré la fila de encabezados. Usa la plantilla descargada.`] };
+  const header = rows[headerIdx].map(normalizarTexto);
+  const idx = {};
+  const faltan = [];
+  cols.forEach((c, ci) => {
+    const k = claves[ci];
+    let i = header.findIndex((h) => h === k);
+    if (i < 0) i = header.findIndex((h) => h.startsWith(k));
+    if (i < 0) { if (c.req) faltan.push(c.header); } else idx[c.key] = i;
+  });
+  if (faltan.length) return { filas: [], errores: [`Hoja "${nombreHoja}": faltan columnas ${faltan.join(", ")}.`] };
+
+  const filas = [];
+  const errores = [];
+  rows.slice(headerIdx + 1).forEach((r, i) => {
+    const linea = headerIdx + i + 2;
+    const val = (k) => (idx[k] === undefined ? "" : r[idx[k]]);
+    if (cols.every((c) => String(val(c.key) ?? "").trim() === "")) return;
+    const f = { _linea: linea };
+    cols.forEach((c) => {
+      const v = val(c.key);
+      const vacio = String(v ?? "").trim() === "";
+      if (c.req && vacio) errores.push(`${nombreHoja}, fila ${linea}: falta "${c.header}".`);
+      if (c.tipo === "fecha") {
+        const d = vacio ? null : leerFechaCelda(XLSX, v);
+        if (!vacio && !d) errores.push(`${nombreHoja}, fila ${linea}: "${c.header}" no es una fecha válida (usa dd/mm/aaaa).`);
+        f[c.key] = d ? isoDeFecha(d) : "";
+      } else if (c.tipo === "monto" || c.tipo === "numero") {
+        let n = vacio ? null : typeof v === "number" ? v : Number(String(v).replace(/[$,\s]/g, ""));
+        if (c.key === "mes" && !vacio) n = mesDeTexto(v);
+        if (n !== null && (!Number.isFinite(n) || n < 0)) {
+          errores.push(`${nombreHoja}, fila ${linea}: "${c.header}" debe ser un número positivo.`);
+          n = null;
+        }
+        f[c.key] = n;
+      } else {
+        f[c.key] = String(v ?? "").trim();
+      }
+    });
+    filas.push(f);
+  });
+  return { filas, errores };
+}
+
+// Lee el Excel de altas y bajas → { bajas, altas, plantilla, errores, avisos }
+async function leerPlantillaRotacion(file) {
+  const XLSX = await import("xlsx");
+  const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+  const buscar = (clave) => wb.SheetNames.find((n) => normalizarTexto(n).startsWith(clave));
+  const errores = [];
+  const avisos = [];
+  const hBajas = buscar("baja");
+  const hAltas = buscar("alta");
+  const hPlantilla = buscar("plantilla");
+  if (!hBajas) return { bajas: [], altas: [], plantilla: {}, errores: ['No encontré la hoja "Bajas". Usa la plantilla descargada.'], avisos };
+
+  const rb = leerHojaRot(XLSX, wb.Sheets[hBajas], ROT_COLS_BAJAS, hBajas);
+  errores.push(...rb.errores);
+  const vistos = new Set();
+  const bajas = [];
+  rb.filas.forEach((f) => {
+    const t = normalizarTexto(f.tipo);
+    if (t.startsWith("v")) f.tipo = "Voluntaria";
+    else if (t.startsWith("i")) f.tipo = "Involuntaria";
+    else if (f.tipo) errores.push(`${hBajas}, fila ${f._linea}: "Tipo de baja" debe ser Voluntaria o Involuntaria.`);
+    if (f.fechaIngreso && f.fechaBaja && f.fechaBaja < f.fechaIngreso) errores.push(`${hBajas}, fila ${f._linea}: la fecha de baja es anterior a la de ingreso.`);
+    if (f.sueldo !== null && f.sueldo <= 0) errores.push(`${hBajas}, fila ${f._linea}: "Sueldo mensual" debe ser mayor a cero.`);
+    const clave = f.empNo.toLowerCase();
+    if (clave && vistos.has(clave)) errores.push(`${hBajas}, fila ${f._linea}: el No. empleado ${f.empNo} está repetido.`);
+    vistos.add(clave);
+    const { _linea, ...resto } = f;
+    bajas.push(resto);
+  });
+  if (!bajas.length && !errores.length) errores.push(`La hoja "${hBajas}" no tiene bajas capturadas.`);
+
+  const altas = [];
+  if (hAltas) {
+    const ra = leerHojaRot(XLSX, wb.Sheets[hAltas], ROT_COLS_ALTAS, hAltas);
+    errores.push(...ra.errores);
+    ra.filas.forEach((f) => {
+      if (f.reemplazaA && !vistos.has(f.reemplazaA.toLowerCase())) {
+        avisos.push(`${hAltas}, fila ${f._linea}: "${f.reemplazaA}" no aparece en Bajas; su costo no se suma a la rotación.`);
+      }
+      const { _linea, ...resto } = f;
+      altas.push(resto);
+    });
+  } else {
+    avisos.push('No encontré la hoja "Altas": el costo de reemplazo quedará en cero.');
+  }
+
+  const plantilla = {};
+  if (hPlantilla) {
+    const rp = leerHojaRot(XLSX, wb.Sheets[hPlantilla], ROT_COLS_PLANTILLA, hPlantilla);
+    errores.push(...rp.errores);
+    rp.filas.forEach((f) => {
+      if (!f.anio || !f.mes || !f.plantilla) return;
+      plantilla[`${Math.round(f.anio)}-${String(f.mes).padStart(2, "0")}`] = f.plantilla;
+    });
+  }
+  if (!Object.keys(plantilla).length) avisos.push(`Sin plantilla mensual: el % de rotación se calcula sobre ${PLANTILLA_DEFAULT} colaboradores.`);
+
+  return { bajas, altas, plantilla, errores, avisos };
+}
+
+// Convierte la carga en las estructuras que usa la vista de Rotación.
+function construirRotacion(carga) {
+  const costoAlta = (a) => (a.reclutamiento || 0) + (a.capacitacion || 0) + (a.otrosAlta || 0);
+  const altasPorBaja = {};
+  (carga.altas || []).forEach((a) => {
+    if (a.reemplazaA) (altasPorBaja[a.reemplazaA.toLowerCase()] ||= []).push(a);
+  });
+
+  const bajasRecientes = carga.bajas.map((b) => {
+    const años = Math.max(0, Math.round(((fechaDeIso(b.fechaBaja) - fechaDeIso(b.fechaIngreso)) / (365.25 * 864e5)) * 10) / 10);
+    const sueldoIntegrado = b.sueldoIntegrado || Math.round(b.sueldo * FACTOR_INTEGRACION);
+    const estimada = b.liquidacion == null;
+    const directo = estimada ? estimarLiquidacion({ ...b, años, sueldoIntegrado }) : b.liquidacion;
+    const reemplazos = altasPorBaja[b.empNo.toLowerCase()] || [];
+    const indirecto = reemplazos.reduce((s, a) => s + costoAlta(a), 0);
+    const notas = [
+      estimada ? "Finiquito/liquidación estimado con LFT (no venía capturado en el Excel)." : "Finiquito/liquidación tomado del Excel.",
+      reemplazos.length
+        ? `Reemplazo: ${reemplazos.map((a) => `${a.nombre} (alta ${fechaCortaIso(a.fechaAlta)})`).join(", ")}.`
+        : "Sin reemplazo registrado en la hoja Altas.",
+    ];
+    return {
+      id: "X-" + b.empNo, empNo: b.empNo, nombre: b.nombre, email: "",
+      area: b.area, gerenciaFuncional: b.area, puesto: b.puesto || "—",
+      fechaIngreso: fechaCortaIso(b.fechaIngreso), fechaAviso: "—", fecha: fechaCortaIso(b.fechaBaja), fechaIso: b.fechaBaja,
+      años, sueldo: b.sueldo, sueldoIntegrado,
+      jefe: b.jefe || "—", reportes: "—",
+      motivo: b.motivo || "Sin motivo registrado",
+      motivoExtendido: b.comentarios || "—",
+      observacionesJefe: notas.join(" "),
+      tipo: b.tipo,
+      costos: { directo, indirecto, oculto: b.oculto || 0, hundido: b.hundido || 0 },
+      liquidacionEstimada: estimada,
+      tieneReemplazo: reemplazos.length > 0,
+    };
+  });
+  const total = (b) => b.costos.directo + b.costos.indirecto + b.costos.oculto + b.costos.hundido;
+
+  const moda = (arr) => {
+    const c = {};
+    arr.forEach((x) => { c[x] = (c[x] || 0) + 1; });
+    return Object.entries(c).sort((a, b) => b[1] - a[1])[0]?.[0] || "—";
+  };
+  const porArea = [...new Set(bajasRecientes.map((b) => b.area))]
+    .map((area) => {
+      const l = bajasRecientes.filter((b) => b.area === area);
+      return { area, n: l.length, motivo: moda(l.map((b) => b.motivo)), tipo: moda(l.map((b) => b.tipo)) };
+    })
+    .sort((a, b) => b.n - a.n);
+
+  // Serie mensual continua (últimos 12 meses con datos)
+  const porMes = {};
+  bajasRecientes.forEach((b) => {
+    const k = b.fechaIso.slice(0, 7);
+    porMes[k] ||= { bajas: 0, costo: 0 };
+    porMes[k].bajas++;
+    porMes[k].costo += total(b);
+  });
+  const ordenadas = Object.keys(porMes).sort();
+  const claves = [];
+  if (ordenadas.length) {
+    let [y, m] = ordenadas[0].split("-").map(Number);
+    const fin = ordenadas[ordenadas.length - 1];
+    while (true) {
+      const k = `${y}-${String(m).padStart(2, "0")}`;
+      claves.push(k);
+      if (k >= fin) break;
+      m++; if (m > 12) { m = 1; y++; }
+    }
+  }
+  const ultimas = claves.slice(-12);
+  const plantilla = carga.plantilla || {};
+  const conocidas = Object.keys(plantilla).sort();
+  const plantillaDe = (k) => {
+    if (plantilla[k]) return plantilla[k];
+    const previa = conocidas.filter((c) => c <= k).pop() || conocidas[0];
+    return previa ? plantilla[previa] : PLANTILLA_DEFAULT;
+  };
+  const mensual = ultimas.map((k) => {
+    const [y, m] = k.split("-").map(Number);
+    const d = porMes[k] || { bajas: 0, costo: 0 };
+    return { mes: MESES_CORTOS[m - 1].charAt(0).toUpperCase() + MESES_CORTOS[m - 1].slice(1), anio: "'" + String(y).slice(2), bajas: d.bajas, costo: d.costo, pct: Math.round((d.bajas / plantillaDe(k)) * 1000) / 10 };
+  });
+  const etiquetaMes = (k) => { const [y, m] = k.split("-").map(Number); return `${MESES_CORTOS[m - 1].charAt(0).toUpperCase() + MESES_CORTOS[m - 1].slice(1)} ${y}`; };
+  const rango = ultimas.length ? (ultimas.length === 1 ? etiquetaMes(ultimas[0]) : `${etiquetaMes(ultimas[0])} – ${etiquetaMes(ultimas[ultimas.length - 1])}`) : "—";
+
+  const sum = (fn) => bajasRecientes.reduce((s, b) => s + fn(b), 0);
+  const costoTotal = sum(total);
+  const pctProm = mensual.length ? mensual.reduce((s, m) => s + m.pct, 0) / mensual.length : 0;
+  const altasReemplazo = (carga.altas || []).filter((a) => a.reemplazaA && altasPorBaja[a.reemplazaA.toLowerCase()] && carga.bajas.some((b) => b.empNo.toLowerCase() === a.reemplazaA.toLowerCase())).length;
+  return {
+    bajasRecientes, porArea, mensual, rango,
+    totalBajas: bajasRecientes.length,
+    voluntarias: bajasRecientes.filter((b) => b.tipo === "Voluntaria").length,
+    costoTotal,
+    costoSalida: sum((b) => b.costos.directo),
+    costoReemplazo: sum((b) => b.costos.indirecto),
+    costoOtros: sum((b) => b.costos.oculto + b.costos.hundido),
+    costoUnitario: bajasRecientes.length ? Math.round(costoTotal / bajasRecientes.length) : 0,
+    pctAnual: pctProm * 12,
+    altasTotal: (carga.altas || []).length,
+    altasReemplazo,
+    estimadas: bajasRecientes.filter((b) => b.liquidacionEstimada).length,
+    sinReemplazo: bajasRecientes.filter((b) => !b.tieneReemplazo).length,
+  };
+}
+
+// Descarga la plantilla con los datos actuales (cargados o de ejemplo).
+async function descargarPlantillaRotacion(carga, bajasEjemplo) {
+  const XLSX = await import("xlsx");
+  let bajas, altas, plantilla;
+  if (carga) {
+    ({ bajas, altas } = carga);
+    plantilla = carga.plantilla || {};
+  } else {
+    const iso = (s) => { const d = leerFechaCelda(XLSX, s); return d ? isoDeFecha(d) : ""; };
+    bajas = bajasEjemplo.map((b) => ({
+      empNo: b.empNo, nombre: b.nombre, area: b.area, puesto: b.puesto, jefe: b.jefe,
+      fechaIngreso: iso(b.fechaIngreso), fechaBaja: iso(b.fecha), tipo: b.tipo, motivo: b.motivo, comentarios: b.motivoExtendido,
+      sueldo: b.sueldo, sueldoIntegrado: b.sueldoIntegrado, liquidacion: b.costos.directo, oculto: b.costos.oculto, hundido: b.costos.hundido,
+    }));
+    altas = bajasEjemplo.map((b, i) => {
+      const d = fechaDeIso(iso(b.fecha));
+      d.setDate(d.getDate() + 30);
+      const reclutamiento = Math.round((b.costos.indirecto * 0.65) / 100) * 100;
+      return {
+        empNo: `EMP-${String(901 + i).padStart(4, "0")}`, nombre: `Reemplazo de ${b.nombre}`, area: b.area, puesto: b.puesto,
+        fechaAlta: isoDeFecha(d), sueldo: b.sueldo, reemplazaA: b.empNo,
+        reclutamiento, capacitacion: b.costos.indirecto - reclutamiento, otrosAlta: 0,
+      };
+    });
+    plantilla = {};
+    bajas.forEach((b) => { plantilla[b.fechaBaja.slice(0, 7)] = PLANTILLA_DEFAULT; });
+  }
+
+  const serial = (s) => { const [y, m, d] = s.split("-").map(Number); return (Date.UTC(y, m - 1, d) - Date.UTC(1899, 11, 30)) / 864e5; };
+  const hojaDe = (cols, filas) => {
+    const aoa = [cols.map((c) => c.header + (c.req ? " *" : ""))];
+    filas.forEach((f) => aoa.push(cols.map((c) => {
+      const v = f[c.key];
+      if (v == null || v === "") return null;
+      if (c.tipo === "fecha") return serial(v);
+      return c.tipo === "texto" ? String(v) : Number(v);
+    })));
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws["!cols"] = cols.map((c) => ({ wch: c.ancho }));
+    for (let r = 1; r < aoa.length; r++) {
+      cols.forEach((c, ci) => {
+        const cell = ws[XLSX.utils.encode_cell({ r, c: ci })];
+        if (!cell) return;
+        if (c.tipo === "fecha") cell.z = "dd/mm/yyyy";
+        if (c.tipo === "monto") cell.z = '"$"#,##0';
+      });
+    }
+    ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: cols.length - 1 } }) };
+    return ws;
+  };
+
+  const instrucciones = [
+    ["Plantilla de Altas y Bajas · Costo de rotación"],
+    [],
+    ["Cómo llenarla"],
+    ["1. Hoja \"Bajas\": una fila por colaborador que salió. Las columnas con * son obligatorias."],
+    ["   · Tipo de baja: Voluntaria o Involuntaria."],
+    ["   · Costo finiquito / liquidación: si lo dejas vacío, se estima con la LFT (aguinaldo y vacaciones proporcionales, prima de antigüedad e indemnización de 90 días en bajas involuntarias)."],
+    ["   · Sueldo integrado mensual: si lo dejas vacío, se usa el sueldo mensual × 1.0493."],
+    ["   · Costo oculto (productividad perdida, errores, supervisión) y Costo hundido (capacitación invertida en quien se fue) son opcionales."],
+    ["2. Hoja \"Altas\": una fila por ingreso. En \"Reemplaza a\" pon el No. empleado de la baja que cubre."],
+    ["   · Los costos de reclutamiento, capacitación y otros de esas altas se suman como costo de reemplazo de la baja."],
+    ["   · Las altas sin \"Reemplaza a\" se consideran crecimiento y no cuentan como costo de rotación."],
+    ["3. Hoja \"Plantilla\" (opcional): plantilla promedio de cada mes (Año, Mes 1-12) para calcular el % de rotación."],
+    ["4. Fechas en formato dd/mm/aaaa. Montos en pesos, sin texto."],
+    ["5. Guarda el archivo y súbelo en Rotación con el botón \"Cargar plantilla\"."],
+    [],
+    ["Costo de rotación por baja = finiquito/liquidación + costo de reemplazo + costo oculto + costo hundido."],
+  ];
+  const wsInstr = XLSX.utils.aoa_to_sheet(instrucciones);
+  wsInstr["!cols"] = [{ wch: 130 }];
+
+  const filasPlantilla = Object.keys(plantilla).sort().map((k) => ({ anio: Number(k.slice(0, 4)), mes: Number(k.slice(5, 7)), plantilla: plantilla[k] }));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, wsInstr, "Instrucciones");
+  XLSX.utils.book_append_sheet(wb, hojaDe(ROT_COLS_BAJAS, bajas), "Bajas");
+  XLSX.utils.book_append_sheet(wb, hojaDe(ROT_COLS_ALTAS, altas), "Altas");
+  XLSX.utils.book_append_sheet(wb, hojaDe(ROT_COLS_PLANTILLA, filasPlantilla), "Plantilla");
+  XLSX.writeFile(wb, "Plantilla Altas y Bajas - Rotación.xlsx");
+}
+
 // =============================================================
-// 6. ROTACIÓN
+// 2. ROTACIÓN
 // =============================================================
 function Rotacion() {
   const [conceptoAbierto, setConceptoAbierto] = useState(null);
@@ -5818,8 +9400,47 @@ function Rotacion() {
   const [vistaRot, setVistaRot] = useState("costo"); // "costo" | "pct"
   const [areaAbierta, setAreaAbierta] = useState(null);
 
+  // Carga de Excel de altas y bajas (si no hay, se usan los datos de ejemplo)
+  const [cargaRot, setCargaRot] = useState(leerCargaRot);
+  const [rotCargaOpen, setRotCargaOpen] = useState(false);
+  const [rotDrag, setRotDrag] = useState(false);
+  const [rotPrev, setRotPrev] = useState(null); // { archivo, bajas, altas, plantilla, errores, avisos }
+  const [rotLeyendo, setRotLeyendo] = useState(false);
+  const rotInputRef = useRef(null);
+  const datosRot = useMemo(() => {
+    try { return cargaRot?.bajas?.length ? construirRotacion(cargaRot) : null; } catch { return null; }
+  }, [cargaRot]);
+  const procesarArchivoRot = async (file) => {
+    if (!file) return;
+    const vacio = { archivo: file.name, bajas: [], altas: [], plantilla: {}, avisos: [] };
+    if (!/\.(xlsx|xls)$/i.test(file.name)) {
+      setRotPrev({ ...vacio, errores: ["Formato no válido. Sube un archivo .xlsx o .xls."] });
+      return;
+    }
+    setRotLeyendo(true);
+    try {
+      setRotPrev({ archivo: file.name, ...(await leerPlantillaRotacion(file)) });
+    } catch {
+      setRotPrev({ ...vacio, errores: ["No se pudo leer el archivo. Verifica que sea la plantilla en Excel."] });
+    } finally {
+      setRotLeyendo(false);
+    }
+  };
+  const rotPrevValido = !!rotPrev && rotPrev.errores.length === 0 && rotPrev.bajas.length > 0;
+  const cerrarRotCarga = () => { setRotCargaOpen(false); setRotPrev(null); setRotDrag(false); };
+  const aplicarRot = () => {
+    if (!rotPrevValido) return;
+    const next = { archivo: rotPrev.archivo, fecha: new Date().toLocaleString("es-MX"), bajas: rotPrev.bajas, altas: rotPrev.altas, plantilla: rotPrev.plantilla };
+    setCargaRot(next);
+    guardarCargaRot(next);
+    setAreaAbierta(null);
+    setConceptoAbierto(null);
+    cerrarRotCarga();
+  };
+  const restaurarRot = () => { setCargaRot(null); guardarCargaRot(null); setAreaAbierta(null); setConceptoAbierto(null); };
+
   // Serie mes a mes (Jul–Dic 2026) — costo de rotación y % de rotación mensual.
-  const rotacionMensual = [
+  const rotacionMensualDemo = [
     { mes: "Jul", anio: "'26", bajas: 2, costo: 198000, pct: 0.8 },
     { mes: "Ago", anio: "'26", bajas: 4, costo: 352000, pct: 1.6 },
     { mes: "Sep", anio: "'26", bajas: 3, costo: 286000, pct: 1.2 },
@@ -5828,7 +9449,7 @@ function Rotacion() {
     { mes: "Dic", anio: "'26", bajas: 2, costo: 178000, pct: 0.8 },
   ];
 
-  const bajas = [
+  const bajasDemo = [
     { area: "Comercial", n: 7, motivo: "Mejor oferta", tipo: "Voluntaria" },
     { area: "Posventa", n: 4, motivo: "Ambiente", tipo: "Voluntaria" },
     { area: "Operaciones", n: 3, motivo: "Desempeño", tipo: "Involuntaria" },
@@ -5838,11 +9459,10 @@ function Rotacion() {
   const costoUnitario = {
     directos: 25000, indirectos: 18000,
   };
-  const totalBajas = bajas.reduce((a, r) => a + r.n, 0);
-  const costoTotal = (costoUnitario.directos + costoUnitario.indirectos) * totalBajas;
+  const totalBajasDemo = bajasDemo.reduce((a, r) => a + r.n, 0);
 
   // Bajas representativas del periodo (8 de 27) — cada una con perfil completo y costo específico por concepto.
-  const bajasRecientes = [
+  const bajasRecientesDemo = [
     {
       id: "B-001", empNo: "EMP-0287", nombre: "Javier Ortega", email: "javier.ortega@empresa.com.mx",
       area: "Comercial", gerenciaFuncional: "Dirección Comercial Norte", puesto: "Gerente Comercial Regional",
@@ -6049,6 +9669,20 @@ function Rotacion() {
     },
   ];
 
+  // Datos activos: los del Excel cargado o los de ejemplo
+  const bajasRecientes = datosRot?.bajasRecientes || bajasRecientesDemo;
+  const bajas = datosRot?.porArea || bajasDemo;
+  const rotacionMensual = datosRot?.mensual || rotacionMensualDemo;
+  const totalBajas = datosRot?.totalBajas ?? totalBajasDemo;
+  const costoTotal = datosRot?.costoTotal ?? (costoUnitario.directos + costoUnitario.indirectos) * totalBajasDemo;
+  const pctAnual = datosRot?.pctAnual ?? 20.6;
+  const costoUnitarioProm = datosRot?.costoUnitario ?? 43000;
+  const rangoMensual = datosRot?.rango || "Jul–Dic 2026";
+  const luzPct = pctAnual > 18 ? "red" : pctAnual > 15 ? "yellow" : "green";
+  const luzBajas = !datosRot ? "yellow" : totalBajas > 30 ? "red" : totalBajas > 24 ? "yellow" : "green";
+  const luzCostoUnit = !datosRot ? "yellow" : costoUnitarioProm > 43000 ? "red" : costoUnitarioProm > 38000 ? "yellow" : "green";
+  const luzCostoTotal = !datosRot ? "yellow" : costoTotal > 1000000 ? "red" : costoTotal > 800000 ? "yellow" : "green";
+
   // Costo económico real de cada baja (suma de los 4 componentes) y total real YTD por área.
   const costoTotalBaja = (b) => b.costos.directo + b.costos.indirecto + b.costos.oculto + b.costos.hundido;
   const costoRealArea = (area) => bajasRecientes.filter((b) => b.area === area).reduce((a, b) => a + costoTotalBaja(b), 0);
@@ -6237,40 +9871,176 @@ function Rotacion() {
     <div>
       <h2 style={S.h2}>Rotación</h2>
 
+      {rotCargaOpen && (() => {
+        const prev = rotPrevValido ? construirRotacion(rotPrev) : null;
+        const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+        return (
+          <div
+            style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}
+            onClick={cerrarRotCarga}
+          >
+            <div
+              style={{ background: "#fff", borderRadius: 12, width: 640, maxWidth: "100%", maxHeight: "90vh", overflow: "auto", padding: 24, boxShadow: "0 20px 50px rgba(15,23,42,0.25)" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                <div>
+                  <div style={{ fontSize: 17, fontWeight: 700, color: "#0f172a" }}>Cargar plantilla</div>
+                  <div style={{ fontSize: 12, color: "#475569", marginTop: 2 }}>Altas y bajas · hojas <strong>Bajas</strong>, <strong>Altas</strong> y <strong>Plantilla</strong></div>
+                </div>
+                <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={cerrarRotCarga}>✕</button>
+              </div>
+
+              <div
+                onDragOver={(e) => { e.preventDefault(); setRotDrag(true); }}
+                onDragLeave={() => setRotDrag(false)}
+                onDrop={(e) => { e.preventDefault(); setRotDrag(false); procesarArchivoRot(e.dataTransfer.files?.[0]); }}
+                onClick={() => rotInputRef.current?.click()}
+                style={{
+                  border: `2px dashed ${rotDrag ? "#c2410c" : "#cbd5e1"}`,
+                  background: rotDrag ? "#fff7ed" : "#f8fafc",
+                  borderRadius: 10,
+                  padding: "32px 16px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={rotDrag ? "#c2410c" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
+                  {rotLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
+                </div>
+                <div style={{ fontSize: 12, color: "#64748b", marginTop: 4 }}>o haz clic para seleccionarlo · .xlsx o .xls</div>
+                <input
+                  ref={rotInputRef}
+                  type="file"
+                  accept=".xlsx,.xls"
+                  style={{ display: "none" }}
+                  onChange={(e) => { procesarArchivoRot(e.target.files?.[0]); e.target.value = ""; }}
+                />
+              </div>
+
+              {rotPrev && (
+                <div style={{ marginTop: 16 }}>
+                  <div style={{ fontSize: 12, color: "#475569", marginBottom: 8 }}>
+                    Archivo: <strong>{rotPrev.archivo}</strong>
+                  </div>
+                  {rotPrev.errores.length > 0 && (
+                    <div style={{ background: "#fdecea", border: "1px solid #f5c2c0", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#8a1c1c", marginBottom: 10 }}>
+                      <strong>Corrige estos puntos y vuelve a subir el archivo:</strong>
+                      <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                        {rotPrev.errores.slice(0, 8).map((er, i) => <li key={i}>{er}</li>)}
+                        {rotPrev.errores.length > 8 && <li>… y {rotPrev.errores.length - 8} más</li>}
+                      </ul>
+                    </div>
+                  )}
+                  {prev && (
+                    <table style={{ ...S.table, fontSize: 12 }}>
+                      <tbody>
+                        <tr><td style={S.td}>Periodo</td><td style={{ ...S.td, textAlign: "right" }}><strong>{prev.rango}</strong></td></tr>
+                        <tr><td style={S.td}>Bajas</td><td style={{ ...S.td, textAlign: "right" }}><strong>{prev.totalBajas}</strong> · {prev.voluntarias} voluntarias · {prev.totalBajas - prev.voluntarias} involuntarias</td></tr>
+                        <tr><td style={S.td}>Altas</td><td style={{ ...S.td, textAlign: "right" }}><strong>{prev.altasTotal}</strong> · {prev.altasReemplazo} reemplazos · {prev.altasTotal - prev.altasReemplazo} crecimiento</td></tr>
+                        <tr><td style={S.td}>Costo de salida (finiquitos / liquidaciones)</td><td style={{ ...S.td, textAlign: "right" }}>{fmt(prev.costoSalida)}{prev.estimadas > 0 && <span style={{ color: "#64748b" }}> · {prev.estimadas} estimado(s)</span>}</td></tr>
+                        <tr><td style={S.td}>Costo de reemplazo (reclutamiento + capacitación)</td><td style={{ ...S.td, textAlign: "right" }}>{fmt(prev.costoReemplazo)}</td></tr>
+                        <tr><td style={S.td}>Costos oculto y hundido</td><td style={{ ...S.td, textAlign: "right" }}>{fmt(prev.costoOtros)}</td></tr>
+                        <tr style={{ background: "#fafafa" }}><td style={{ ...S.td, fontWeight: 700 }}>Costo total de rotación</td><td style={{ ...S.td, textAlign: "right", fontWeight: 700, color: COLOR.accent }}>{fmt(prev.costoTotal)} · {fmt(prev.costoUnitario)} por baja</td></tr>
+                      </tbody>
+                    </table>
+                  )}
+                  {rotPrev.avisos.length > 0 && (
+                    <ul style={{ fontSize: 12, color: "#64748b", margin: "8px 0 0", paddingLeft: 18 }}>
+                      {rotPrev.avisos.slice(0, 6).map((a, i) => <li key={i}>{a}</li>)}
+                      {rotPrev.avisos.length > 6 && <li>… y {rotPrev.avisos.length - 6} avisos más</li>}
+                    </ul>
+                  )}
+                </div>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
+                <button style={{ ...S.btnGhost, fontSize: 12 }} onClick={() => descargarPlantillaRotacion(cargaRot, bajasRecientesDemo)}>
+                  ¿No tienes la plantilla? Descárgala
+                </button>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button style={S.btnGhost} onClick={cerrarRotCarga}>Cancelar</button>
+                  <button
+                    style={{ ...S.btn, opacity: rotPrevValido ? 1 : 0.45, cursor: rotPrevValido ? "pointer" : "not-allowed" }}
+                    disabled={!rotPrevValido}
+                    onClick={aplicarRot}
+                  >
+                    Aplicar a Rotación
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       <div style={S.grid4}>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Bajas YTD</div>
             <div style={S.kpiValue}>{totalBajas}</div>
-            <div style={S.kpiBenchmark("yellow")}>Meta anual: ≤30 bajas</div>
+            <div style={S.kpiBenchmark(luzBajas)}>Meta anual: ≤30 bajas</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzBajas} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>% rotación anualizada</div>
-            <div style={S.kpiValue}>20.6%</div>
-            <div style={S.kpiBenchmark("red")}>Industria 15-18% · Meta: ≤18%</div>
+            <div style={S.kpiValue}>{pctAnual.toFixed(1)}%</div>
+            <div style={S.kpiBenchmark(luzPct)}>Industria 15-18% · Meta: ≤18%</div>
           </div>
-          <TrafficLight light="red" />
+          <TrafficLight light={luzPct} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Costo unitario promedio</div>
-            <div style={S.kpiValue}>$43,000</div>
-            <div style={S.kpiBenchmark("yellow")}>Histórico promedio: $38,000</div>
+            <div style={S.kpiValue}>${costoUnitarioProm.toLocaleString("es-MX")}</div>
+            <div style={S.kpiBenchmark(luzCostoUnit)}>Histórico promedio: $38,000</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzCostoUnit} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Costo total estimado</div>
             <div style={S.kpiValue}>${(costoTotal / 1000000).toFixed(2)}M</div>
-            <div style={S.kpiBenchmark("yellow")}>Presupuesto anual: $1.0M</div>
+            <div style={S.kpiBenchmark(luzCostoTotal)}>Presupuesto anual: $1.0M</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzCostoTotal} />
         </div>
       </div>
+
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end", marginTop: 12, marginBottom: 8 }}>
+        <button
+          style={{ ...S.btnGhost, display: "inline-flex", alignItems: "center", gap: 6 }}
+          onClick={() => descargarPlantillaRotacion(cargaRot, bajasRecientesDemo)}
+          title="Descarga un Excel con hojas de Bajas, Altas y Plantilla para llenarlo"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+          Descarga plantilla
+        </button>
+        <button
+          style={{ ...S.btn, display: "inline-flex", alignItems: "center", gap: 6 }}
+          onClick={() => setRotCargaOpen(true)}
+          title="Sube el Excel de altas y bajas para calcular el costo de rotación"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+          Cargar plantilla
+        </button>
+      </div>
+
+      {datosRot && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fff7ed", border: "1px solid #fed7aa", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#7c2d12" }}>
+          <span>
+            Datos cargados desde Excel · <strong>{cargaRot.archivo}</strong> · {datosRot.totalBajas} bajas · {datosRot.altasTotal} altas · {datosRot.rango} · {cargaRot.fecha}
+            {datosRot.estimadas > 0 && <> · {datosRot.estimadas} finiquito(s) estimado(s) con LFT</>}
+          </span>
+          <button style={{ ...S.btnGhost, padding: "4px 10px", fontSize: 12 }} onClick={restaurarRot}>
+            Restaurar datos originales
+          </button>
+        </div>
+      )}
 
       <h3 style={S.h3}>Anatomía del costo por baja</h3>
       <p style={{ ...S.hint, marginTop: -4 }}>Haz click en cada concepto para ver el desglose.</p>
@@ -6445,7 +10215,7 @@ function Rotacion() {
         const ac = esCosto ? COLOR.accent : "#2e4773";
         const acLight = esCosto ? COLOR.accentLight : "#3e5f96";
         const valor = (m) => (esCosto ? m.costo : m.pct);
-        const maxV = Math.max(...rotacionMensual.map(valor));
+        const maxV = Math.max(1e-9, ...rotacionMensual.map(valor));
         const totalCosto = rotacionMensual.reduce((a, m) => a + m.costo, 0);
         const totalBajas = rotacionMensual.reduce((a, m) => a + m.bajas, 0);
         const pctProm = (rotacionMensual.reduce((a, m) => a + m.pct, 0) / rotacionMensual.length);
@@ -6464,9 +10234,9 @@ function Rotacion() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
               <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
                 <div>
-                  <div style={S.kpiLabel}>Total gastado · Jul–Dic 2026</div>
+                  <div style={S.kpiLabel}>Total gastado · {rangoMensual}</div>
                   <div style={{ fontSize: 26, fontWeight: 700, color: COLOR.accent, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{fmtMonto(totalCosto)}</div>
-                  <div style={{ fontSize: 11, color: COLOR.textMuted }}>{totalBajas} bajas · {fmtMonto(Math.round(totalCosto / totalBajas))} promedio por baja</div>
+                  <div style={{ fontSize: 11, color: COLOR.textMuted }}>{totalBajas} bajas · {fmtMonto(Math.round(totalCosto / (totalBajas || 1)))} promedio por baja</div>
                 </div>
                 <div>
                   <div style={S.kpiLabel}>Rotación mensual promedio</div>
@@ -6816,12 +10586,14 @@ function Rotacion() {
           </div>
         </div>
       )}
+
+      <AulaRotacion bajas={bajasRecientes} porArea={bajas} mensual={rotacionMensual} totalBajas={totalBajas} costoTotal={costoTotal} pctAnual={pctAnual} rango={rangoMensual} />
     </div>
   );
 }
 
 // =============================================================
-// 7. CAPACITACIÓN Y ENTRENAMIENTO
+// 6. CAPACITACIÓN Y ENTRENAMIENTO
 // =============================================================
 function Capacitacion() {
   const [cursoAbierto, setCursoAbierto] = useState(null);
@@ -8289,12 +12061,14 @@ function Capacitacion() {
           </div>
         );
       })()}
+
+      <AulaCapacitacion cursos={cursos} incidencias={incidenciasCap} />
     </div>
   );
 }
 
 // =============================================================
-// 5. PROCESO DE SELECCIÓN
+// PROCESO DE SELECCIÓN (fuera del menú)
 // =============================================================
 function Seleccion({ onAbrirGuia }) {
   const [candidatoAbierto, setCandidatoAbierto] = useState(null);
@@ -8791,42 +12565,31 @@ const BENCHMARKS_INICIALES = [
   { id: "dash-3", modulo: "Dashboard General", kpi: "Rotación anual", partes: [t("Industria "), n(15), t("-"), n(18), t("% · Meta: ≤"), n(18), t("%")], tipo: "Rango", aplicaA: ["dashboard", "rotacion"] },
   { id: "dash-4", modulo: "Dashboard General", kpi: "Clima (último pulso)", partes: [t("Meta: ≥"), n(7.0), t(" · Excelente: ≥"), n(7.5)], tipo: "Score 1-10", aplicaA: ["dashboard", "clima"] },
   { id: "dash-5", modulo: "Dashboard General", kpi: "Cobertura plantilla", partes: [t("Meta: ≥"), n(95), t("%")], tipo: "%", aplicaA: ["dashboard", "cobertura"] },
-  { id: "dash-6", modulo: "Dashboard General", kpi: "Denuncias activas", partes: [t("Meta: "), n(0), t(" sin Hoja de Ruta")], tipo: "Conteo", aplicaA: ["dashboard", "denuncia"] },
   { id: "dash-7", modulo: "Dashboard General", kpi: "Capacitación: ROI promedio", partes: [t("Meta: ≥"), n(1.5), t("x")], tipo: "Múltiplo ROI", aplicaA: ["dashboard", "capacitacion"] },
-  { id: "dash-8", modulo: "Dashboard General", kpi: "Tiempo medio de cobertura", partes: [t("SLA: ≤"), n(30), t(" días")], tipo: "Días", aplicaA: ["dashboard", "seleccion"] },
+  { id: "dash-8", modulo: "Dashboard General", kpi: "Tiempo medio de cobertura", partes: [t("SLA: ≤"), n(30), t(" días")], tipo: "Días", aplicaA: ["dashboard", "cobertura"] },
   // 1. Variaciones de Nómina
   { id: "nom-1", modulo: "1. Variaciones de Nómina", kpi: "Nómina base total", partes: [t("Estable vs media móvil (±"), n(2), t("%)")], tipo: "% Variación", aplicaA: ["nomina"] },
   { id: "nom-2", modulo: "1. Variaciones de Nómina", kpi: "Compensación variable", partes: [t("Variación esperada ≤±"), n(3), t("% vs MA")], tipo: "% Variación", aplicaA: ["nomina"] },
   { id: "nom-3", modulo: "1. Variaciones de Nómina", kpi: "Total nómina", partes: [t("Aceptable: ≤+"), n(2), t("% vs MA")], tipo: "% Variación", aplicaA: ["nomina"] },
-  // 2. Clima Laboral
-  { id: "cli-1", modulo: "2. Clima Laboral", kpi: "Pulso semanal", partes: [t("Meta: ≥"), n(7.0), t(" · Excelente: ≥"), n(7.5)], tipo: "Score 1-10", aplicaA: ["clima"] },
-  { id: "cli-2", modulo: "2. Clima Laboral", kpi: "eNPS", partes: [t("Saludable: ≥+"), n(20), t(" · Líder: ≥+"), n(30)], tipo: "Score eNPS", aplicaA: ["clima"] },
-  { id: "cli-3", modulo: "2. Clima Laboral", kpi: "Tasa de respuesta", partes: [t("Meta: ≥"), n(75), t("% · Mínimo válido: ≥"), n(60), t("%")], tipo: "%", aplicaA: ["clima"] },
-  // 3. Línea de Denuncia
-  { id: "den-1", modulo: "3. Línea de Denuncia", kpi: "Activas", partes: [t("Histórico mensual: "), n(3), t("-"), n(6)], tipo: "Rango", aplicaA: ["denuncia"] },
-  { id: "den-2", modulo: "3. Línea de Denuncia", kpi: "Sin Hoja de Ruta", partes: [t("Meta: "), n(0), t(" (toda activa con plan)")], tipo: "Conteo", aplicaA: ["denuncia"] },
-  { id: "den-3", modulo: "3. Línea de Denuncia", kpi: "Resueltas (mes)", partes: [t("Meta: ≥"), n(3), t(" / mes")], tipo: "Conteo", aplicaA: ["denuncia"] },
-  { id: "den-4", modulo: "3. Línea de Denuncia", kpi: "Tiempo medio resolución", partes: [t("SLA interno: ≤"), n(15), t(" días")], tipo: "Días", aplicaA: ["denuncia"] },
-  // 4. Cobertura
-  { id: "cob-1", modulo: "4. Cobertura de Plantilla", kpi: "Plantilla autorizada", partes: [t("Plan anual 2026: "), n(248)], tipo: "Conteo", aplicaA: ["cobertura"] },
-  { id: "cob-2", modulo: "4. Cobertura de Plantilla", kpi: "Cubierta", partes: [t("Objetivo: "), n(248), t(" (autorizado)")], tipo: "Conteo", aplicaA: ["cobertura"] },
-  { id: "cob-3", modulo: "4. Cobertura de Plantilla", kpi: "% cobertura", partes: [t("Meta: ≥"), n(95), t("% · Crítico: <"), n(90), t("%")], tipo: "%", aplicaA: ["cobertura"] },
-  { id: "cob-4", modulo: "4. Cobertura de Plantilla", kpi: "Vacantes >60 días", partes: [t("Meta: "), n(0), t(" · Alerta: ≥"), n(1)], tipo: "Conteo", aplicaA: ["cobertura"] },
-  // 5. Selección
-  { id: "sel-1", modulo: "5. Proceso de Selección", kpi: "Candidatos activos", partes: [t("Pool saludable: ≥"), n(20)], tipo: "Conteo", aplicaA: ["seleccion"] },
-  { id: "sel-2", modulo: "5. Proceso de Selección", kpi: "Tiempo medio cobertura", partes: [t("SLA: ≤"), n(30), t(" días")], tipo: "Días", aplicaA: ["seleccion"] },
-  { id: "sel-3", modulo: "5. Proceso de Selección", kpi: "Tasa de oferta aceptada", partes: [t("Meta: ≥"), n(70), t("% · Excelente: ≥"), n(85), t("%")], tipo: "%", aplicaA: ["seleccion"] },
-  { id: "sel-4", modulo: "5. Proceso de Selección", kpi: "Onboardings activos", partes: [t("Capacidad mensual: "), n(6)], tipo: "Conteo", aplicaA: ["seleccion"] },
-  // 6. Rotación
-  { id: "rot-1", modulo: "6. Rotación", kpi: "Bajas YTD", partes: [t("Meta anual: ≤"), n(30), t(" bajas")], tipo: "Conteo", aplicaA: ["rotacion"] },
-  { id: "rot-2", modulo: "6. Rotación", kpi: "% rotación anualizada", partes: [t("Industria "), n(15), t("-"), n(18), t("% · Meta: ≤"), n(18), t("%")], tipo: "%", aplicaA: ["rotacion"] },
-  { id: "rot-3", modulo: "6. Rotación", kpi: "Costo unitario promedio", partes: [t("Histórico promedio: $"), n(38000)], tipo: "$", aplicaA: ["rotacion"] },
-  { id: "rot-4", modulo: "6. Rotación", kpi: "Costo total estimado", partes: [t("Presupuesto anual: $"), n(1.0), t("M")], tipo: "$", aplicaA: ["rotacion"] },
-  // 7. Capacitación
-  { id: "cap-1", modulo: "7. Capacitación", kpi: "Cursos activos", partes: [t("Capacidad simultánea: "), n(2), t("-"), n(3)], tipo: "Conteo", aplicaA: ["capacitacion"] },
-  { id: "cap-2", modulo: "7. Capacitación", kpi: "Programados", partes: [t("Pipeline saludable: ≥"), n(3)], tipo: "Conteo", aplicaA: ["capacitacion"] },
-  { id: "cap-3", modulo: "7. Capacitación", kpi: "Inversión YTD", partes: [t("Presupuesto anual: $"), n(360), t("K")], tipo: "$", aplicaA: ["capacitacion"] },
-  { id: "cap-4", modulo: "7. Capacitación", kpi: "ROI promedio", partes: [t("Meta: ≥"), n(1.5), t("x")], tipo: "Múltiplo ROI", aplicaA: ["capacitacion"] },
+  // 2. Rotación
+  { id: "rot-1", modulo: "2. Rotación", kpi: "Bajas YTD", partes: [t("Meta anual: ≤"), n(30), t(" bajas")], tipo: "Conteo", aplicaA: ["rotacion"] },
+  { id: "rot-2", modulo: "2. Rotación", kpi: "% rotación anualizada", partes: [t("Industria "), n(15), t("-"), n(18), t("% · Meta: ≤"), n(18), t("%")], tipo: "%", aplicaA: ["rotacion"] },
+  { id: "rot-3", modulo: "2. Rotación", kpi: "Costo unitario promedio", partes: [t("Histórico promedio: $"), n(38000)], tipo: "$", aplicaA: ["rotacion"] },
+  { id: "rot-4", modulo: "2. Rotación", kpi: "Costo total estimado", partes: [t("Presupuesto anual: $"), n(1.0), t("M")], tipo: "$", aplicaA: ["rotacion"] },
+  // 3. Cobertura
+  { id: "cob-1", modulo: "3. Cobertura de Plantilla", kpi: "Plantilla autorizada", partes: [t("Plan anual 2026: "), n(248)], tipo: "Conteo", aplicaA: ["cobertura"] },
+  { id: "cob-2", modulo: "3. Cobertura de Plantilla", kpi: "Cubierta", partes: [t("Objetivo: "), n(248), t(" (autorizado)")], tipo: "Conteo", aplicaA: ["cobertura"] },
+  { id: "cob-3", modulo: "3. Cobertura de Plantilla", kpi: "% cobertura", partes: [t("Meta: ≥"), n(95), t("% · Crítico: <"), n(90), t("%")], tipo: "%", aplicaA: ["cobertura"] },
+  { id: "cob-4", modulo: "3. Cobertura de Plantilla", kpi: "Vacantes >60 días", partes: [t("Meta: "), n(0), t(" · Alerta: ≥"), n(1)], tipo: "Conteo", aplicaA: ["cobertura"] },
+  // 5. Clima Laboral
+  { id: "cli-1", modulo: "5. Clima Laboral", kpi: "Pulso semanal", partes: [t("Meta: ≥"), n(7.0), t(" · Excelente: ≥"), n(7.5)], tipo: "Score 1-10", aplicaA: ["clima"] },
+  { id: "cli-2", modulo: "5. Clima Laboral", kpi: "eNPS", partes: [t("Saludable: ≥+"), n(20), t(" · Líder: ≥+"), n(30)], tipo: "Score eNPS", aplicaA: ["clima"] },
+  { id: "cli-3", modulo: "5. Clima Laboral", kpi: "Tasa de respuesta", partes: [t("Meta: ≥"), n(75), t("% · Mínimo válido: ≥"), n(60), t("%")], tipo: "%", aplicaA: ["clima"] },
+  // 6. Capacitación
+  { id: "cap-1", modulo: "6. Capacitación", kpi: "Cursos activos", partes: [t("Capacidad simultánea: "), n(2), t("-"), n(3)], tipo: "Conteo", aplicaA: ["capacitacion"] },
+  { id: "cap-2", modulo: "6. Capacitación", kpi: "Programados", partes: [t("Pipeline saludable: ≥"), n(3)], tipo: "Conteo", aplicaA: ["capacitacion"] },
+  { id: "cap-3", modulo: "6. Capacitación", kpi: "Inversión YTD", partes: [t("Presupuesto anual: $"), n(360), t("K")], tipo: "$", aplicaA: ["capacitacion"] },
+  { id: "cap-4", modulo: "6. Capacitación", kpi: "ROI promedio", partes: [t("Meta: ≥"), n(1.5), t("x")], tipo: "Múltiplo ROI", aplicaA: ["capacitacion"] },
 ];
 
 // Helper: convierte partes a string para mostrar/exportar
@@ -8841,7 +12604,7 @@ const IconLock = ({ size = 11, color = "currentColor" }) => (
 );
 
 // =============================================================
-// 8. DESEMPEÑO — Modelo de 9 Box (Potencial × Desempeño)
+// 4. DESEMPEÑO — Modelo de 9 Box (Potencial × Desempeño)
 // =============================================================
 // Casillas ordenadas por posición visual: índice 0..8, de arriba-izquierda
 // (potencial alto / desempeño bajo) a abajo-derecha (potencial bajo / desempeño alto).
@@ -9437,6 +13200,8 @@ function Desempeno() {
           );
         })()}
       </div>
+
+      <AulaDesempeno colaboradores={colaboradores} />
     </div>
   );
 }
@@ -9483,12 +13248,10 @@ function Catalogos() {
   const moduloColor = {
     "Dashboard General": "#0f172a",
     "1. Variaciones de Nómina": "#c2410c",
-    "2. Clima Laboral": "#0a7d2c",
-    "3. Línea de Denuncia": "#b00020",
-    "4. Cobertura de Plantilla": "#1d4ed8",
-    "5. Proceso de Selección": "#7c3aed",
-    "6. Rotación": "#b58900",
-    "7. Capacitación": "#0891b2",
+    "2. Rotación": "#b58900",
+    "3. Cobertura de Plantilla": "#1d4ed8",
+    "5. Clima Laboral": "#0a7d2c",
+    "6. Capacitación": "#0891b2",
   };
 
   return (
@@ -9655,9 +13418,7 @@ export default function SaaSRRHH() {
   const SEARCH_INDEX = [
     { tab: "nomina", concepts: ["nómina", "sueldo", "salario", "compensación", "compensación variable", "bono", "bonos", "comisión", "comisiones", "destajo", "% variable", "límite mensual", "monto autorizado", "concepto de compensación"] },
     { tab: "clima", concepts: ["clima", "pulso semanal", "encuesta", "encuestas", "enps", "evaluación 360", "360", "entrevista de salida", "encuesta de bienvenida", "satisfacción", "exit interview", "instrumentos"] },
-    { tab: "denuncia", concepts: ["denuncia", "denuncias", "incidencia ética", "compliance", "ética", "hoja de ruta", "acoso", "discriminación", "fraude", "conflicto interpersonal", "violación de política", "ricardo cardona", "alfredo mendoza", "francisco suárez", "jorge briones"] },
     { tab: "cobertura", concepts: ["vacante", "vacantes abiertas", "requisición", "REQ-101", "REQ-102", "REQ-103", "REQ-104", "REQ-105", "REQ-106", "REQ-107", "cobertura", "plantilla", "headcount", "puestos abiertos", "sourcing", "guía de entrevista"] },
-    { tab: "seleccion", concepts: ["candidato", "candidatos", "selección", "pipeline candidatos", "entrevista RH", "pruebas psicométricas", "oferta económica", "contratación", "onboarding 30-60-90", "ana ramírez", "javier torres", "mauricio gómez", "sofía vega", "pedro núñez", "karen robles", "ramón cabral"] },
     { tab: "rotacion", concepts: ["rotación", "baja", "bajas", "renuncia", "renuncias", "finiquito", "liquidación", "anatomía del costo", "costo de baja", "involuntaria", "voluntaria", "ortega", "carlos reyes", "alejandro méndez", "patricia lozano", "mariana ortiz", "diana castro", "roberto núñez", "sofía beltrán"] },
     { tab: "capacitacion", concepts: ["capacitación", "curso", "cursos", "programa", "training", "ROI capacitación", "incidencias capacitación", "accountability", "deloitte", "sandler", "ipade", "cxg", "gantt"] },
     { tab: "catalogos", concepts: ["catálogo", "benchmark", "benchmarks", "configuración benchmark", "umbrales", "metas", "reglas semáforo"], locked: true },
