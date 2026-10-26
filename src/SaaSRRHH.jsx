@@ -4932,8 +4932,6 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         </tbody>
       </table>
 
-      <AulaVariaciones data={data} />
-
       <h3 style={S.h3}>Autorización de Bonos</h3>
       <div style={S.card}>
         <p style={S.hint}>
@@ -5453,6 +5451,8 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
           </div>
         </div>
       )}
+
+      <AulaVariaciones data={data} />
     </div>
   );
 }
