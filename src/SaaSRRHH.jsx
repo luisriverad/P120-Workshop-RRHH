@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback, Fragment } from "react";
 import GuiaEntrevista from "./GuiaEntrevista.jsx";
 import plantillaDetalleUrl from "./assets/plantilla-detalle-por-area.xlsx?url";
-import logoProfit120 from "./assets/profit120-logo.png";
+import logoAxon from "./assets/axon-logo.png";
 
 // Demo: configurar VITE_CATALOGOS_PASSWORD en .env para producción (no commitear secretos reales).
 const CATALOGOS_ADMIN_PASSWORD = import.meta.env.VITE_CATALOGOS_PASSWORD ?? "12345";
@@ -165,7 +165,7 @@ function ChartCopy({ children, label = "Gráfica" }) {
 }
 
 // =============================================================
-// TABLERO DE CONTROL PARA RRHH · Profit120
+// TABLERO DE CONTROL PARA RRHH · Axon
 // Layout: sidebar de catálogo a la IZQUIERDA + contenido a la derecha
 // =============================================================
 
@@ -178,7 +178,7 @@ const TABS = [
   { id: "capacitacion", label: "Capacitación", num: "6" },
 ];
 
-// ---------- estilos base — branding Profit120 (verde #6DBE45 + negro) ----------
+// ---------- estilos base — branding Axon (amarillo #FDCA00 + negro) ----------
 const FONT_STACK = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
 const COLOR = {
   ink: "#0f172a",
@@ -191,9 +191,9 @@ const COLOR = {
   surface: "#ffffff",
   surfaceSoft: "#fafafa",
   surfaceWarm: "#fbfaf7",
-  accent: "#367f1f",
-  accentLight: "#6dbe45",
-  accentSoft: "#f1f8ec",
+  accent: "#8c6900",
+  accentLight: "#fdca00",
+  accentSoft: "#fffbe5",
   shadow: "0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03)",
   shadowHover: "0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04)",
 };
@@ -201,7 +201,7 @@ const S = {
   page: {
     minHeight: "100vh",
     background: COLOR.surface,
-    backgroundImage: "radial-gradient(circle at 0% 0%, rgba(109, 190, 69, 0.035) 0%, transparent 40%), radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.025) 0%, transparent 35%)",
+    backgroundImage: "radial-gradient(circle at 0% 0%, rgba(253, 202, 0, 0.035) 0%, transparent 40%), radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.025) 0%, transparent 35%)",
     color: COLOR.ink,
     fontFamily: FONT_STACK,
     letterSpacing: "-0.005em",
@@ -211,7 +211,7 @@ const S = {
     padding: "18px 28px",
     display: "flex", alignItems: "center", justifyContent: "space-between",
     background: COLOR.surface,
-    boxShadow: "0 1px 0 rgba(54, 127, 31, 0.06)",
+    boxShadow: "0 1px 0 rgba(140, 105, 0, 0.06)",
     position: "relative",
   },
   title: { fontSize: 20, fontWeight: 700, color: COLOR.ink, letterSpacing: "-0.02em" },
@@ -241,12 +241,12 @@ const S = {
   }),
   sidebarNum: (active) => ({
     width: 22, height: 22, borderRadius: 6,
-    background: active ? `linear-gradient(135deg, ${COLOR.accentLight} 0%, ${COLOR.accent} 100%)` : "#e2e8f0",
-    color: active ? "#fff" : COLOR.textMuted,
+    background: active ? COLOR.accentLight : "#e2e8f0",
+    color: active ? "#060606" : COLOR.textMuted,
     fontSize: 11, fontWeight: 700,
     display: "flex", alignItems: "center", justifyContent: "center",
     flexShrink: 0,
-    boxShadow: active ? "0 1px 2px rgba(54, 127, 31, 0.25)" : "none",
+    boxShadow: active ? "0 1px 2px rgba(140, 105, 0, 0.25)" : "none",
     transition: "all 0.15s ease",
   }),
   sidebarSection: { padding: "22px 20px 14px", marginTop: 12, borderTop: "1px solid " + COLOR.borderSoft },
@@ -301,10 +301,10 @@ const S = {
   },
   btn: {
     padding: "9px 16px", border: "none",
-    background: `linear-gradient(135deg, #4e9a2e 0%, ${COLOR.accent} 100%)`,
-    color: "#fff", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer",
+    background: COLOR.accentLight,
+    color: "#060606", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer",
     fontFamily: FONT_STACK, letterSpacing: 0.2,
-    boxShadow: "0 1px 2px rgba(54, 127, 31, 0.25)",
+    boxShadow: "0 1px 2px rgba(140, 105, 0, 0.25)",
     transition: "transform 0.1s ease, box-shadow 0.15s ease",
   },
   btnGhost: {
@@ -317,9 +317,9 @@ const S = {
   badge: (color) => ({ display: "inline-block", padding: "3px 9px", borderRadius: 999, fontSize: 11, fontWeight: 700, background: color || COLOR.borderSoft, color: COLOR.ink, letterSpacing: 0.2 }),
   alert: (kind) => ({
     padding: "11px 14px", borderRadius: 6, fontSize: 12, marginBottom: 12,
-    background: kind === "danger" ? "#fef2f2" : kind === "warn" ? "#f1f8ec" : "#eff6ff",
-    border: `1px solid ${kind === "danger" ? "#fca5a5" : kind === "warn" ? "#a9d58f" : "#93c5fd"}`,
-    borderLeft: `3px solid ${kind === "danger" ? "#b00020" : kind === "warn" ? "#367f1f" : "#1d4ed8"}`,
+    background: kind === "danger" ? "#fef2f2" : kind === "warn" ? "#fffbe5" : "#eff6ff",
+    border: `1px solid ${kind === "danger" ? "#fca5a5" : kind === "warn" ? "#fedc66" : "#93c5fd"}`,
+    borderLeft: `3px solid ${kind === "danger" ? "#b00020" : kind === "warn" ? "#8c6900" : "#1d4ed8"}`,
     color: COLOR.inkSoft, lineHeight: 1.5,
   }),
 };
@@ -979,7 +979,7 @@ const AULA_RIESGOS = [
     nivel: "Alto",
     que: "Bonos sin autorizador ni evidencia abren la puerta a favoritismos, pagos duplicados o a personas que no cumplieron la meta.",
     ejemplo: "Un gerente autoriza su propio bono \"por proyecto especial\" sin documento de soporte. En auditoría nadie puede justificarlo.",
-    mitiga: "Flujo de autorización con dos niveles y evidencia (el tablero de Autorización de Bonos de abajo). Nadie aprueba su propio pago.",
+    mitiga: "Flujo de autorización con dos niveles y evidencia. Nadie aprueba su propio pago.",
     base: "Control interno · Art. 27 fr. V LISR (deducible solo con CFDI de nómina y retención).",
   },
   {
@@ -1051,7 +1051,146 @@ function useAnchoSvg(inicial = 640) {
 }
 
 // ---------- Piezas reutilizables de las Aulas (módulos didácticos) ----------
-function AulaShell({ titulo, pasos, paso, setPaso, children }) {
+// ---------- Chat del Aula: preguntas a la IA, solo del módulo en curso ----------
+const CHAT_MODULOS = {
+  nomina: { nombre: "Variaciones de Nómina", sugerencias: ["¿Cuánto me cuesta realmente un bono de $10,000?", "¿Cuándo un bono se vuelve derecho adquirido?", "¿Qué % de variable es sano para un área comercial?"] },
+  rotacion: { nombre: "Rotación", sugerencias: ["¿Cómo calculo el costo de reemplazar a un vendedor?", "¿Qué diferencia hay entre finiquito y liquidación?", "¿Qué tasa de rotación es preocupante?"] },
+  cobertura: { nombre: "Cobertura de Plantilla", sugerencias: ["¿Cuánto cuesta un puesto vacío 60 días?", "¿Cómo reduzco el tiempo para cubrir una vacante?", "¿Qué conviene: horas extra o contratar?"] },
+  desempeno: { nombre: "Desempeño", sugerencias: ["¿Cuánto cuesta mantener a alguien de bajo desempeño?", "¿Cómo armo un plan de mejora (PIP)?", "¿Cómo justifico invertir en mis estrellas?"] },
+  clima: { nombre: "Clima Laboral", sugerencias: ["¿Cómo traduzco el eNPS a pesos?", "¿Qué pide la NOM-035 y cuánto cuesta no cumplir?", "¿Qué hago con un área con clima bajo?"] },
+  capacitacion: { nombre: "Capacitación", sugerencias: ["¿Cómo calculo el ROI de un curso?", "¿Qué métrica uso para medir un curso de ventas?", "¿Cómo justifico el presupuesto de capacitación?"] },
+};
+
+function textoChat(t) {
+  // Formato mínimo: viñetas "- " y **negritas**
+  return t.split("\n").map((linea, i) => {
+    const vineta = /^\s*[-•]\s+/.test(linea);
+    const limpia = vineta ? linea.replace(/^\s*[-•]\s+/, "") : linea;
+    const partes = limpia.split(/(\*\*[^*]+\*\*)/g).map((p, j) =>
+      p.startsWith("**") && p.endsWith("**") ? <strong key={j}>{p.slice(2, -2)}</strong> : <Fragment key={j}>{p}</Fragment>
+    );
+    if (!linea.trim()) return <div key={i} style={{ height: 6 }} />;
+    return (
+      <div key={i} style={{ display: "flex", gap: 6, paddingLeft: vineta ? 4 : 0 }}>
+        {vineta && <span style={{ color: COLOR.accent, fontWeight: 700 }}>•</span>}
+        <span>{partes}</span>
+      </div>
+    );
+  });
+}
+
+function ChatAula({ modulo, paso }) {
+  const cfg = CHAT_MODULOS[modulo];
+  const [mensajes, setMensajes] = useState([]); // { role, content, error? }
+  const [texto, setTexto] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const listaRef = useRef(null);
+  useEffect(() => {
+    if (listaRef.current) listaRef.current.scrollTop = listaRef.current.scrollHeight;
+  }, [mensajes]);
+  if (!cfg) return null;
+
+  const enviar = async (pregunta) => {
+    const q = (pregunta ?? texto).trim();
+    if (!q || enviando) return;
+    const historial = [...mensajes.filter((m) => !m.error), { role: "user", content: q }];
+    setMensajes([...historial, { role: "assistant", content: "" }]);
+    setTexto("");
+    setEnviando(true);
+    const actualizar = (fn) => setMensajes((prev) => {
+      const copia = [...prev];
+      copia[copia.length - 1] = fn(copia[copia.length - 1]);
+      return copia;
+    });
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ modulo, paso, mensajes: historial.map(({ role, content }) => ({ role, content })) }),
+      });
+      if (!r.ok || !r.body) {
+        let msg = "No se pudo obtener respuesta. Intenta de nuevo.";
+        try { msg = (await r.json()).error || msg; } catch { /* sin cuerpo */ }
+        if (r.status === 404) msg = "El chat necesita el servidor de la app (npm run dev o npm run preview) o el despliegue con la función /api/chat.";
+        actualizar(() => ({ role: "assistant", content: msg, error: true }));
+        return;
+      }
+      const lector = r.body.getReader();
+      const dec = new TextDecoder();
+      for (;;) {
+        const { done, value } = await lector.read();
+        if (done) break;
+        const trozo = dec.decode(value, { stream: true });
+        actualizar((m) => ({ ...m, content: m.content + trozo }));
+      }
+    } catch {
+      actualizar(() => ({ role: "assistant", content: "Sin conexión con el servicio de IA. Revisa tu internet e intenta de nuevo.", error: true }));
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 20, border: "1px solid " + COLOR.border, borderRadius: 10, overflow: "hidden", background: "#fff" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap", padding: "12px 16px", borderBottom: "1px solid " + COLOR.borderSoft, background: COLOR.accentSoft }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 28, height: 28, borderRadius: 8, background: "#060606", color: COLOR.accentLight, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+          </span>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink }}>Pregúntale a la IA</div>
+            <div style={{ fontSize: 12, color: COLOR.textSoft }}>Solo preguntas sobre <strong>{cfg.nombre}</strong> y su impacto en la rentabilidad</div>
+          </div>
+        </div>
+        {mensajes.length > 0 && (
+          <button style={{ ...S.btnGhost, padding: "4px 10px", fontSize: 12 }} onClick={() => setMensajes([])} disabled={enviando}>Nueva conversación</button>
+        )}
+      </div>
+
+      <div ref={listaRef} style={{ maxHeight: 360, overflowY: "auto", padding: mensajes.length ? 16 : "12px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+        {mensajes.length === 0 ? (
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {cfg.sugerencias.map((s) => (
+              <button key={s} onClick={() => enviar(s)} style={{ border: "1px solid " + COLOR.border, background: COLOR.surfaceSoft, borderRadius: 999, padding: "6px 12px", fontSize: 12, color: COLOR.text, cursor: "pointer", fontFamily: FONT_STACK }}>
+                {s}
+              </button>
+            ))}
+          </div>
+        ) : mensajes.map((m, i) => (
+          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: "82%" }}>
+            <div style={{
+              padding: "9px 13px", borderRadius: 10, fontSize: 13, lineHeight: 1.5,
+              background: m.role === "user" ? "#060606" : m.error ? "#fdecea" : COLOR.surfaceSoft,
+              color: m.role === "user" ? "#fff" : m.error ? "#8a1c1c" : COLOR.text,
+              border: m.role === "user" ? "none" : "1px solid " + (m.error ? "#f5c2c0" : COLOR.borderSoft),
+            }}>
+              {m.role === "user" ? m.content : m.content ? textoChat(m.content) : <span style={{ color: COLOR.textMuted }}>Pensando…</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <form
+        onSubmit={(e) => { e.preventDefault(); enviar(); }}
+        style={{ display: "flex", gap: 8, padding: 12, borderTop: "1px solid " + COLOR.borderSoft }}
+      >
+        <input
+          value={texto}
+          onChange={(e) => setTexto(e.target.value)}
+          maxLength={1200}
+          placeholder={`Escribe tu pregunta sobre ${cfg.nombre}…`}
+          style={{ ...S.input, flex: 1 }}
+          disabled={enviando}
+        />
+        <button type="submit" style={{ ...S.btn, opacity: enviando || !texto.trim() ? 0.5 : 1 }} disabled={enviando || !texto.trim()}>
+          {enviando ? "Respondiendo…" : "Enviar"}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function AulaShell({ titulo, pasos, paso, setPaso, modulo, children }) {
   const ac = COLOR.accent;
   return (
     <>
@@ -1074,6 +1213,7 @@ function AulaShell({ titulo, pasos, paso, setPaso, children }) {
         </div>
         <div style={{ padding: 20 }}>
           {children}
+          {modulo && <ChatAula modulo={modulo} paso={pasos[paso]} />}
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 18, paddingTop: 14, borderTop: "1px solid " + COLOR.borderSoft }}>
             <button style={{ ...S.btnGhost, visibility: paso > 0 ? "visible" : "hidden" }} onClick={() => setPaso(paso - 1)}>← {pasos[paso - 1] || ""}</button>
             {paso < pasos.length - 1 && <button style={S.btn} onClick={() => setPaso(paso + 1)}>Siguiente: {pasos[paso + 1]} →</button>}
@@ -1346,7 +1486,7 @@ function AulaVariaciones({ data = [] }) {
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: "#1d4ed8", fontVariantNumeric: "tabular-nums" }}>{fmt(monto * factor)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>${factor.toFixed(2)} por cada $1 del recibo</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
               <div style={S.kpiLabel}>Compromiso total</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(total)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>{recurrente ? "un año de pagos + pasivo si sale" : "un solo pago con cargas"}</div>
@@ -1413,7 +1553,7 @@ function AulaVariaciones({ data = [] }) {
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(totalExceso)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>variable pagada arriba del límite</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
             <div style={S.kpiLabel}>Si se repite 12 meses</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(totalAnual)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>costo integral con cargas</div>
@@ -1459,7 +1599,7 @@ function AulaVariaciones({ data = [] }) {
   const contenido = [pasoBasico, pasoIceberg, pasoExceso, () => <AulaRiesgos riesgos={AULA_RIESGOS} intro="Cada peso variable trae riesgos que no se ven en el recibo. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />, () => <AulaQuiz preguntas={AULA_QUIZ} repaso={"Vale la pena repasar \"El iceberg de un bono\" y \"Riesgos que se asumen\" antes de autorizar el próximo bono."} />][paso]();
 
   return (
-    <AulaShell titulo="Aula · El costo real de la compensación variable" pasos={pasos} paso={paso} setPaso={setPaso}>
+    <AulaShell titulo="Aula · El costo real de la compensación variable" pasos={pasos} paso={paso} setPaso={setPaso} modulo="nomina">
       {contenido}
     </AulaShell>
   );
@@ -1702,7 +1842,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: cd.neto > 0 ? "#b00020" : "#0a7d2c", fontVariantNumeric: "tabular-nums" }}>{fmt(cd.neto)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>ya descontando el sueldo no pagado</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
               <div style={S.kpiLabel}>En {dias} días</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(acumulado)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>costo neto acumulado</div>
@@ -1808,7 +1948,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{filas.length}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>{criticas} con más de 60 días</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
             <div style={S.kpiLabel}>Costo acumulado a hoy</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(total)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>neto del sueldo no pagado</div>
@@ -1867,7 +2007,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
   ][paso]();
 
   return (
-    <AulaShell titulo="Aula · El costo de la silla vacía" pasos={pasos} paso={paso} setPaso={setPaso}>
+    <AulaShell titulo="Aula · El costo de la silla vacía" pasos={pasos} paso={paso} setPaso={setPaso} modulo="cobertura">
       {contenido}
     </AulaShell>
   );
@@ -2136,7 +2276,7 @@ function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, 
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(noVisible)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>productividad perdida</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
               <div style={S.kpiLabel}>Costo total de la baja</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(total)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>= {(total / sueldo).toFixed(1)} meses de sueldo del puesto</div>
@@ -2220,7 +2360,7 @@ function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, 
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{pctNoVisible.toFixed(0)}%</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>del costo es oculto o hundido</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
             <div style={S.kpiLabel}>Probablemente evitable</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(costoPrevenibles)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>{prevenibles.length} renuncias por sueldo, jefe, ambiente o carrera</div>
@@ -2295,7 +2435,7 @@ function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, 
   ][paso]();
 
   return (
-    <AulaShell titulo="Aula · El costo real de que alguien se vaya" pasos={pasos} paso={paso} setPaso={setPaso}>
+    <AulaShell titulo="Aula · El costo real de que alguien se vaya" pasos={pasos} paso={paso} setPaso={setPaso} modulo="rotacion">
       {contenido}
     </AulaShell>
   );
@@ -2475,7 +2615,7 @@ function AulaDesempeno({ colaboradores = [] }) {
     </label>
   );
   const kpi = (label, valor, nota, color, destacado) => (
-    <div style={{ ...S.kpi, padding: 12, ...(destacado ? { background: COLOR.accentSoft, borderColor: "#cfe7c0" } : {}) }}>
+    <div style={{ ...S.kpi, padding: 12, ...(destacado ? { background: COLOR.accentSoft, borderColor: "#feeaa0" } : {}) }}>
       <div style={S.kpiLabel}>{label}</div>
       <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: color || COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{valor}</div>
       <div style={{ fontSize: 11, color: COLOR.textMuted }}>{nota}</div>
@@ -2558,7 +2698,7 @@ function AulaDesempeno({ colaboradores = [] }) {
 
     const segmentos = [
       { label: "Valor que el puesto no genera", v: costoProductividad, color: "#983838", nota: `${nBajos} persona${nBajos !== 1 ? "s" : ""} al ${productividad}% · múltiplo ${multiplo}×` },
-      { label: "Retrabajo que absorben los demás", v: costoRetrabajo, color: "#367f1f", nota: `${horasRetrabajo} h/semana por cada una` },
+      { label: "Retrabajo que absorben los demás", v: costoRetrabajo, color: "#8c6900", nota: `${horasRetrabajo} h/semana por cada una` },
       { label: "Renuncias extra de los mejores", v: costoFuga, color: "#233a63", nota: `${Math.max(0, fugas - fugasBase).toFixed(1)} renuncias más de lo normal · ${mesesReemplazo} meses de sueldo cada una` },
     ];
 
@@ -2742,7 +2882,7 @@ function AulaDesempeno({ colaboradores = [] }) {
   ][paso]();
 
   return (
-    <AulaShell titulo="Aula · ¿Cuánto vale gestionar el desempeño?" pasos={pasos} paso={paso} setPaso={setPaso}>
+    <AulaShell titulo="Aula · ¿Cuánto vale gestionar el desempeño?" pasos={pasos} paso={paso} setPaso={setPaso} modulo="desempeno">
       {contenido}
     </AulaShell>
   );
@@ -3008,7 +3148,7 @@ function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, 
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(actual.total)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmt(gente ? actual.total / gente : 0)} por colaborador</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
               <div style={S.kpiLabel}>Se come de la utilidad</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{pctUtilidad.toFixed(1)}%</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>de {fmtM(potencial)} posibles</div>
@@ -3094,7 +3234,7 @@ function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, 
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmtM(totalAreas)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>al año · desenganche + salidas</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
             <div style={S.kpiLabel}>Área que más cuesta</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac }}>{peor?.area}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>{fmtM(peor?.total || 0)} al año</div>
@@ -3156,7 +3296,7 @@ function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, 
   ][paso]();
 
   return (
-    <AulaShell titulo="Aula · ¿El clima laboral le pega a la utilidad?" pasos={pasos} paso={paso} setPaso={setPaso}>
+    <AulaShell titulo="Aula · ¿El clima laboral le pega a la utilidad?" pasos={pasos} paso={paso} setPaso={setPaso} modulo="clima">
       {contenido}
     </AulaShell>
   );
@@ -3420,7 +3560,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(con.inversion)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>{(con.inversion / colegiatura).toFixed(1)}× lo que dice la factura</div>
             </div>
-            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+            <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
               <div style={S.kpiLabel}>ROI a 12 meses</div>
               <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: con.roi12 >= 0 ? "#0a7d2c" : "#b00020", fontVariantNumeric: "tabular-nums" }}>{roiPct(con.roi12)}</div>
               <div style={{ fontSize: 11, color: COLOR.textMuted }}>sin rotación sería {roiPct(sin.roi12)}</div>
@@ -3523,7 +3663,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmt(totalFactura)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>lo que ve Finanzas</div>
           </div>
-          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#cfe7c0" }}>
+          <div style={{ ...S.kpi, padding: 12, background: COLOR.accentSoft, borderColor: "#feeaa0" }}>
             <div style={S.kpiLabel}>Inversión real</div>
             <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: ac, fontVariantNumeric: "tabular-nums" }}>{fmt(totalReal)}</div>
             <div style={{ fontSize: 11, color: COLOR.textMuted }}>+{fmt(totalReal - totalFactura)} en horas fuera del puesto</div>
@@ -3599,7 +3739,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
   ][paso]();
 
   return (
-    <AulaShell titulo="Aula · Capacitación: ¿gasto o inversión?" pasos={pasos} paso={paso} setPaso={setPaso}>
+    <AulaShell titulo="Aula · Capacitación: ¿gasto o inversión?" pasos={pasos} paso={paso} setPaso={setPaso} modulo="capacitacion">
       {contenido}
     </AulaShell>
   );
@@ -4080,9 +4220,9 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         yTicks.reverse();
         const mes = (periodo || "").split(" ")[0]?.toUpperCase() || "MES";
         const anio = (periodo || "").split(" ")[1] || "";
-        const colorAbove = "#367f1f"; // verde Profit120
+        const colorAbove = "#8c6900"; // dorado Axon
         const colorBelow = "#475569"; // slate-600, neutral gray
-        const gradAbove = "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)";
+        const gradAbove = "linear-gradient(180deg, #fdca00 0%, #8c6900 100%)";
         const gradBelow = "linear-gradient(180deg, #64748b 0%, #475569 100%)";
         return (
           <div
@@ -4289,9 +4429,9 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         const months = monthsOrder.slice(0, idx + 1);
         const areasList = ["Comercial", "Posventa", "Operaciones", "Administración", "Dirección"];
         const areaAbbr = { Comercial: "Com", Posventa: "Pos", Operaciones: "Ope", "Administración": "Adm", "Dirección": "Dir" };
-        const colorAbove = "#367f1f";
+        const colorAbove = "#8c6900";
         const colorBelow = "#475569";
-        const gradAbove = "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)";
+        const gradAbove = "linear-gradient(180deg, #fdca00 0%, #8c6900 100%)";
         const gradBelow = "linear-gradient(180deg, #64748b 0%, #475569 100%)";
         const series = months.map((m) => {
           const raw = areasPorMes[m] || [];
@@ -4651,9 +4791,9 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                   <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", gap: 18, padding: "0 16px" }}>
                     {series.map((s) => {
                       const exceeds = s.pctVar > limite;
-                      const color = exceeds ? "#367f1f" : "#475569";
+                      const color = exceeds ? "#8c6900" : "#475569";
                       const grad = exceeds
-                        ? "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)"
+                        ? "linear-gradient(180deg, #fdca00 0%, #8c6900 100%)"
                         : "linear-gradient(180deg, #64748b 0%, #475569 100%)";
                       const heightPct = (s.pctVar / yMax) * 100;
                       return (
@@ -4729,7 +4869,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
             }}>
               <div style={{ display: "flex", gap: 18 }}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
-                  <span style={{ width: 10, height: 10, background: "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 2 }} />
+                  <span style={{ width: 10, height: 10, background: "linear-gradient(180deg, #fdca00 0%, #8c6900 100%)", borderRadius: 2 }} />
                   Excede límite (18%)
                 </span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
@@ -4746,7 +4886,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
       })()}</ChartCopy>)}
 
       {cargaActual && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#f1f8ec", border: "1px solid #cfe7c0", borderRadius: 8, padding: "8px 14px", marginBottom: 8, fontSize: 12, color: "#2b5f18" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fffbe5", border: "1px solid #feeaa0", borderRadius: 8, padding: "8px 14px", marginBottom: 8, fontSize: 12, color: "#5e4700" }}>
           <span>
             Datos cargados desde Excel · <strong>{cargaActual.archivo}</strong> · {Object.keys(cargaActual.meses || {}).length} mes(es) · {cargaActual.fecha}
           </span>
@@ -4779,8 +4919,8 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
               onDrop={(e) => { e.preventDefault(); setCargaDrag(false); procesarArchivoPlantilla(e.dataTransfer.files?.[0]); }}
               onClick={() => cargaInputRef.current?.click()}
               style={{
-                border: `2px dashed ${cargaDrag ? "#367f1f" : "#cbd5e1"}`,
-                background: cargaDrag ? "#f1f8ec" : "#f8fafc",
+                border: `2px dashed ${cargaDrag ? "#8c6900" : "#cbd5e1"}`,
+                background: cargaDrag ? "#fffbe5" : "#f8fafc",
                 borderRadius: 10,
                 padding: "32px 16px",
                 textAlign: "center",
@@ -4788,7 +4928,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                 transition: "all 0.15s",
               }}
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cargaDrag ? "#367f1f" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cargaDrag ? "#8c6900" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
                 {cargaLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
               </div>
@@ -4931,526 +5071,6 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
           })}
         </tbody>
       </table>
-
-      <h3 style={S.h3}>Autorización de Bonos</h3>
-      <div style={S.card}>
-        <p style={S.hint}>
-          Cada bono requiere autorizador, medio de evidencia, y avanza por el workflow de aprobación.
-          Arrastra una tarjeta entre columnas para moverla, o usa los botones. Las rechazadas pueden volver al pipeline.
-        </p>
-
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${stages.length}, 1fr)`, gap: 10 }}>
-          {stages.map((s) => {
-            const cards = bonos.filter((b) => b.stage === s.id);
-            const isOver = dragOverStage === s.id;
-            return (
-              <div
-                key={s.id}
-                onDragOver={(e) => { e.preventDefault(); if (dragOverStage !== s.id) setDragOverStage(s.id); }}
-                onDragLeave={(e) => { if (e.currentTarget === e.target) setDragOverStage(null); }}
-                onDrop={() => onDropStage(s.id)}
-                style={{
-                  background: isOver ? "#eef5ff" : "#f6f6f6",
-                  borderRadius: 6,
-                  padding: 8,
-                  minHeight: 160,
-                  outline: isOver ? "2px dashed #2563eb" : "none",
-                  outlineOffset: -2,
-                  transition: "background 0.12s",
-                }}
-              >
-                <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, color: "#444", marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
-                  <span>{s.label}</span>
-                  <span style={{ background: "#fff", border: "1px solid #ccc", borderRadius: 10, padding: "0 6px", fontSize: 10 }}>{cards.length}</span>
-                </div>
-                {cards.map((b) => {
-                  const sc = stageColor(b.estado);
-                  const isDragging = draggedId === b.id;
-                  return (
-                    <div
-                      key={b.id}
-                      draggable
-                      onDragStart={(e) => {
-                        setDraggedId(b.id);
-                        e.dataTransfer.effectAllowed = "move";
-                      }}
-                      onDragEnd={() => { setDraggedId(null); setDragOverStage(null); }}
-                      onClick={() => verBono(b)}
-                      style={{
-                        background: sc.bg,
-                        border: `1px solid ${sc.border}`,
-                        borderRadius: 5,
-                        padding: 8,
-                        marginBottom: 6,
-                        fontSize: 11,
-                        cursor: isDragging ? "grabbing" : "pointer",
-                        opacity: isDragging ? 0.45 : 1,
-                        boxShadow: isDragging ? "0 4px 12px rgba(0,0,0,0.15)" : "none",
-                        userSelect: "none",
-                      }}
-                    >
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
-                        <strong style={{ fontSize: 12 }}>{b.empleado}</strong>
-                        <span style={{ fontWeight: 700 }}>{fmt(b.monto)}</span>
-                      </div>
-                      <div style={{ color: "#444", marginBottom: 2 }}>{b.area} · {b.tipo}</div>
-                      <div style={{ color: "#666", fontSize: 10, marginBottom: 4 }}>
-                        Solicita: {b.solicitante} ({b.gerenciaSolicitante})
-                      </div>
-                      <div style={{ color: "#666", fontSize: 10, marginBottom: 6 }}>
-                        Autoriza: {b.autoriza} · {b.medioEvidencia}
-                      </div>
-                      {b.stage !== "final" ? (
-                        <div style={{ display: "flex", gap: 4 }}>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); avanzar(b.id); }}
-                            style={{ flex: 1, fontSize: 10, padding: "4px 6px", border: "1px solid #0a7d2c", background: "#0a7d2c", color: "#fff", borderRadius: 3, cursor: "pointer", fontWeight: 600 }}
-                          >
-                            ✓ Avanzar
-                          </button>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); rechazar(b.id); }}
-                            style={{ flex: 1, fontSize: 10, padding: "4px 6px", border: "1px solid #b00020", background: "#fff", color: "#b00020", borderRadius: 3, cursor: "pointer", fontWeight: 600 }}
-                          >
-                            ✕ Rechazar
-                          </button>
-                        </div>
-                      ) : (
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          {badgeEstado(b.estado)}
-                          {b.estado === "Rechazado" && (
-                            <span style={{ fontSize: 10, color: "#666", fontStyle: "italic" }}>arrastra para reabrir</span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={{ marginTop: 12 }}>
-          <button style={S.btn} onClick={() => setModalOpen(true)}>+ Solicitar bono</button>
-        </div>
-      </div>
-
-      {modalOpen && (
-        <div
-          onClick={cerrarModal}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 100,
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: "#fff",
-              borderRadius: 8,
-              padding: 24,
-              width: 720,
-              maxWidth: "94vw",
-              maxHeight: "92vh",
-              overflowY: "auto",
-              border: "1px solid #ccc",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Solicitud de Bono</h3>
-              <button
-                onClick={cerrarModal}
-                style={{ border: "none", background: "transparent", fontSize: 22, cursor: "pointer", color: "#666", lineHeight: 1 }}
-                aria-label="Cerrar"
-              >
-                ×
-              </button>
-            </div>
-            <p style={{ ...S.hint, marginTop: 0, marginBottom: 16 }}>
-              Toda solicitud requiere justificación documentada y entra a workflow de aprobación.
-            </p>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-              <div>
-                <label style={labelStyle}>Empleado</label>
-                <input
-                  style={inputStyle}
-                  value={form.empleado}
-                  onChange={(e) => setForm({ ...form, empleado: e.target.value })}
-                  placeholder="Nombre del colaborador"
-                />
-              </div>
-              <div>
-                <label style={labelStyle}>Área</label>
-                <select
-                  style={inputStyle}
-                  value={form.area}
-                  onChange={(e) => setForm({ ...form, area: e.target.value })}
-                >
-                  {data.map((d) => (
-                    <option key={d.area} value={d.area}>{d.area}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>Monto ($)</label>
-                <input
-                  style={inputStyle}
-                  type="text"
-                  inputMode="decimal"
-                  value={form.monto}
-                  onChange={(e) => setForm({ ...form, monto: formatMonto(e.target.value) })}
-                  placeholder="0.00"
-                />
-              </div>
-              <div>
-                <label style={labelStyle}>Tipo</label>
-                <select
-                  style={inputStyle}
-                  value={form.tipo}
-                  onChange={(e) => setForm({ ...form, tipo: e.target.value })}
-                >
-                  {tiposBono.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label style={labelStyle}>Justificación (mín. 80 caracteres)</label>
-              <textarea
-                style={{ ...inputStyle, minHeight: 70, resize: "vertical" }}
-                value={form.justificacion}
-                onChange={(e) => setForm({ ...form, justificacion: e.target.value })}
-                placeholder="Describe el desempeño, contexto y razón del bono."
-              />
-              <div style={{ fontSize: 11, color: justLen < 80 ? "#b00020" : "#0a7d2c", marginTop: 2 }}>
-                {justLen} / 80
-              </div>
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label style={labelStyle}>Impacto cuantificable</label>
-              <input
-                style={inputStyle}
-                value={form.impacto}
-                onChange={(e) => setForm({ ...form, impacto: e.target.value })}
-                placeholder="Ej. cuenta cerrada $3.2M, NPS 92, ahorro $450K"
-              />
-            </div>
-
-            <div style={{ marginBottom: 16 }}>
-              <label style={labelStyle}>Evidencia (PDF o link a CRM)</label>
-              <div
-                onDragOver={(e) => { e.preventDefault(); if (!dragOverFile) setDragOverFile(true); }}
-                onDragLeave={(e) => { if (e.currentTarget === e.target) setDragOverFile(false); }}
-                onDrop={handleDropFile}
-                style={{
-                  border: `2px dashed ${dragOverFile ? "#2563eb" : form.evidenciaArchivo ? "#0a7d2c" : "#ccc"}`,
-                  borderRadius: 6,
-                  padding: 14,
-                  textAlign: "center",
-                  background: dragOverFile ? "#eef5ff" : form.evidenciaArchivo ? "#f6fbf6" : "#fafafa",
-                  fontSize: 12,
-                  color: "#444",
-                  transition: "all 0.12s",
-                }}
-              >
-                {form.evidenciaArchivo ? (
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <span style={{ fontSize: 16 }}>📎</span>
-                      <strong>{form.evidenciaArchivo}</strong>
-                    </span>
-                    <button
-                      onClick={() => setForm({ ...form, evidenciaArchivo: "" })}
-                      style={{ border: "1px solid #ccc", background: "#fff", borderRadius: 3, fontSize: 11, padding: "2px 8px", cursor: "pointer" }}
-                    >
-                      Quitar
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <div style={{ fontSize: 22, marginBottom: 2 }}>📥</div>
-                    <div style={{ fontWeight: 600 }}>Arrastra un PDF aquí</div>
-                    <div style={{ fontSize: 11, color: "#888", marginTop: 2 }}>(contrato firmado, encuesta NPS, evidencia formal)</div>
-                  </>
-                )}
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "8px 0 4px", fontSize: 11, color: "#888" }}>
-                <div style={{ flex: 1, height: 1, background: "#eee" }} />
-                <span>o pega un link al CRM</span>
-                <div style={{ flex: 1, height: 1, background: "#eee" }} />
-              </div>
-              <input
-                style={inputStyle}
-                value={form.evidencia}
-                onChange={(e) => setForm({ ...form, evidencia: e.target.value })}
-                placeholder="https://crm.empresa.com/oportunidad/..."
-              />
-            </div>
-
-            {/* Sección: Solicita / Autoriza */}
-            <div style={{ borderTop: "1px solid #eee", paddingTop: 12, marginBottom: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8, color: "#222" }}>SOLICITA / AUTORIZA</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                <div>
-                  <label style={labelStyle}>Solicita (nombre)</label>
-                  <input
-                    style={inputStyle}
-                    value={form.solicitante}
-                    onChange={(e) => setForm({ ...form, solicitante: e.target.value })}
-                    placeholder="Quien solicita el bono"
-                  />
-                </div>
-                <div>
-                  <label style={labelStyle}>Gerencia solicitante</label>
-                  <select
-                    style={inputStyle}
-                    value={form.gerenciaSolicitante}
-                    onChange={(e) => setForm({ ...form, gerenciaSolicitante: e.target.value })}
-                  >
-                    {data.map((d) => (
-                      <option key={d.area} value={d.area}>{d.area}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label style={labelStyle}>Autoriza (nombre)</label>
-                  <input
-                    style={inputStyle}
-                    value={form.autoriza}
-                    onChange={(e) => setForm({ ...form, autoriza: e.target.value })}
-                    placeholder="Quien autoriza"
-                  />
-                </div>
-                <div>
-                  <label style={labelStyle}>Medio de evidencia</label>
-                  <select
-                    style={inputStyle}
-                    value={form.medioEvidencia}
-                    onChange={(e) => setForm({ ...form, medioEvidencia: e.target.value })}
-                  >
-                    {mediosEvidencia.map((m) => (
-                      <option key={m} value={m}>{m}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div style={{ fontSize: 11, color: "#666" }}>
-                El medio de evidencia es donde queda registrada la autorización (correo, firma electrónica, memorándum, etc.) para auditoría.
-              </div>
-            </div>
-
-            {/* Indicadores en vivo */}
-            <div style={{ borderTop: "1px solid #eee", paddingTop: 12, marginBottom: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8, color: "#222" }}>VALIDACIONES EN VIVO</div>
-
-              {/* Semáforo de límite del área */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  border: `1px solid ${semaforoArea === "red" ? "#b00020" : semaforoArea === "yellow" ? "#b58900" : "#ccc"}`,
-                  borderRadius: 6,
-                  padding: 10,
-                  marginBottom: 8,
-                  background: semaforoArea === "red" ? "#fdecea" : semaforoArea === "yellow" ? "#fff7e0" : "#f6fbf6",
-                }}
-              >
-                <TrafficLight light={semaforoArea} />
-                <div style={{ flex: 1, fontSize: 12 }}>
-                  <div style={{ fontWeight: 700, marginBottom: 2 }}>
-                    Límite de compensación variable — {form.area}
-                  </div>
-                  {areaSel && (
-                    <>
-                      <div>
-                        % variable actual: <strong>{((areaSel.comisiones + areaSel.bonos + areaSel.destajos + areaSel.otros) / (areaSel.base + areaSel.comisiones + areaSel.bonos + areaSel.destajos + areaSel.otros) * 100).toFixed(1)}%</strong>
-                        {" → con este bono: "}
-                        <strong style={{ color: semaforoArea === "red" ? "#b00020" : semaforoArea === "yellow" ? "#b58900" : "#0a7d2c" }}>
-                          {newPctVarArea.toFixed(1)}%
-                        </strong>
-                        {" · Límite autorizado: "}<strong>{areaSel.limite}%</strong>
-                      </div>
-                      <div style={{ marginTop: 4, fontSize: 11, color: "#444" }}>
-                        {semaforoArea === "red" && "⚠ Rebasa el monto autorizado del área. Requiere aprobación adicional."}
-                        {semaforoArea === "yellow" && "Se acerca al límite. Revisar antes de autorizar."}
-                        {semaforoArea === "green" && montoNum > 0 && "Dentro del rango autorizado."}
-                        {montoNum <= 0 && "Captura el monto para validar."}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Bonos previos del empleado */}
-              {bonosDelEmpleado.length > 0 && (
-                <div
-                  style={{
-                    background: bonosDelEmpleado.length >= 2 ? "#fdecea" : "#fff7e0",
-                    border: `1px solid ${bonosDelEmpleado.length >= 2 ? "#b00020" : "#b58900"}`,
-                    borderRadius: 6,
-                    padding: 10,
-                    marginBottom: 8,
-                    fontSize: 12,
-                  }}
-                >
-                  <div style={{ fontWeight: 700, marginBottom: 4 }}>
-                    {bonosDelEmpleado.length >= 2 ? "⚠ " : "ℹ "}
-                    {form.empleado} ya tiene {bonosDelEmpleado.length} bono{bonosDelEmpleado.length > 1 ? "s" : ""} en el sistema · Total previo: {fmt(totalPrevioEmpleado)}
-                  </div>
-                  <ul style={{ margin: 0, paddingLeft: 18, fontSize: 11, color: "#444" }}>
-                    {bonosDelEmpleado.map((b) => (
-                      <li key={b.id}>
-                        {b.fecha} · {fmt(b.monto)} · {b.tipo} · <em>{b.estado}</em>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Bonos del mes por gerencia solicitante con semáforo */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  background: semaforoGerencia === "red" ? "#fdecea" : semaforoGerencia === "yellow" ? "#fff7e0" : "#f6fbf6",
-                  border: `1px solid ${semaforoGerencia === "red" ? "#b00020" : semaforoGerencia === "yellow" ? "#b58900" : "#ccc"}`,
-                  borderRadius: 6,
-                  padding: 10,
-                  marginBottom: 8,
-                  fontSize: 12,
-                }}
-              >
-                <TrafficLight light={semaforoGerencia} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, marginBottom: 2 }}>
-                    Gerencia "{form.gerenciaSolicitante}" — bonos solicitados este mes
-                  </div>
-                  <div style={{ marginBottom: warningsGerencia.length > 0 ? 6 : 0 }}>
-                    <strong>{bonosGerencia.length}</strong> solicitud{bonosGerencia.length === 1 ? "" : "es"} · Total: <strong>{fmt(totalGerencia)}</strong>
-                  </div>
-                  {warningsGerencia.length > 0 && (
-                    <ul style={{ margin: 0, paddingLeft: 16, fontSize: 11, color: semaforoGerencia === "red" ? "#b00020" : "#7a5a00" }}>
-                      {warningsGerencia.map((w, i) => (
-                        <li key={i}>{w}</li>
-                      ))}
-                    </ul>
-                  )}
-                  {warningsGerencia.length === 0 && (
-                    <div style={{ fontSize: 11, color: "#0a7d2c" }}>Dentro de política · sin alertas.</div>
-                  )}
-                </div>
-              </div>
-
-              {/* Workflow stepper */}
-              <div style={{ background: "#fff", border: "1px solid #ddd", borderRadius: 6, padding: 10 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Workflow de aprobación requerido</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                  {(() => {
-                    const n = montoNum;
-                    const pasos = ["Solicitud", "Gerente"];
-                    if (n >= 25000) pasos.push("Director");
-                    if (n > 75000) pasos.push("CEO + RRHH");
-                    pasos.push("Final");
-                    return pasos.map((p, i) => (
-                      <span key={p} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{
-                          padding: "4px 10px",
-                          borderRadius: 14,
-                          background: i === 0 ? "#000" : "#eee",
-                          color: i === 0 ? "#fff" : "#333",
-                          border: "1px solid #ccc",
-                          fontSize: 11,
-                          fontWeight: 600,
-                        }}>{p}</span>
-                        {i < pasos.length - 1 && <span style={{ color: "#999" }}>→</span>}
-                      </span>
-                    ));
-                  })()}
-                </div>
-                <div style={{ fontSize: 11, color: "#666", marginTop: 6 }}>
-                  Según el monto ({fmt(montoNum)}) → {aprobadoresPara(montoNum)}
-                </div>
-              </div>
-            </div>
-
-            {/* Errores */}
-            {errores.length > 0 && (
-              <ul style={{ background: "#fdecea", border: "1px solid #b00020", borderRadius: 4, padding: "8px 8px 8px 28px", fontSize: 12, color: "#b00020", marginBottom: 12 }}>
-                {errores.map((e, i) => <li key={i}>{e}</li>)}
-              </ul>
-            )}
-
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-              <button
-                style={{
-                  ...S.btnGhost,
-                  display: "inline-flex", alignItems: "center", gap: 6,
-                  borderColor: "#367f1f",
-                  color: "#367f1f",
-                }}
-                onClick={() => {
-                  const asunto = `Solicitud de bono · ${form.empleado || "(empleado)"} · $${(parseInt(String(form.monto).replace(/[^0-9]/g, "")) || 0).toLocaleString("es-MX")}`;
-                  const cuerpo = [
-                    `Solicito autorización del siguiente bono:`,
-                    ``,
-                    `Empleado: ${form.empleado || "(pendiente)"}`,
-                    `Área: ${form.area}`,
-                    `Monto: $${(parseInt(String(form.monto).replace(/[^0-9]/g, "")) || 0).toLocaleString("es-MX")}`,
-                    `Tipo: ${form.tipo}`,
-                    ``,
-                    `Justificación:`,
-                    `${form.justificacion || "(pendiente)"}`,
-                    ``,
-                    `Impacto medible:`,
-                    `${form.impacto || "(pendiente)"}`,
-                    ``,
-                    `Evidencia:`,
-                    `${form.evidencia || "(pendiente)"}`,
-                    ``,
-                    `Solicitante: ${form.solicitante || "(pendiente)"} · ${form.gerenciaSolicitante}`,
-                    `Autoriza: ${form.autoriza || "(por confirmar)"}`,
-                    `Medio de evidencia: ${form.medioEvidencia}`,
-                    ``,
-                    `--`,
-                    `Enviado desde el Tablero de Control RRHH`,
-                  ].join("%0D%0A");
-                  const destinatarios = "compensaciones@empresa.com.mx";
-                  const cc = "rh@empresa.com.mx";
-                  window.location.href = `mailto:${destinatarios}?cc=${cc}&subject=${encodeURIComponent(asunto)}&body=${cuerpo}`;
-                }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-                Mandar solicitud por correo
-              </button>
-              <div style={{ display: "flex", gap: 8 }}>
-                <button style={S.btnGhost} onClick={cerrarModal}>Cancelar</button>
-                <button
-                  style={{ ...S.btn, opacity: errores.length > 0 ? 0.4 : 1, cursor: errores.length > 0 ? "not-allowed" : "pointer" }}
-                  onClick={enviarBono}
-                  disabled={errores.length > 0}
-                >
-                  Enviar a aprobación
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <AulaVariaciones data={data} />
     </div>
@@ -6127,7 +5747,520 @@ const INGRESOS_BIENVENIDA = [
   },
 ];
 
+// =============================================================
+// PLANTILLAS EXCEL (Desempeño · Clima Laboral · Capacitación)
+// =============================================================
+const leerStore = (k) => {
+  try { return JSON.parse(localStorage.getItem(k) || "null"); } catch { return null; }
+};
+const guardarStore = (k, v) => {
+  try {
+    if (v) localStorage.setItem(k, JSON.stringify(v));
+    else localStorage.removeItem(k);
+  } catch { /* sin almacenamiento */ }
+};
+
+// Hoja de Excel con encabezados, anchos, formatos y autofiltro
+function hojaPlantilla(XLSX, cols, filas) {
+  const serial = (s) => { const [y, m, d] = s.split("-").map(Number); return (Date.UTC(y, m - 1, d) - Date.UTC(1899, 11, 30)) / 864e5; };
+  const aoa = [cols.map((c) => c.header + (c.req ? " *" : ""))];
+  filas.forEach((f) => aoa.push(cols.map((c) => {
+    const v = f[c.key];
+    if (v == null || v === "") return null;
+    if (c.tipo === "fecha") return serial(v);
+    return c.tipo === "texto" ? String(v) : Number(v);
+  })));
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws["!cols"] = cols.map((c) => ({ wch: c.ancho }));
+  for (let r = 1; r < aoa.length; r++) {
+    cols.forEach((c, ci) => {
+      const cell = ws[XLSX.utils.encode_cell({ r, c: ci })];
+      if (!cell) return;
+      if (c.tipo === "fecha") cell.z = "dd/mm/yyyy";
+      if (c.tipo === "monto") cell.z = '"$"#,##0';
+    });
+  }
+  ws["!autofilter"] = { ref: XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: 0, c: cols.length - 1 } }) };
+  return ws;
+}
+
+function libroPlantilla(XLSX, instrucciones, hojas, archivo) {
+  const wsInstr = XLSX.utils.aoa_to_sheet(instrucciones.map((t) => [t]));
+  wsInstr["!cols"] = [{ wch: 140 }];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, wsInstr, "Instrucciones");
+  hojas.forEach(([nombre, ws]) => XLSX.utils.book_append_sheet(wb, ws, nombre));
+  XLSX.writeFile(wb, archivo);
+}
+
+// Busca una hoja por el inicio de su nombre (sin acentos ni espacios)
+const hojaDeLibro = (wb, clave) => {
+  const n = wb.SheetNames.find((s) => normalizarTexto(s).startsWith(clave));
+  return n ? { nombre: n, hoja: wb.Sheets[n] } : null;
+};
+
+// Barra "Descarga plantilla / Cargar plantilla" + aviso de datos cargados + ventana de carga
+function PlantillaExcel({ modulo, hojas, onDescargar, leer, resumen, carga, resumenCarga, onAplicar, onRestaurar }) {
+  const [abierto, setAbierto] = useState(false);
+  const [drag, setDrag] = useState(false);
+  const [prev, setPrev] = useState(null); // { archivo, datos, errores, avisos }
+  const [leyendo, setLeyendo] = useState(false);
+  const inputRef = useRef(null);
+  const valido = !!prev && prev.errores.length === 0 && !!prev.datos;
+
+  const procesar = async (file) => {
+    if (!file) return;
+    if (!/\.(xlsx|xls)$/i.test(file.name)) {
+      setPrev({ archivo: file.name, datos: null, avisos: [], errores: ["Formato no válido. Sube un archivo .xlsx o .xls."] });
+      return;
+    }
+    setLeyendo(true);
+    try {
+      setPrev({ archivo: file.name, ...(await leer(file)) });
+    } catch {
+      setPrev({ archivo: file.name, datos: null, avisos: [], errores: ["No se pudo leer el archivo. Verifica que sea la plantilla en Excel."] });
+    } finally {
+      setLeyendo(false);
+    }
+  };
+  const cerrar = () => { setAbierto(false); setPrev(null); setDrag(false); };
+  const aplicar = () => {
+    if (!valido) return;
+    onAplicar(prev.datos, prev.archivo);
+    cerrar();
+  };
+  const filasResumen = valido ? resumen(prev.datos) : [];
+
+  return (
+    <>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end", marginTop: 12, marginBottom: 8 }}>
+        <button style={{ ...S.btnGhost, display: "inline-flex", alignItems: "center", gap: 6 }} onClick={onDescargar} title={`Descarga un Excel con ${hojas} para llenarlo`}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+          Descarga plantilla
+        </button>
+        <button style={{ ...S.btn, display: "inline-flex", alignItems: "center", gap: 6 }} onClick={() => setAbierto(true)} title={`Sube el Excel llenado para actualizar ${modulo}`}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+          Cargar plantilla
+        </button>
+      </div>
+
+      {carga && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: COLOR.accentSoft, border: "1px solid #feeaa0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#5e4700" }}>
+          <span>
+            Datos cargados desde Excel · <strong>{carga.archivo}</strong>
+            {resumenCarga && <> · {resumenCarga}</>}
+            {" "}· {carga.fecha}
+          </span>
+          <button style={{ ...S.btnGhost, padding: "4px 10px", fontSize: 12 }} onClick={onRestaurar}>
+            Restaurar datos originales
+          </button>
+        </div>
+      )}
+
+      {abierto && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }} onClick={cerrar}>
+          <div style={{ background: "#fff", borderRadius: 12, width: 640, maxWidth: "100%", maxHeight: "90vh", overflow: "auto", padding: 24, boxShadow: "0 20px 50px rgba(15,23,42,0.25)" }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+              <div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: "#0f172a" }}>Cargar plantilla</div>
+                <div style={{ fontSize: 12, color: "#475569", marginTop: 2 }}>{modulo} · {hojas}</div>
+              </div>
+              <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={cerrar}>✕</button>
+            </div>
+
+            <div
+              onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+              onDragLeave={() => setDrag(false)}
+              onDrop={(e) => { e.preventDefault(); setDrag(false); procesar(e.dataTransfer.files?.[0]); }}
+              onClick={() => inputRef.current?.click()}
+              style={{ border: `2px dashed ${drag ? COLOR.accent : "#cbd5e1"}`, background: drag ? COLOR.accentSoft : "#f8fafc", borderRadius: 10, padding: "32px 16px", textAlign: "center", cursor: "pointer", transition: "all 0.15s" }}
+            >
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={drag ? COLOR.accent : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>{leyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}</div>
+              <div style={{ fontSize: 12, color: "#64748b", marginTop: 4 }}>o haz clic para seleccionarlo · .xlsx o .xls</div>
+              <input ref={inputRef} type="file" accept=".xlsx,.xls" style={{ display: "none" }} onChange={(e) => { procesar(e.target.files?.[0]); e.target.value = ""; }} />
+            </div>
+
+            {prev && (
+              <div style={{ marginTop: 16 }}>
+                <div style={{ fontSize: 12, color: "#475569", marginBottom: 8 }}>Archivo: <strong>{prev.archivo}</strong></div>
+                {prev.errores.length > 0 && (
+                  <div style={{ background: "#fdecea", border: "1px solid #f5c2c0", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#8a1c1c", marginBottom: 10 }}>
+                    <strong>Corrige estos puntos y vuelve a subir el archivo:</strong>
+                    <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                      {prev.errores.slice(0, 8).map((er, i) => <li key={i}>{er}</li>)}
+                      {prev.errores.length > 8 && <li>… y {prev.errores.length - 8} más</li>}
+                    </ul>
+                  </div>
+                )}
+                {filasResumen.length > 0 && (
+                  <table style={{ ...S.table, fontSize: 12 }}>
+                    <tbody>
+                      {filasResumen.map(([k, v]) => (
+                        <tr key={k}><td style={S.td}>{k}</td><td style={{ ...S.td, textAlign: "right" }}>{v}</td></tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+                {prev.avisos.length > 0 && (
+                  <ul style={{ fontSize: 12, color: "#64748b", margin: "8px 0 0", paddingLeft: 18 }}>
+                    {prev.avisos.slice(0, 6).map((a, i) => <li key={i}>{a}</li>)}
+                    {prev.avisos.length > 6 && <li>… y {prev.avisos.length - 6} avisos más</li>}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
+              <button style={{ ...S.btnGhost, fontSize: 12 }} onClick={onDescargar}>¿No tienes la plantilla? Descárgala</button>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button style={S.btnGhost} onClick={cerrar}>Cancelar</button>
+                <button style={{ ...S.btn, opacity: valido ? 1 : 0.45, cursor: valido ? "pointer" : "not-allowed" }} disabled={!valido} onClick={aplicar}>
+                  Aplicar a {modulo}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ---------- Desempeño ----------
+const DES_STORAGE_KEY = "rrhh.desempeno.v1";
+const DES_COLS = [
+  { key: "nombre", header: "Nombre", req: true, tipo: "texto", ancho: 28 },
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 16 },
+  { key: "desempeno", header: "Desempeño (Bajo / Medio / Alto)", req: true, tipo: "texto", ancho: 18 },
+  { key: "potencial", header: "Potencial (Bajo / Medio / Alto)", req: true, tipo: "texto", ancho: 18 },
+  { key: "calificacion", header: "Última evaluación (0-10)", tipo: "numero", ancho: 14 },
+  { key: "puesto", header: "Puesto", tipo: "texto", ancho: 30 },
+  { key: "departamento", header: "Departamento", tipo: "texto", ancho: 20 },
+  { key: "jefe", header: "Jefe directo", tipo: "texto", ancho: 22 },
+  { key: "aCargo", header: "Personas a cargo", tipo: "numero", ancho: 10 },
+  { key: "antiguedad", header: "Antigüedad (años)", tipo: "numero", ancho: 10 },
+  { key: "edad", header: "Edad", tipo: "numero", ancho: 8 },
+  { key: "correo", header: "Correo", tipo: "texto", ancho: 30 },
+  { key: "telefono", header: "Teléfono", tipo: "texto", ancho: 16 },
+  { key: "ubicacion", header: "Ubicación", tipo: "texto", ancho: 18 },
+  { key: "notas", header: "Notas", tipo: "texto", ancho: 50 },
+];
+const NIVEL_TXT = ["Bajo", "Medio", "Alto"];
+const nivelDe = (v) => {
+  const t = normalizarTexto(v || "");
+  if (!t) return null;
+  if (t.startsWith("alt") || t === "a") return 2;
+  if (t.startsWith("med") || t === "m") return 1;
+  if (t.startsWith("baj") || t === "b") return 0;
+  const n = Number(v);
+  return n === 1 || n === 2 || n === 3 ? n - 1 : null;
+};
+
+async function leerPlantillaDesempeno(file) {
+  const XLSX = await import("xlsx");
+  const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+  const h = hojaDeLibro(wb, "colaborador");
+  if (!h) return { datos: null, avisos: [], errores: ['No encontré la hoja "Colaboradores". Usa la plantilla descargada.'] };
+  const { filas, errores } = leerHojaRot(XLSX, h.hoja, DES_COLS, h.nombre);
+  const avisos = [];
+  const colaboradores = [];
+  filas.forEach((f, i) => {
+    const des = nivelDe(f.desempeno);
+    const pot = nivelDe(f.potencial);
+    if (f.desempeno && des == null) errores.push(`${h.nombre}, fila ${f._linea}: Desempeño debe ser Bajo, Medio o Alto.`);
+    if (f.potencial && pot == null) errores.push(`${h.nombre}, fila ${f._linea}: Potencial debe ser Bajo, Medio o Alto.`);
+    if (f.calificacion != null && f.calificacion > 10) errores.push(`${h.nombre}, fila ${f._linea}: la evaluación va de 0 a 10.`);
+    if (des == null || pot == null) return;
+    colaboradores.push({
+      id: i + 1,
+      box: (2 - pot) * 3 + des,
+      nombre: f.nombre,
+      edad: f.edad ?? "—",
+      correo: f.correo || "—",
+      telefono: f.telefono || "—",
+      departamento: f.departamento || f.area,
+      area: f.area,
+      puesto: f.puesto || "—",
+      jefe: f.jefe || "—",
+      aCargo: f.aCargo || 0,
+      antiguedad: f.antiguedad != null ? `${f.antiguedad} año${f.antiguedad === 1 ? "" : "s"}` : "—",
+      ultimaEval: f.calificacion != null ? `${f.calificacion.toFixed(1)} / 10` : "Sin evaluar",
+      ubicacion: f.ubicacion || "—",
+      notas: f.notas || "Sin notas.",
+    });
+  });
+  if (!filas.length && !errores.length) errores.push(`Hoja "${h.nombre}": no tiene colaboradores.`);
+  const sinEval = colaboradores.filter((c) => c.ultimaEval === "Sin evaluar").length;
+  if (sinEval) avisos.push(`${sinEval} colaborador${sinEval === 1 ? "" : "es"} sin calificación de la última evaluación.`);
+  return { datos: errores.length ? null : { colaboradores }, errores, avisos };
+}
+
+async function descargarPlantillaDesempeno(colaboradores) {
+  const XLSX = await import("xlsx");
+  const filas = colaboradores.map((c) => {
+    const cal = parseFloat(String(c.ultimaEval));
+    const ant = parseInt(String(c.antiguedad), 10);
+    return {
+      nombre: c.nombre, area: c.area,
+      desempeno: NIVEL_TXT[c.box % 3], potencial: NIVEL_TXT[2 - Math.floor(c.box / 3)],
+      calificacion: Number.isFinite(cal) ? cal : null, puesto: c.puesto === "—" ? "" : c.puesto,
+      departamento: c.departamento, jefe: c.jefe === "—" ? "" : c.jefe, aCargo: c.aCargo,
+      antiguedad: Number.isFinite(ant) ? ant : null, edad: typeof c.edad === "number" ? c.edad : null,
+      correo: c.correo === "—" ? "" : c.correo, telefono: c.telefono === "—" ? "" : c.telefono,
+      ubicacion: c.ubicacion === "—" ? "" : c.ubicacion, notas: c.notas,
+    };
+  });
+  libroPlantilla(XLSX, [
+    "Axon · Plantilla de Desempeño (Matriz 9 Box)",
+    "",
+    "Cómo llenarla (las columnas con * son obligatorias)",
+    "1. Hoja \"Colaboradores\": una fila por persona evaluada.",
+    "2. Desempeño y Potencial: escribe Bajo, Medio o Alto. Con los dos se ubica a cada persona en su casilla del 9 Box.",
+    "   · Potencial alto + Desempeño alto = Estrella · Potencial bajo + Desempeño bajo = Bajo rendimiento (PIP).",
+    "3. Última evaluación: calificación de 0 a 10 (opcional).",
+    "4. Al subirla se reemplaza la lista de colaboradores y se recalculan los indicadores y el Aula de Desempeño.",
+    "5. Guarda el archivo y súbelo en Desempeño con el botón \"Cargar plantilla\".",
+  ], [["Colaboradores", hojaPlantilla(XLSX, DES_COLS, filas)]], "Plantilla Desempeño.xlsx");
+}
+
+// ---------- Clima Laboral ----------
+const CLI_STORAGE_KEY = "rrhh.clima.v1";
+const CLI_DEMO = { pulso: 7.2, enps: 18, promotores: 42, detractores: 24, respondieron: 168, plantilla: 248 };
+const CLI_PLANTILLA_DEMO = [
+  { area: "Comercial", colaboradores: 62 }, { area: "Posventa", colaboradores: 48 }, { area: "Operaciones", colaboradores: 80 },
+  { area: "Administración", colaboradores: 26 }, { area: "Dirección", colaboradores: 12 }, { area: "RH", colaboradores: 20 },
+];
+const CLI_COLS_RESP = [
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 18 },
+  { key: "pulso", header: "Pulso (1-10)", req: true, tipo: "numero", ancho: 12 },
+  { key: "recomendacion", header: "Recomendaría la empresa (0-10)", req: true, tipo: "numero", ancho: 18 },
+  { key: "fecha", header: "Fecha de respuesta", tipo: "fecha", ancho: 16 },
+  { key: "comentario", header: "Comentario", tipo: "texto", ancho: 60 },
+];
+const CLI_COLS_PLANT = [
+  { key: "area", header: "Área", req: true, tipo: "texto", ancho: 18 },
+  { key: "colaboradores", header: "Colaboradores", req: true, tipo: "numero", ancho: 14 },
+];
+
+function construirClima({ respuestas, plantilla }) {
+  const n = respuestas.length;
+  const prom = respuestas.filter((r) => r.recomendacion >= 9).length;
+  const det = respuestas.filter((r) => r.recomendacion <= 6).length;
+  const pctProm = n ? (prom / n) * 100 : 0;
+  const pctDet = n ? (det / n) * 100 : 0;
+  const totalPlant = plantilla ? plantilla.reduce((s, p) => s + (p.colaboradores || 0), 0) : null;
+  const porArea = {};
+  respuestas.forEach((r) => {
+    const a = (porArea[r.area] ||= { area: r.area, n: 0, suma: 0 });
+    a.n += 1;
+    a.suma += r.pulso;
+  });
+  return {
+    pulso: n ? respuestas.reduce((s, r) => s + r.pulso, 0) / n : 0,
+    enps: Math.round(pctProm - pctDet),
+    promotores: Math.round(pctProm),
+    detractores: Math.round(pctDet),
+    respondieron: n,
+    plantilla: totalPlant || CLI_DEMO.plantilla,
+    plantillaCargada: !!totalPlant,
+    areas: Object.values(porArea).map((a) => ({ area: a.area, n: a.n, pulso: a.suma / a.n })),
+  };
+}
+
+async function leerPlantillaClima(file) {
+  const XLSX = await import("xlsx");
+  const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+  const errores = [];
+  const avisos = [];
+  const hR = hojaDeLibro(wb, "respuesta");
+  const hP = hojaDeLibro(wb, "plantilla");
+  if (!hR) return { datos: null, avisos, errores: ['No encontré la hoja "Respuestas". Usa la plantilla descargada.'] };
+  const r = leerHojaRot(XLSX, hR.hoja, CLI_COLS_RESP, hR.nombre);
+  errores.push(...r.errores);
+  r.filas.forEach((f) => {
+    if (f.pulso != null && (f.pulso < 1 || f.pulso > 10)) errores.push(`${hR.nombre}, fila ${f._linea}: el pulso va de 1 a 10.`);
+    if (f.recomendacion != null && f.recomendacion > 10) errores.push(`${hR.nombre}, fila ${f._linea}: la recomendación va de 0 a 10.`);
+  });
+  if (!r.filas.length && !r.errores.length) errores.push(`Hoja "${hR.nombre}": no tiene respuestas.`);
+  let plantilla = null;
+  if (hP) {
+    const p = leerHojaRot(XLSX, hP.hoja, CLI_COLS_PLANT, hP.nombre);
+    errores.push(...p.errores);
+    if (p.filas.length) plantilla = p.filas.map((f) => ({ area: f.area, colaboradores: f.colaboradores || 0 }));
+  }
+  if (!plantilla) avisos.push(`Sin hoja "Plantilla por área": la tasa de respuesta se calcula sobre ${CLI_DEMO.plantilla} colaboradores.`);
+  const respuestas = r.filas.map((f) => ({ area: f.area, pulso: f.pulso, recomendacion: f.recomendacion, fecha: f.fecha, comentario: f.comentario }));
+  if (plantilla) {
+    const conocidas = new Set(plantilla.map((p) => normalizarTexto(p.area)));
+    const otras = [...new Set(respuestas.map((x) => x.area).filter((a) => !conocidas.has(normalizarTexto(a))))];
+    if (otras.length) avisos.push(`Áreas con respuestas que no están en la plantilla: ${otras.join(", ")}.`);
+  }
+  return { datos: errores.length ? null : { respuestas, plantilla }, errores, avisos };
+}
+
+// Respuestas de ejemplo que reproducen los indicadores de la demo (168 respuestas, eNPS +18, pulso 7.2)
+function respuestasClimaDemo() {
+  const bolsa = [];
+  CLI_PLANTILLA_DEMO.forEach((p) => {
+    const n = Math.round((p.colaboradores / CLI_DEMO.plantilla) * CLI_DEMO.respondieron);
+    for (let i = 0; i < n; i++) bolsa.push(p.area);
+  });
+  while (bolsa.length < CLI_DEMO.respondieron) bolsa.push("Operaciones");
+  bolsa.length = CLI_DEMO.respondieron;
+  const nProm = Math.round(CLI_DEMO.respondieron * 0.42);
+  const nDet = Math.round(CLI_DEMO.respondieron * 0.24);
+  return bolsa.map((area, i) => {
+    const j = (i * 37) % CLI_DEMO.respondieron; // reparte promotores y detractores entre áreas
+    if (j < nProm) return { area, pulso: j % 2 ? 9 : 8, recomendacion: j % 3 ? 9 : 10, fecha: "2026-10-19" };
+    if (j < nProm + nDet) return { area, pulso: [5, 5, 6][j % 3], recomendacion: [4, 5, 6, 6][j % 4], fecha: "2026-10-19" };
+    return { area, pulso: 7, recomendacion: j % 2 ? 7 : 8, fecha: "2026-10-19" };
+  });
+}
+
+async function descargarPlantillaClima(carga) {
+  const XLSX = await import("xlsx");
+  const respuestas = carga?.respuestas || respuestasClimaDemo();
+  const plantilla = carga?.plantilla || CLI_PLANTILLA_DEMO;
+  libroPlantilla(XLSX, [
+    "Axon · Plantilla de Clima Laboral (Pulso y eNPS)",
+    "",
+    "Cómo llenarla (las columnas con * son obligatorias)",
+    "1. Hoja \"Respuestas\": una fila por persona que contestó la encuesta (anónima: no pongas nombres).",
+    "   · Pulso (1-10): ¿cómo calificas tu experiencia de trabajo esta semana?",
+    "   · Recomendaría la empresa (0-10): ¿qué tan probable es que recomiendes la empresa como lugar para trabajar?",
+    "     9-10 = promotor · 7-8 = pasivo · 0-6 = detractor. eNPS = % promotores − % detractores.",
+    "2. Hoja \"Plantilla por área\": colaboradores por área. Se usa para la tasa de respuesta.",
+    "3. Con esto se recalculan Pulso, eNPS, Tasa de respuesta y el Aula de Clima Laboral.",
+    "4. Guarda el archivo y súbelo en Clima Laboral con el botón \"Cargar plantilla\".",
+  ], [
+    ["Respuestas", hojaPlantilla(XLSX, CLI_COLS_RESP, respuestas)],
+    ["Plantilla por área", hojaPlantilla(XLSX, CLI_COLS_PLANT, plantilla)],
+  ], "Plantilla Clima Laboral.xlsx");
+}
+
+// ---------- Capacitación ----------
+const CAP_STORAGE_KEY = "rrhh.capacitacion.v1";
+const CAP_ESTADOS = ["Solicitud", "Programado", "En curso"];
+const CAP_COLS = [
+  { key: "id", header: "ID curso", tipo: "texto", ancho: 12 },
+  { key: "nombre", header: "Nombre del curso", req: true, tipo: "texto", ancho: 34 },
+  { key: "categoria", header: "Categoría", tipo: "texto", ancho: 24 },
+  { key: "area", header: "Área solicitante", req: true, tipo: "texto", ancho: 16 },
+  { key: "solicitante", header: "Solicitante", tipo: "texto", ancho: 22 },
+  { key: "fechaIni", header: "Fecha de inicio", req: true, tipo: "fecha", ancho: 14 },
+  { key: "fechaFin", header: "Fecha de fin", req: true, tipo: "fecha", ancho: 14 },
+  { key: "costo", header: "Costo total", req: true, tipo: "monto", ancho: 14 },
+  { key: "roi", header: "ROI esperado (x)", req: true, tipo: "numero", ancho: 12 },
+  { key: "estatus", header: "Estatus", tipo: "texto", ancho: 14 },
+  { key: "avance", header: "Avance %", tipo: "numero", ancho: 10 },
+  { key: "participantes", header: "Participantes", tipo: "numero", ancho: 12 },
+  { key: "horas", header: "Horas totales", tipo: "numero", ancho: 12 },
+  { key: "empresa", header: "Empresa capacitadora", tipo: "texto", ancho: 26 },
+  { key: "modalidad", header: "Modalidad", tipo: "texto", ancho: 16 },
+  { key: "metrica", header: "Métrica de ROI", tipo: "texto", ancho: 40 },
+  { key: "descripcion", header: "Descripción", tipo: "texto", ancho: 50 },
+];
+const MESES_CAP = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const fechaCapDeIso = (iso) => { const [y, m, d] = iso.split("-"); return `${d}-${MESES_CAP[Number(m) - 1]}-${y}`; };
+const isoDeFechaCap = (s) => {
+  const m = String(s || "").match(/^(\d{1,2})-([a-z]{3})(?:-(\d{4}))?$/);
+  if (!m) return "";
+  const mes = MESES_CAP.indexOf(m[2]);
+  return mes < 0 ? "" : `${m[3] || "2026"}-${String(mes + 1).padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+};
+
+async function leerPlantillaCapacitacion(file) {
+  const XLSX = await import("xlsx");
+  const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+  const h = hojaDeLibro(wb, "curso");
+  if (!h) return { datos: null, avisos: [], errores: ['No encontré la hoja "Cursos". Usa la plantilla descargada.'] };
+  const { filas, errores } = leerHojaRot(XLSX, h.hoja, CAP_COLS, h.nombre);
+  const avisos = [];
+  const cursos = filas.map((f, i) => {
+    let est = CAP_ESTADOS.find((e) => normalizarTexto(e) === normalizarTexto(f.estatus || ""));
+    if (!est) {
+      if (f.estatus) avisos.push(`${h.nombre}, fila ${f._linea}: estatus "${f.estatus}" no reconocido, se tomó como Solicitud.`);
+      est = "Solicitud";
+    }
+    if (f.fechaIni && f.fechaFin && f.fechaFin < f.fechaIni) errores.push(`${h.nombre}, fila ${f._linea}: la fecha de fin es anterior a la de inicio.`);
+    if (f.avance != null && f.avance > 100) errores.push(`${h.nombre}, fila ${f._linea}: el avance va de 0 a 100.`);
+    const costo = Math.round(f.costo || 0);
+    return {
+      id: f.id || `CAP-${String(i + 1).padStart(2, "0")}`,
+      nombre: f.nombre,
+      solicita: f.area,
+      fechaIni: f.fechaIni ? fechaCapDeIso(f.fechaIni) : "",
+      fechaFin: f.fechaFin ? fechaCapDeIso(f.fechaFin) : "",
+      costo,
+      roi: f.roi != null ? `${f.roi}x` : "—",
+      est,
+      progreso: f.avance != null ? Math.round(f.avance) : est === "En curso" ? 0 : 0,
+      descripcion: f.descripcion || "Sin descripción.",
+      categoria: f.categoria || "Sin categoría",
+      empresaCapacitadora: { nombre: f.empresa || "Por definir", contacto: "—", modalidad: f.modalidad || "—", certificacion: "—" },
+      solicitante: { nombre: f.solicitante || "Por definir", puesto: "—", area: f.area, justificacion: "Sin justificación documentada." },
+      aprobadoPor: { nombre: est === "Solicitud" ? "Pendiente de aprobación" : "Aprobado (carga de Excel)", fecha: "—", costoAprobado: est === "Solicitud" ? 0 : costo },
+      pm: { nombre: "Pendiente de asignar", puesto: "—" },
+      participantes: { total: f.participantes || 0, perfiles: "—" },
+      objetivos: ["Por definir"],
+      temario: ["Por definir con la empresa capacitadora"],
+      modalidad: f.modalidad || "—",
+      horasTotales: f.horas || 0,
+      costoDesglose: [{ concepto: "Costo total", monto: costo }],
+      roiDetalle: {
+        metricaPrincipal: f.metrica || "Por definir", baseline: "Por levantar", target: "Por definir",
+        comoSeMide: "Metodología por definir", fechaMedicion: "Por programar", beneficiosEsperados: "Por cuantificar",
+      },
+      evaluaciones: ["Por definir con la empresa capacitadora"],
+    };
+  });
+  if (!filas.length && !errores.length) errores.push(`Hoja "${h.nombre}": no tiene cursos.`);
+  const sinPart = cursos.filter((c) => !c.participantes.total).length;
+  if (sinPart) avisos.push(`${sinPart} curso${sinPart === 1 ? "" : "s"} sin número de participantes: el costo por persona del Aula queda incompleto.`);
+  return { datos: errores.length ? null : { cursos }, errores, avisos };
+}
+
+async function descargarPlantillaCapacitacion(cursos) {
+  const XLSX = await import("xlsx");
+  const filas = cursos.map((c) => ({
+    id: c.id, nombre: c.nombre, categoria: c.categoria, area: c.solicita, solicitante: c.solicitante?.nombre,
+    fechaIni: isoDeFechaCap(c.fechaIni), fechaFin: isoDeFechaCap(c.fechaFin), costo: c.costo,
+    roi: parseFloat(String(c.roi)) || null, estatus: c.est, avance: c.progreso,
+    participantes: c.participantes?.total || null, horas: c.horasTotales || null,
+    empresa: c.empresaCapacitadora?.nombre, modalidad: c.empresaCapacitadora?.modalidad || c.modalidad,
+    metrica: c.roiDetalle?.metricaPrincipal, descripcion: c.descripcion,
+  }));
+  libroPlantilla(XLSX, [
+    "Axon · Plantilla de Capacitación",
+    "",
+    "Cómo llenarla (las columnas con * son obligatorias)",
+    "1. Hoja \"Cursos\": una fila por curso o programa de capacitación.",
+    "2. Estatus: " + CAP_ESTADOS.join(" · ") + ". Avance %: de 0 a 100.",
+    "3. ROI esperado (x): cuántos pesos se esperan recuperar por cada peso invertido (ej. 2.1 = 2.1x).",
+    "4. Participantes y Horas totales alimentan el costo real del Aula (horas-persona fuera del puesto).",
+    "5. Fechas en formato dd/mm/aaaa. Costos en pesos, sin texto.",
+    "6. Al subirla se reemplaza el pipeline de cursos, el calendario y los indicadores.",
+    "7. Guarda el archivo y súbelo en Capacitación con el botón \"Cargar plantilla\".",
+  ], [["Cursos", hojaPlantilla(XLSX, CAP_COLS, filas)]], "Plantilla Capacitación.xlsx");
+}
+
 function Clima() {
+  const [cargaCli, setCargaCli] = useState(() => leerStore(CLI_STORAGE_KEY));
+  const cli = useMemo(() => {
+    try { return cargaCli ? construirClima(cargaCli) : null; } catch { return null; }
+  }, [cargaCli]);
+  const kc = cli || CLI_DEMO;
+  const tasaResp = kc.plantilla ? (kc.respondieron / kc.plantilla) * 100 : 0;
+  const luzPulso = kc.pulso >= 7 ? "green" : kc.pulso >= 6 ? "yellow" : "red";
+  const luzEnps = kc.enps >= 20 ? "green" : kc.enps >= 0 ? "yellow" : "red";
+  const luzTasa = tasaResp >= 75 ? "green" : tasaResp >= 60 ? "yellow" : "red";
+  const aplicarCli = (datos, archivo) => {
+    const next = { archivo, fecha: new Date().toLocaleString("es-MX"), ...datos };
+    setCargaCli(next);
+    guardarStore(CLI_STORAGE_KEY, next);
+  };
+  const restaurarCli = () => { setCargaCli(null); guardarStore(CLI_STORAGE_KEY, null); };
   const [modal, setModal] = useState({ open: false, instrumento: null, mode: null });
   const [audiencia, setAudiencia] = useState("Toda la empresa");
   const [selected360Idx, setSelected360Idx] = useState(0);
@@ -6274,31 +6407,50 @@ function Clima() {
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Pulso semanal (último)</div>
-            <div style={S.kpiValue}>7.2 / 10</div>
-            <div style={S.kpiDelta(true)}>+0.3 vs semana anterior</div>
-            <div style={S.kpiBenchmark("green")}>Meta: ≥7.0 · Excelente: ≥7.5</div>
+            <div style={S.kpiValue}>{kc.pulso.toFixed(1)} / 10</div>
+            <div style={S.kpiDelta(true)}>{cli ? `Promedio de ${kc.respondieron} respuestas` : "+0.3 vs semana anterior"}</div>
+            <div style={S.kpiBenchmark(luzPulso)}>Meta: ≥7.0 · Excelente: ≥7.5</div>
           </div>
-          <TrafficLight light="green" />
+          <TrafficLight light={luzPulso} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>eNPS</div>
-            <div style={S.kpiValue}>+18</div>
-            <div style={S.kpiDelta(false)}>Promotores 42% / Detractores 24%</div>
-            <div style={S.kpiBenchmark("yellow")}>Saludable: ≥+20 · Líder: ≥+30</div>
+            <div style={S.kpiValue}>{kc.enps > 0 ? "+" : ""}{kc.enps}</div>
+            <div style={S.kpiDelta(kc.enps >= 20)}>Promotores {kc.promotores}% / Detractores {kc.detractores}%</div>
+            <div style={S.kpiBenchmark(luzEnps)}>Saludable: ≥+20 · Líder: ≥+30</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzEnps} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Tasa de respuesta</div>
-            <div style={S.kpiValue}>68%</div>
-            <div style={S.kpiDelta(true)}>168 / 248 colaboradores</div>
-            <div style={S.kpiBenchmark("yellow")}>Meta: ≥75% · Mínimo válido: ≥60%</div>
+            <div style={S.kpiValue}>{Math.round(tasaResp)}%</div>
+            <div style={S.kpiDelta(tasaResp >= 60)}>{kc.respondieron} / {kc.plantilla} colaboradores</div>
+            <div style={S.kpiBenchmark(luzTasa)}>Meta: ≥75% · Mínimo válido: ≥60%</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={luzTasa} />
         </div>
       </div>
+
+      <PlantillaExcel
+        modulo="Clima Laboral"
+        hojas="hojas Respuestas y Plantilla por área"
+        onDescargar={() => descargarPlantillaClima(cargaCli)}
+        leer={leerPlantillaClima}
+        resumen={(d) => {
+          const c = construirClima(d);
+          return [
+            ["Respuestas", <><strong>{c.respondieron}</strong> de {c.plantilla} colaboradores · {Math.round((c.respondieron / c.plantilla) * 100)}%</>],
+            ["Pulso promedio", <strong>{c.pulso.toFixed(1)} / 10</strong>],
+            ["eNPS", <><strong>{c.enps > 0 ? "+" : ""}{c.enps}</strong> · promotores {c.promotores}% / detractores {c.detractores}%</>],
+          ];
+        }}
+        carga={cargaCli}
+        resumenCarga={cli ? `${cli.respondieron} respuestas · ${cli.areas.length} áreas` : ""}
+        onAplicar={aplicarCli}
+        onRestaurar={restaurarCli}
+      />
 
       <h3 style={S.h3}>Tipos de instrumento</h3>
       <div style={S.grid3}>
@@ -6675,7 +6827,7 @@ function Clima() {
               const raters = [
                 { key: "auto",   label: "Auto",   color: "#475569", grad: "linear-gradient(180deg, #94a3b8 0%, #64748b 100%)" },
                 { key: "pares",  label: "Pares",  color: "#0f172a", grad: "linear-gradient(180deg, #334155 0%, #1e293b 100%)" },
-                { key: "equipo", label: "Equipo", color: "#2b5f18", grad: "linear-gradient(180deg, #367f1f 0%, #2b5f18 100%)" },
+                { key: "equipo", label: "Equipo", color: "#5e4700", grad: "linear-gradient(180deg, #8c6900 0%, #5e4700 100%)" },
                 { key: "jefe",   label: "Jefe",   color: "#3f3f46", grad: "linear-gradient(180deg, #52525b 0%, #3f3f46 100%)" },
               ];
               const avgOtros = (c) => (c.pares + c.equipo + c.jefe) / 3;
@@ -6813,7 +6965,7 @@ function Clima() {
                       ))}
                     </div>
                     <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, padding: 12, background: "#f8fafc" }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: "#367f1f", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Puntos ciegos</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: "#8c6900", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Puntos ciegos</div>
                       <div style={{ fontSize: 10, color: "#64748b", marginBottom: 8 }}>Auto &gt; Otros (sobreestima)</div>
                       {puntosCiegos.length === 0 ? (
                         <div style={{ fontSize: 12, color: "#94a3b8", fontStyle: "italic" }}>Sin brechas significativas.</div>
@@ -6957,7 +7109,7 @@ function Clima() {
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
                         {c.alertas.map((a, i) => (
-                          <div key={i} style={{ borderLeft: "3px solid #367f1f", background: "#f1f8ec", padding: "8px 12px", fontSize: 12, color: "#2b5f18" }}>
+                          <div key={i} style={{ borderLeft: "3px solid #8c6900", background: "#fffbe5", padding: "8px 12px", fontSize: 12, color: "#5e4700" }}>
                             {a}
                           </div>
                         ))}
@@ -7023,7 +7175,7 @@ function Clima() {
         </div>
       )}
 
-      <AulaClima pulso={7.2} enps={18} promotores={42} detractores={24} respondieron={168} plantilla={248} />
+      <AulaClima pulso={Math.round(kc.pulso * 10) / 10} enps={kc.enps} promotores={kc.promotores} detractores={kc.detractores} respondieron={kc.respondieron} plantilla={kc.plantilla} />
     </div>
   );
 }
@@ -7336,7 +7488,7 @@ function Denuncia() {
   const estadoBadgeColor = (estado) =>
     estado === "Resuelta" ? "#e8f5e9" : estado === "En investigación" ? "#fff7e0" : "#fdecea";
   const severidadColor = (sev) =>
-    sev === "Crítica" ? "#b00020" : sev === "Alta" ? "#367f1f" : sev === "Media" ? "#a16207" : "#475569";
+    sev === "Crítica" ? "#b00020" : sev === "Alta" ? "#8c6900" : sev === "Media" ? "#a16207" : "#475569";
   const pasoEstadoColor = (estado) =>
     estado === "Hecho" ? "#e8f5e9" : estado === "En curso" ? "#fff7e0" : "#eee";
 
@@ -7427,7 +7579,7 @@ function Denuncia() {
           const hechos = c.hojaRuta.filter((p) => p.estado === "Hecho").length;
           const tot = c.hojaRuta.length || 1;
           const prog = Math.round((hechos / tot) * 100);
-          const ac = resuelto ? "#0a7d2c" : "#367f1f";
+          const ac = resuelto ? "#0a7d2c" : "#8c6900";
           return (
             <button
               onClick={() => intentarAbrir(c.id)}
@@ -7478,11 +7630,11 @@ function Denuncia() {
                 </div>
                 <div style={{ display: "flex", height: 12, overflow: "hidden", marginTop: 12, border: "1px solid " + COLOR.border }}>
                   <div style={{ width: `${tasa}%`, background: "linear-gradient(90deg, #16a34a 0%, #0a7d2c 100%)" }} title={`Resueltos: ${resueltos.length}`} />
-                  <div style={{ flex: 1, background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)" }} title={`No resueltos: ${noResueltos.length}`} />
+                  <div style={{ flex: 1, background: "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)" }} title={`No resueltos: ${noResueltos.length}`} />
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11 }}>
                   <span style={{ color: "#0a7d2c", fontWeight: 700 }}>● Resueltos {resueltos.length}</span>
-                  <span style={{ color: "#367f1f", fontWeight: 700 }}>No resueltos {noResueltos.length} ●</span>
+                  <span style={{ color: "#8c6900", fontWeight: 700 }}>No resueltos {noResueltos.length} ●</span>
                 </div>
               </div>
 
@@ -7517,7 +7669,7 @@ function Denuncia() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#367f1f" }} />
+                  <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#8c6900" }} />
                   <span style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, color: COLOR.textSoft }}>No resueltos · en proceso ({noResueltos.length})</span>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -8072,7 +8224,7 @@ async function descargarPlantillaCobertura(carga, ejemplo) {
   };
 
   const instrucciones = [
-    ["Profit120 · Plantilla de Cobertura de Plantilla"],
+    ["Axon · Plantilla de Cobertura de Plantilla"],
     [],
     ["Cómo llenarla (las columnas con * son obligatorias; puedes subir solo las hojas que quieras actualizar)"],
     ["1. Hoja \"Plantilla por área\": plantilla autorizada y cubierta de cada área. Con esto se calculan Plantilla autorizada, Cubierta y % cobertura."],
@@ -8433,7 +8585,7 @@ function Cobertura() {
       </div>
 
       {datosCob && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#f1f8ec", border: "1px solid #cfe7c0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#2b5f18" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fffbe5", border: "1px solid #feeaa0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#5e4700" }}>
           <span>
             Datos cargados desde Excel · <strong>{cargaCob.archivo}</strong>
             {datosCob.plantilla && <> · {datosCob.plantilla.areas} áreas</>}
@@ -8472,8 +8624,8 @@ function Cobertura() {
                 onDrop={(e) => { e.preventDefault(); setCobDrag(false); procesarArchivoCob(e.dataTransfer.files?.[0]); }}
                 onClick={() => cobInputRef.current?.click()}
                 style={{
-                  border: `2px dashed ${cobDrag ? "#367f1f" : "#cbd5e1"}`,
-                  background: cobDrag ? "#f1f8ec" : "#f8fafc",
+                  border: `2px dashed ${cobDrag ? "#8c6900" : "#cbd5e1"}`,
+                  background: cobDrag ? "#fffbe5" : "#f8fafc",
                   borderRadius: 10,
                   padding: "32px 16px",
                   textAlign: "center",
@@ -8481,7 +8633,7 @@ function Cobertura() {
                   transition: "all 0.15s",
                 }}
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cobDrag ? "#367f1f" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={cobDrag ? "#8c6900" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
                 <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
                   {cobLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
                 </div>
@@ -8565,7 +8717,7 @@ function Cobertura() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 2 }}>
               <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>Recibidas vs Cerradas</div>
               <div style={{ fontSize: 11, color: "#64748b" }}>
-                <span style={{ color: "#367f1f", fontWeight: 700 }}>Recibidas</span> · <span style={{ color: "#475569", fontWeight: 700 }}>Cerradas</span>
+                <span style={{ color: "#8c6900", fontWeight: 700 }}>Recibidas</span> · <span style={{ color: "#475569", fontWeight: 700 }}>Cerradas</span>
               </div>
             </div>
           </div>
@@ -8586,7 +8738,7 @@ function Cobertura() {
                   {solicitudesMensuales.map((m) => (
                     <div key={m.mes} style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 3, height: "100%" }}>
                       {[
-                        { val: m.recibidas, grad: "linear-gradient(180deg, #6dbe45 0%, #367f1f 100%)", color: "#367f1f" },
+                        { val: m.recibidas, grad: "linear-gradient(180deg, #fdca00 0%, #8c6900 100%)", color: "#8c6900" },
                         { val: m.cerradas,  grad: "linear-gradient(180deg, #64748b 0%, #475569 100%)", color: "#475569" },
                       ].map((b, j) => (
                         <div key={j} style={{ width: 14, height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
@@ -8606,7 +8758,7 @@ function Cobertura() {
             </div>
           </div>
           <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 10, paddingTop: 8, display: "flex", justifyContent: "space-between", fontSize: 11, color: "#475569" }}>
-            <span>Recibidas YTD: <strong style={{ color: "#367f1f" }}>{totalRecibidas}</strong></span>
+            <span>Recibidas YTD: <strong style={{ color: "#8c6900" }}>{totalRecibidas}</strong></span>
             <span>Cerradas YTD: <strong style={{ color: "#475569" }}>{totalCerradas}</strong></span>
             <span>Pendientes: <strong style={{ color: "#0f172a" }}>{totalRecibidas - totalCerradas}</strong></span>
           </div>
@@ -8621,7 +8773,7 @@ function Cobertura() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 2 }}>
               <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>Backlog del proceso</div>
               <div style={{ fontSize: 11, color: "#64748b" }}>
-                Backlog actual <strong style={{ color: "#367f1f", fontVariantNumeric: "tabular-nums" }}>{totalRecibidas - totalCerradas}</strong>
+                Backlog actual <strong style={{ color: "#8c6900", fontVariantNumeric: "tabular-nums" }}>{totalRecibidas - totalCerradas}</strong>
               </div>
             </div>
           </div>
@@ -8631,7 +8783,7 @@ function Cobertura() {
               <div key={a.mes} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11 }}>
                 <div style={{ width: 50, color: "#475569", fontWeight: 500 }}>{a.mes}</div>
                 <div style={{ flex: 1, position: "relative", height: 18, background: "#f1f5f9", borderRadius: 3, overflow: "hidden" }}>
-                  <div style={{ position: "absolute", inset: 0, width: `${(a.acumRecibidas / yMaxAcum) * 100}%`, background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 3 }} />
+                  <div style={{ position: "absolute", inset: 0, width: `${(a.acumRecibidas / yMaxAcum) * 100}%`, background: "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)", borderRadius: 3 }} />
                   <div style={{ position: "absolute", top: 2, bottom: 2, left: 0, width: `${(a.acumCerradas / yMaxAcum) * 100}%`, background: "linear-gradient(90deg, #64748b 0%, #475569 100%)", borderRadius: 3 }} />
                 </div>
                 <div style={{ width: 64, textAlign: "right", color: "#0f172a", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
@@ -8641,7 +8793,7 @@ function Cobertura() {
             ))}
           </div>
           <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 12, paddingTop: 8, fontSize: 11, color: "#64748b" }}>
-            Las barras verdes marcan recibidas acumuladas; las grises encima muestran las cerradas. La diferencia es el backlog histórico.
+            Las barras amarillas marcan recibidas acumuladas; las grises encima muestran las cerradas. La diferencia es el backlog histórico.
           </div>
         </div></ChartCopy>
       </div>
@@ -8667,7 +8819,7 @@ function Cobertura() {
             const isSourcing = idx === 1;
             const grad = idx === 0
               ? "linear-gradient(90deg, #1e293b 0%, #0f172a 100%)"
-              : "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)";
+              : "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)";
             return (
               <div key={s.etapa} style={{ display: "grid", gridTemplateColumns: "200px 1fr 80px 110px", gap: 10, alignItems: "center", fontSize: 12 }}>
                 <div style={{ color: "#0f172a", fontWeight: 600 }}>{s.etapa}</div>
@@ -8709,13 +8861,13 @@ function Cobertura() {
         <div style={{ borderTop: "1px solid #f1f5f9", marginTop: 14, paddingTop: 10, display: "flex", justifyContent: "space-between", fontSize: 11, color: "#475569" }}>
           {datosCob?.funnel ? (
             <>
-              <span>Mayor caída: {datosCob.funnelCaida ? <><strong style={{ color: "#367f1f" }}>{datosCob.funnelCaida.de} → {datosCob.funnelCaida.a}</strong> ({Math.round(100 - datosCob.funnelCaida.conv)}% queda fuera)</> : "—"}</span>
-              <span>Cuello de botella: {datosCob.funnelCuello ? <><strong style={{ color: "#367f1f" }}>{datosCob.funnelCuello.de} → {datosCob.funnelCuello.a}</strong> ({Math.round(datosCob.funnelCuello.conv)}% conversión, {Math.round(datosCob.funnelCuello.extra)} días extra)</> : "—"}</span>
+              <span>Mayor caída: {datosCob.funnelCaida ? <><strong style={{ color: "#8c6900" }}>{datosCob.funnelCaida.de} → {datosCob.funnelCaida.a}</strong> ({Math.round(100 - datosCob.funnelCaida.conv)}% queda fuera)</> : "—"}</span>
+              <span>Cuello de botella: {datosCob.funnelCuello ? <><strong style={{ color: "#8c6900" }}>{datosCob.funnelCuello.de} → {datosCob.funnelCuello.a}</strong> ({Math.round(datosCob.funnelCuello.conv)}% conversión, {Math.round(datosCob.funnelCuello.extra)} días extra)</> : "—"}</span>
             </>
           ) : (
             <>
-              <span>Mayor caída: <strong style={{ color: "#367f1f" }}>Sourcing → Filtro CV</strong> (50% queda fuera)</span>
-              <span>Cuello de botella: <strong style={{ color: "#367f1f" }}>Entrevista RH → Gerente</strong> (44% conversión, 5 días extra)</span>
+              <span>Mayor caída: <strong style={{ color: "#8c6900" }}>Sourcing → Filtro CV</strong> (50% queda fuera)</span>
+              <span>Cuello de botella: <strong style={{ color: "#8c6900" }}>Entrevista RH → Gerente</strong> (44% conversión, 5 días extra)</span>
             </>
           )}
         </div>
@@ -8732,13 +8884,13 @@ function Cobertura() {
               <div key={a.area} style={{ display: "grid", gridTemplateColumns: "130px 1fr 110px 90px", gap: 10, alignItems: "center", fontSize: 12 }}>
                 <div style={{ color: "#0f172a", fontWeight: 600 }}>{a.area}</div>
                 <div style={{ position: "relative", height: 18, background: "#f1f5f9", borderRadius: 3, overflow: "hidden" }}>
-                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(a.recibidas / maxPorArea) * 100}%`, background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 3 }} />
+                  <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(a.recibidas / maxPorArea) * 100}%`, background: "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)", borderRadius: 3 }} />
                   <div style={{ position: "absolute", left: 0, top: 2, bottom: 2, width: `${(a.cerradas / maxPorArea) * 100}%`, background: "linear-gradient(90deg, #64748b 0%, #475569 100%)", borderRadius: 3 }} />
                 </div>
                 <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#0f172a", fontWeight: 600 }}>
                   {a.cerradas}/{a.recibidas} ({pendientes} pend.)
                 </div>
-                <div style={{ textAlign: "right", fontSize: 11, color: a.dias > 45 ? "#367f1f" : "#475569", fontVariantNumeric: "tabular-nums" }}>
+                <div style={{ textAlign: "right", fontSize: 11, color: a.dias > 45 ? "#8c6900" : "#475569", fontVariantNumeric: "tabular-nums" }}>
                   {a.dias} días prom.
                 </div>
               </div>
@@ -8799,9 +8951,9 @@ function Cobertura() {
         const slaPct = Math.min(100, (v.abierta / sla) * 100);
         const slaColor = v.abierta > 60 ? "#b00020" : v.abierta > 30 ? "#d97706" : "#0a7d2c";
         const gradAvance = pctAvance >= 100
-          ? "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)"
+          ? "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)"
           : pctAvance >= 60
-          ? "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)"
+          ? "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)"
           : "linear-gradient(90deg, #64748b 0%, #475569 100%)";
         return (
           <div
@@ -8881,7 +9033,7 @@ function Cobertura() {
                       <div style={{ fontSize: 14, fontWeight: 700, marginTop: 2 }}>${v.bandaMin.toLocaleString("es-MX")}</div>
                     </div>
                     <div style={{ flex: 1, position: "relative", height: 8, background: "#f1f5f9", borderRadius: 4, overflow: "hidden" }}>
-                      <div style={{ position: "absolute", left: "33%", top: 0, bottom: 0, width: "34%", background: "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)", borderRadius: 4 }} />
+                      <div style={{ position: "absolute", left: "33%", top: 0, bottom: 0, width: "34%", background: "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)", borderRadius: 4 }} />
                     </div>
                     <div>
                       <div style={{ fontSize: 10, color: "#666", textTransform: "uppercase", letterSpacing: 0.4, fontWeight: 700 }}>Máx</div>
@@ -8950,13 +9102,13 @@ function Cobertura() {
                     <div key={idx} style={{
                       display: "flex", alignItems: "center", gap: 10,
                       padding: "8px 12px",
-                      background: isDone ? "#f6fbf6" : isCurrent ? "#f1f8ec" : "#fafafa",
-                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#cfe7c0" : "#e5e5e5"}`,
+                      background: isDone ? "#f6fbf6" : isCurrent ? "#fffbe5" : "#fafafa",
+                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#feeaa0" : "#e5e5e5"}`,
                       borderRadius: 4,
                     }}>
                       <div style={{
                         width: 20, height: 20, borderRadius: "50%",
-                        background: isDone ? "#0a7d2c" : isCurrent ? "#367f1f" : "#cbd5e1",
+                        background: isDone ? "#0a7d2c" : isCurrent ? "#8c6900" : "#cbd5e1",
                         color: "#fff",
                         fontSize: 11, fontWeight: 700,
                         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
@@ -8964,7 +9116,7 @@ function Cobertura() {
                         {isDone && !isCurrent ? "✓" : idx + 1}
                       </div>
                       <span style={{ fontSize: 13, fontWeight: isCurrent ? 700 : 500, color: "#0f172a", flex: 1 }}>{etapa}</span>
-                      {isCurrent && <span style={{ fontSize: 10, color: "#367f1f", fontWeight: 700, padding: "1px 6px", background: "#e2f2d8", borderRadius: 10 }}>EN CURSO</span>}
+                      {isCurrent && <span style={{ fontSize: 10, color: "#8c6900", fontWeight: 700, padding: "1px 6px", background: "#fff4c7", borderRadius: 10 }}>EN CURSO</span>}
                     </div>
                   );
                 })}
@@ -9361,7 +9513,7 @@ async function descargarPlantillaRotacion(carga, bajasEjemplo) {
   };
 
   const instrucciones = [
-    ["Profit120 · Plantilla de Altas y Bajas · Costo de rotación"],
+    ["Axon · Plantilla de Altas y Bajas · Costo de rotación"],
     [],
     ["Cómo llenarla"],
     ["1. Hoja \"Bajas\": una fila por colaborador que salió. Las columnas con * son obligatorias."],
@@ -9898,8 +10050,8 @@ function Rotacion() {
                 onDrop={(e) => { e.preventDefault(); setRotDrag(false); procesarArchivoRot(e.dataTransfer.files?.[0]); }}
                 onClick={() => rotInputRef.current?.click()}
                 style={{
-                  border: `2px dashed ${rotDrag ? "#367f1f" : "#cbd5e1"}`,
-                  background: rotDrag ? "#f1f8ec" : "#f8fafc",
+                  border: `2px dashed ${rotDrag ? "#8c6900" : "#cbd5e1"}`,
+                  background: rotDrag ? "#fffbe5" : "#f8fafc",
                   borderRadius: 10,
                   padding: "32px 16px",
                   textAlign: "center",
@@ -9907,7 +10059,7 @@ function Rotacion() {
                   transition: "all 0.15s",
                 }}
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={rotDrag ? "#367f1f" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={rotDrag ? "#8c6900" : "#94a3b8"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 12 15 15" /></svg>
                 <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 8 }}>
                   {rotLeyendo ? "Leyendo archivo…" : "Arrastra aquí tu Excel"}
                 </div>
@@ -10032,7 +10184,7 @@ function Rotacion() {
       </div>
 
       {datosRot && (
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#f1f8ec", border: "1px solid #cfe7c0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#2b5f18" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", background: "#fffbe5", border: "1px solid #feeaa0", borderRadius: 8, padding: "8px 14px", marginBottom: 12, fontSize: 12, color: "#5e4700" }}>
           <span>
             Datos cargados desde Excel · <strong>{cargaRot.archivo}</strong> · {datosRot.totalBajas} bajas · {datosRot.altasTotal} altas · {datosRot.rango} · {cargaRot.fecha}
             {datosRot.estimadas > 0 && <> · {datosRot.estimadas} finiquito(s) estimado(s) con LFT</>}
@@ -10616,12 +10768,12 @@ function Capacitacion() {
   const meses = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
   const parseFecha = (s) => {
     if (!s) return null;
-    if (s.includes("-") && s.length <= 7) {
-      const [d, m] = s.split("-");
+    if (/^\d{1,2}-[a-z]{3}(-\d{4})?$/.test(s)) {
+      const [d, m, y] = s.split("-");
       const monthIdx = meses.indexOf(m);
       const day = parseInt(d, 10);
       if (monthIdx < 0 || !day || day < 1 || day > 31) return null;
-      const dt = new Date(2026, monthIdx, day);
+      const dt = new Date(y ? parseInt(y, 10) : 2026, monthIdx, day);
       return Number.isNaN(dt.getTime()) ? null : dt;
     }
     const dt = new Date(s);
@@ -10770,7 +10922,24 @@ function Capacitacion() {
       evaluaciones: ["Diagnóstico pre con cliente misterioso", "Role plays evaluados por instructor", "Cliente misterioso post-programa (3 mediciones)"],
     },
   ];
-  const [cursos, setCursos] = useState(cursosInicial);
+  const [cargaCap, setCargaCap] = useState(() => leerStore(CAP_STORAGE_KEY));
+  const [cursos, setCursos] = useState(() => cargaCap?.cursos || cursosInicial);
+  const aplicarCap = (datos, archivo) => {
+    const next = { archivo, fecha: new Date().toLocaleString("es-MX"), cursos: datos.cursos };
+    setCargaCap(next);
+    guardarStore(CAP_STORAGE_KEY, next);
+    setCursos(datos.cursos);
+    setCursoAbierto(null);
+  };
+  const restaurarCap = () => { setCargaCap(null); guardarStore(CAP_STORAGE_KEY, null); setCursos(cursosInicial); setCursoAbierto(null); };
+  const kpiCap = (() => {
+    const activos = cursos.filter((c) => c.est === "En curso").length;
+    const programados = cursos.filter((c) => c.est === "Programado").length;
+    const inversion = cursos.reduce((t, c) => t + (c.costo || 0), 0);
+    const rois = cursos.map((c) => parseFloat(String(c.roi))).filter(Number.isFinite);
+    const roiProm = cargaCap ? (rois.length ? rois.reduce((a, b) => a + b, 0) / rois.length : null) : 1.8;
+    return { activos, programados, inversion, roiProm };
+  })();
   const [incidenciaAbierta, setIncidenciaAbierta] = useState(null);
   const [mensajeAbierto, setMensajeAbierto] = useState(null); // formato: "pasoIdx-agenteIdx"
 
@@ -11269,36 +11438,56 @@ function Capacitacion() {
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Cursos activos</div>
-            <div style={S.kpiValue}>2</div>
-            <div style={S.kpiBenchmark("green")}>Capacidad simultánea: 2-3</div>
+            <div style={S.kpiValue}>{kpiCap.activos}</div>
+            <div style={S.kpiBenchmark(kpiCap.activos <= 3 ? "green" : "yellow")}>Capacidad simultánea: 2-3</div>
           </div>
-          <TrafficLight light="green" />
+          <TrafficLight light={kpiCap.activos <= 3 ? "green" : "yellow"} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Programados</div>
-            <div style={S.kpiValue}>1</div>
-            <div style={S.kpiBenchmark("yellow")}>Pipeline saludable: ≥3</div>
+            <div style={S.kpiValue}>{kpiCap.programados}</div>
+            <div style={S.kpiBenchmark(kpiCap.programados >= 3 ? "green" : "yellow")}>Pipeline saludable: ≥3</div>
           </div>
-          <TrafficLight light="yellow" />
+          <TrafficLight light={kpiCap.programados >= 3 ? "green" : "yellow"} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>Inversión YTD</div>
-            <div style={S.kpiValue}>$288K</div>
-            <div style={S.kpiBenchmark("green")}>Presupuesto anual: $360K</div>
+            <div style={S.kpiValue}>${Math.round(kpiCap.inversion / 1000).toLocaleString("es-MX")}K</div>
+            <div style={S.kpiBenchmark(kpiCap.inversion <= 360000 ? "green" : "red")}>Presupuesto anual: $360K</div>
           </div>
-          <TrafficLight light="green" />
+          <TrafficLight light={kpiCap.inversion <= 360000 ? "green" : "red"} />
         </div>
         <div style={{ ...S.kpi, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={S.kpiLabel}>ROI promedio</div>
-            <div style={S.kpiValue}>1.8x</div>
-            <div style={S.kpiBenchmark("green")}>Meta: ≥1.5x</div>
+            <div style={S.kpiValue}>{kpiCap.roiProm != null ? kpiCap.roiProm.toFixed(1) + "x" : "—"}</div>
+            <div style={S.kpiBenchmark(kpiCap.roiProm >= 1.5 ? "green" : kpiCap.roiProm >= 1 ? "yellow" : "red")}>Meta: ≥1.5x</div>
           </div>
-          <TrafficLight light="green" />
+          <TrafficLight light={kpiCap.roiProm >= 1.5 ? "green" : kpiCap.roiProm >= 1 ? "yellow" : "red"} />
         </div>
       </div>
+
+      <PlantillaExcel
+        modulo="Capacitación"
+        hojas="hoja Cursos"
+        onDescargar={() => descargarPlantillaCapacitacion(cursos)}
+        leer={leerPlantillaCapacitacion}
+        resumen={(d) => {
+          const inv = d.cursos.reduce((t, c) => t + c.costo, 0);
+          const cuenta = (e) => d.cursos.filter((c) => c.est === e).length;
+          return [
+            ["Cursos", <><strong>{d.cursos.length}</strong> · {cuenta("En curso")} en curso · {cuenta("Programado")} programados · {cuenta("Solicitud")} en solicitud</>],
+            ["Inversión total", <strong>${inv.toLocaleString("es-MX")}</strong>],
+            ["Participantes", <strong>{d.cursos.reduce((t, c) => t + (c.participantes.total || 0), 0)}</strong>],
+          ];
+        }}
+        carga={cargaCap}
+        resumenCarga={cargaCap ? `${cargaCap.cursos.length} cursos` : ""}
+        onAplicar={aplicarCap}
+        onRestaurar={restaurarCap}
+      />
 
       <h3 style={S.h3}>Pipeline de capacitación</h3>
       <p style={{ ...S.hint, marginTop: -4 }}>Haz click en cualquier curso para ver el desglose completo.</p>
@@ -12249,10 +12438,10 @@ function Seleccion({ onAbrirGuia }) {
     pctAvance: Math.round(((c.etapaActualIdx + 1) / etapas.length) * 100),
   }));
 
-  // Colores del branding Profit120
+  // Colores del branding Axon
   const colorAvance = "linear-gradient(90deg, #3f3f46 0%, #18181b 100%)";
   const colorGris = "linear-gradient(90deg, #94a3b8 0%, #64748b 100%)";
-  const colorVerde = "linear-gradient(90deg, #6dbe45 0%, #367f1f 100%)";
+  const colorVerde = "linear-gradient(90deg, #fdca00 0%, #8c6900 100%)";
   const gradPorAvance = (pct) => pct >= 100 ? colorVerde : pct >= 60 ? colorAvance : colorGris;
 
   return (
@@ -12265,7 +12454,7 @@ function Seleccion({ onAbrirGuia }) {
           onClick={onAbrirGuia}
           style={{
             ...S.btn,
-            background: "linear-gradient(135deg, #6dbe45 0%, #367f1f 100%)",
+            background: "linear-gradient(135deg, #fdca00 0%, #8c6900 100%)",
             border: "none",
             color: "#fff",
             padding: "10px 18px",
@@ -12393,7 +12582,7 @@ function Seleccion({ onAbrirGuia }) {
                     {c.pctAvance >= 100
                       ? <span style={S.badge("#dcfce7")}>Onboarding</span>
                       : c.pctAvance >= 60
-                      ? <span style={S.badge("#e2f2d8")}>Etapa final</span>
+                      ? <span style={S.badge("#fff4c7")}>Etapa final</span>
                       : <span style={S.badge("#f1f5f9")}>En proceso</span>}
                   </div>
                   <div style={{ fontSize: 13, color: "#475569" }}>
@@ -12491,13 +12680,13 @@ function Seleccion({ onAbrirGuia }) {
                     <div key={step.idx} style={{
                       display: "flex", alignItems: "flex-start", gap: 10,
                       padding: "10px 12px",
-                      background: isDone ? "#f6fbf6" : isCurrent ? "#f1f8ec" : "#fafafa",
-                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#cfe7c0" : "#e5e5e5"}`,
+                      background: isDone ? "#f6fbf6" : isCurrent ? "#fffbe5" : "#fafafa",
+                      border: `1px solid ${isDone ? "#86efac" : isCurrent ? "#feeaa0" : "#e5e5e5"}`,
                       borderRadius: 4,
                     }}>
                       <div style={{
                         width: 22, height: 22, borderRadius: "50%",
-                        background: isDone ? "#0a7d2c" : isCurrent ? "#367f1f" : "#cbd5e1",
+                        background: isDone ? "#0a7d2c" : isCurrent ? "#8c6900" : "#cbd5e1",
                         color: "#fff",
                         fontSize: 12, fontWeight: 700,
                         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
@@ -12507,7 +12696,7 @@ function Seleccion({ onAbrirGuia }) {
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <span style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{step.label}</span>
-                          {isCurrent && <span style={{ fontSize: 10, color: "#367f1f", fontWeight: 700, padding: "1px 6px", background: "#e2f2d8", borderRadius: 10 }}>EN CURSO</span>}
+                          {isCurrent && <span style={{ fontSize: 10, color: "#8c6900", fontWeight: 700, padding: "1px 6px", background: "#fff4c7", borderRadius: 10 }}>EN CURSO</span>}
                           {step.fecha && <span style={{ fontSize: 11, color: "#666" }}>· {step.fecha}</span>}
                           {step.responsable && <span style={{ fontSize: 11, color: "#666" }}>· {step.responsable}</span>}
                         </div>
@@ -12609,7 +12798,7 @@ const IconLock = ({ size = 11, color = "currentColor" }) => (
 // =============================================================
 // Casillas ordenadas por posición visual: índice 0..8, de arriba-izquierda
 // (potencial alto / desempeño bajo) a abajo-derecha (potencial bajo / desempeño alto).
-// Paleta homologada al branding Profit120 (verdes / grafito) con capas de
+// Paleta homologada al branding Axon (amarillos / grafito) con capas de
 // transparencia y textura mediante gradientes radiales.
 const hexA = (hex, a) => {
   const h = hex.replace("#", "");
@@ -12711,7 +12900,15 @@ const AREAS_EMPRESA = ["Comercial", "Posventa", "Operaciones", "Administración"
 const iniciales = (nombre) => nombre.split(" ").filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
 
 function Desempeno() {
-  const [colaboradores, setColaboradores] = useState(COLABORADORES_INICIALES);
+  const [cargaDes, setCargaDes] = useState(() => leerStore(DES_STORAGE_KEY));
+  const [colaboradores, setColaboradores] = useState(() => cargaDes?.colaboradores || COLABORADORES_INICIALES);
+  const aplicarDes = (datos, archivo) => {
+    const next = { archivo, fecha: new Date().toLocaleString("es-MX"), colaboradores: datos.colaboradores };
+    setCargaDes(next);
+    guardarStore(DES_STORAGE_KEY, next);
+    setColaboradores(datos.colaboradores);
+  };
+  const restaurarDes = () => { setCargaDes(null); guardarStore(DES_STORAGE_KEY, null); setColaboradores(COLABORADORES_INICIALES); };
   const [dragId, setDragId] = useState(null);
   const [overBox, setOverBox] = useState(null);
   const [detalleId, setDetalleId] = useState(null);
@@ -12866,6 +13063,25 @@ function Desempeno() {
           <TrafficLight light={enRiesgo === 0 ? "green" : enRiesgo <= 2 ? "yellow" : "red"} />
         </div>
       </div>
+
+      <PlantillaExcel
+        modulo="Desempeño"
+        hojas="hoja Colaboradores"
+        onDescargar={() => descargarPlantillaDesempeno(colaboradores)}
+        leer={leerPlantillaDesempeno}
+        resumen={(d) => {
+          const cuenta = (ids) => d.colaboradores.filter((c) => ids.includes(c.box)).length;
+          return [
+            ["Colaboradores", <><strong>{d.colaboradores.length}</strong> en {new Set(d.colaboradores.map((c) => c.area)).size} áreas</>],
+            ["Alto potencial", <><strong>{cuenta([0, 1, 2])}</strong> personas · {cuenta([2])} estrellas</>],
+            ["En riesgo (PIP)", <strong>{cuenta([6])}</strong>],
+          ];
+        }}
+        carga={cargaDes}
+        resumenCarga={cargaDes ? `${cargaDes.colaboradores.length} colaboradores` : ""}
+        onAplicar={aplicarDes}
+        onRestaurar={restaurarDes}
+      />
 
       <h3 style={S.h3}>Matriz 9 Box</h3>
 
@@ -13248,7 +13464,7 @@ function Catalogos() {
 
   const moduloColor = {
     "Dashboard General": "#0f172a",
-    "1. Variaciones de Nómina": "#367f1f",
+    "1. Variaciones de Nómina": "#8c6900",
     "2. Rotación": "#b58900",
     "3. Cobertura de Plantilla": "#1d4ed8",
     "5. Clima Laboral": "#0a7d2c",
@@ -13324,7 +13540,7 @@ function Catalogos() {
                       <span style={S.badge("#f1f5f9")}>{b.tipo}</span>
                     </td>
                     <td style={S.td}>
-                      <div style={{ display: "inline-flex", alignItems: "center", gap: 2, flexWrap: "wrap", padding: "4px 8px", background: enEdicion ? "#f1f8ec" : "#f8fafc", border: enEdicion ? "1px solid #cfe7c0" : "1px solid transparent", borderRadius: 4, fontFamily: "ui-monospace, monospace", fontSize: 12, color: "#0f172a", lineHeight: 1.8 }}>
+                      <div style={{ display: "inline-flex", alignItems: "center", gap: 2, flexWrap: "wrap", padding: "4px 8px", background: enEdicion ? "#fffbe5" : "#f8fafc", border: enEdicion ? "1px solid #feeaa0" : "1px solid transparent", borderRadius: 4, fontFamily: "ui-monospace, monospace", fontSize: 12, color: "#0f172a", lineHeight: 1.8 }}>
                         {partesActuales.map((p, i) => p.tipo === "texto" ? (
                           <span key={i} style={{ whiteSpace: "pre" }}>{p.valor}</span>
                         ) : enEdicion ? (
@@ -13341,19 +13557,19 @@ function Catalogos() {
                             autoFocus={i === partesActuales.findIndex((pp) => pp.tipo === "numero")}
                             style={{
                               width: `${Math.max(String(p.valor).length + 1, 3)}ch`,
-                              padding: "1px 4px", border: "1.5px solid #367f1f",
+                              padding: "1px 4px", border: "1.5px solid #8c6900",
                               borderRadius: 3, fontSize: 12, fontFamily: "ui-monospace, monospace",
-                              fontWeight: 700, color: "#367f1f", background: "#fff",
+                              fontWeight: 700, color: "#8c6900", background: "#fff",
                               outline: "none", textAlign: "center",
                             }}
                           />
                         ) : (
-                          <span key={i} style={{ fontWeight: 700, color: "#367f1f" }}>{Number.isInteger(p.valor) ? p.valor.toLocaleString("es-MX") : p.valor}</span>
+                          <span key={i} style={{ fontWeight: 700, color: "#8c6900" }}>{Number.isInteger(p.valor) ? p.valor.toLocaleString("es-MX") : p.valor}</span>
                         ))}
                       </div>
                       {enEdicion && (
                         <div style={{ fontSize: 10, color: "#666", marginTop: 4, fontStyle: "italic" }}>
-                          Solo los números en verde son editables. El texto y las unidades son fijos.
+                          Solo los números resaltados son editables. El texto y las unidades son fijos.
                         </div>
                       )}
                     </td>
@@ -13489,7 +13705,7 @@ export default function SaaSRRHH() {
       {/* Topbar */}
       <div style={S.topbar} className="no-print">
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <img src={logoProfit120} alt="Profit120" style={{ height: 30, width: "auto", display: "block" }} />
+          <img src={logoAxon} alt="Axon" style={{ height: 44, width: "auto", display: "block" }} />
           <div style={{ width: 1, height: 34, background: COLOR.border }} />
           <div>
             <div style={S.subtitle}>Rentabilidad de Recursos Humanos</div>
@@ -13500,7 +13716,7 @@ export default function SaaSRRHH() {
             style={S.btn}
             onClick={() => {
               const tabActual = TABS.find((t) => t.id === tab)?.label || (tab === "catalogos" ? "Catálogos maestros" : "Vista");
-              document.title = `${tabActual} · ${periodo} · Profit120`;
+              document.title = `${tabActual} · ${periodo} · Axon`;
               setTimeout(() => window.print(), 50);
             }}
             title="Imprimir / Exportar a PDF la pestaña actual"
@@ -13524,7 +13740,7 @@ export default function SaaSRRHH() {
             />
             {resultadosBusqueda && (
               <div style={{ fontSize: 10, color: "#64748b", marginTop: 4, fontWeight: 600, letterSpacing: 0.3 }}>
-                {resultadosBusqueda.length} resultado{resultadosBusqueda.length !== 1 ? "s" : ""} para "<span style={{ color: "#367f1f" }}>{filter}</span>"
+                {resultadosBusqueda.length} resultado{resultadosBusqueda.length !== 1 ? "s" : ""} para "<span style={{ color: "#8c6900" }}>{filter}</span>"
               </div>
             )}
           </div>
@@ -13559,7 +13775,7 @@ export default function SaaSRRHH() {
                       {t.matchedConcepts.length > 0 && (
                         <div style={{ marginTop: 3, display: "flex", flexWrap: "wrap", gap: 3 }}>
                           {t.matchedConcepts.slice(0, 3).map((c, i) => (
-                            <span key={i} style={{ fontSize: 9, padding: "1px 5px", background: "#f1f8ec", color: "#367f1f", borderRadius: 3, fontWeight: 700, letterSpacing: 0.2 }}>{c}</span>
+                            <span key={i} style={{ fontSize: 9, padding: "1px 5px", background: "#fffbe5", color: "#8c6900", borderRadius: 3, fontWeight: 700, letterSpacing: 0.2 }}>{c}</span>
                           ))}
                           {t.matchedConcepts.length > 3 && (
                             <span style={{ fontSize: 9, color: "#94a3b8" }}>+{t.matchedConcepts.length - 3}</span>
@@ -13628,7 +13844,7 @@ export default function SaaSRRHH() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
               <div style={{
                 width: 36, height: 36, borderRadius: "50%",
-                background: "linear-gradient(135deg, #6dbe45 0%, #367f1f 100%)",
+                background: "linear-gradient(135deg, #fdca00 0%, #8c6900 100%)",
                 color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <IconLock size={16} color="#fff" />
