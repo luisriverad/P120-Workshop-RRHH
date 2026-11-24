@@ -75,3 +75,14 @@ Al abrir la app aparece una pantalla de registro (nombre y correo) con el logo d
 - Cada registro se guarda en `asistencia/registro.csv` (no se sube a git).
 - Para descargar la lista: abre `/api/asistencia` en el navegador (ej. `http://localhost:5173/api/asistencia`).
 - En Vercel el disco no es permanente: los registros quedan en los logs de la función `api/asistencia`.
+
+## Supabase (asistencia y micro tests)
+
+Variables en `.env.local` (y en Vercel):
+```
+VITE_SUPABASE_URL=https://<proyecto>.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_...
+```
+- `asistentes`: nombre, correo y hora de cada registro.
+- `resultados_quiz`: cada respuesta de "Pon a prueba al equipo" (correo, módulo, pregunta, respuesta 1=A, correcta).
+- Las tablas solo permiten insertar desde la app (RLS); los datos se consultan desde el panel de Supabase.

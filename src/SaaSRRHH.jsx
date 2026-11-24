@@ -4,6 +4,7 @@ import plantillaDetalleUrl from "./assets/plantilla-detalle-por-area.xlsx?url";
 import logoAxon from "./assets/axon-logo.png";
 import AULA_DETALLES from "./aulaDetalles.json";
 import AULA_RIESGOS_DET from "./aulaRiesgos.json";
+import { guardarFila, usuarioActual } from "./supabase.js";
 
 // Demo: configurar VITE_CATALOGOS_PASSWORD en .env para producción (no commitear secretos reales).
 const CATALOGOS_ADMIN_PASSWORD = import.meta.env.VITE_CATALOGOS_PASSWORD ?? "12345";
@@ -1488,7 +1489,21 @@ function AulaRiesgos({ riesgos, intro }) {
 
 // Quiz: [{ p: pregunta, o: [opciones], c: índice correcto, e: explicación }]
 function AulaQuiz({ preguntas, repaso }) {
+  const modulo = useContext(AulaModuloCtx);
   const [respuestas, setRespuestas] = useState({});
+  // Guarda la respuesta en Supabase ligada al participante (anónima si entró sin registrarse)
+  const responder = (i, j) => {
+    setRespuestas((prev) => ({ ...prev, [i]: j }));
+    const u = usuarioActual();
+    guardarFila("resultados_quiz", {
+      correo: u.correo ? u.correo.toLowerCase() : null,
+      nombre: u.nombre || null,
+      modulo,
+      pregunta: i + 1,
+      respuesta: j + 1,
+      correcta: j === preguntas[i].c,
+    });
+  };
   const ac = COLOR.accent;
   const contestadas = Object.keys(respuestas).length;
   const aciertos = preguntas.filter((q, i) => respuestas[i] === q.c).length;
@@ -1520,7 +1535,7 @@ function AulaQuiz({ preguntas, repaso }) {
                     <button
                       key={j}
                       disabled={listo}
-                      onClick={() => setRespuestas((prev) => ({ ...prev, [i]: j }))}
+                      onClick={() => responder(i, j)}
                       style={{ textAlign: "left", padding: "9px 12px", border: `1px solid ${bc}`, background: bg, color: col, fontSize: 12.5, fontFamily: FONT_STACK, cursor: listo ? "default" : "pointer", borderRadius: 6, display: "flex", gap: 8 }}
                     >
                       <strong>{String.fromCharCode(65 + j)}.</strong>

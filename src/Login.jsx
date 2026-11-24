@@ -1,6 +1,7 @@
 import { useState } from "react";
 import logoDragon from "./assets/dragon-logo.png";
 import logoAxon from "./assets/axon-logo.png";
+import { guardarFila } from "./supabase.js";
 
 // Pantalla de registro de asistencia (nombre y correo). No es seguridad:
 // se puede entrar aunque no se llene nada.
@@ -86,6 +87,7 @@ export default function Login({ onEntrar }) {
     if (registrar && (n || c)) {
       try { localStorage.setItem(RECUERDO_KEY, JSON.stringify({ nombre: n, correo: c })); } catch { /* sin almacenamiento */ }
       // Si el registro falla, igual se entra al workshop
+      guardarFila("asistentes", { nombre: n || null, correo: c ? c.toLowerCase() : null });
       fetch("/api/asistencia", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

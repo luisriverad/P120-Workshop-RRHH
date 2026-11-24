@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import SaaSRRHH from "./SaaSRRHH.jsx";
 import Login from "./Login.jsx";
+import { guardarUsuario } from "./supabase.js";
 
 // La pantalla de registro aparece una vez por sesión del navegador
 const SESION_KEY = "rrhh.sesion.v1";
@@ -14,7 +15,8 @@ function App() {
   if (!entro) {
     return (
       <Login
-        onEntrar={() => {
+        onEntrar={(u) => {
+          guardarUsuario(u);
           try { sessionStorage.setItem(SESION_KEY, "1"); } catch { /* sin almacenamiento */ }
           window.scrollTo(0, 0);
           setEntro(true);
