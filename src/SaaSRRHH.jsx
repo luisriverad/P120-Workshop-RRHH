@@ -1406,6 +1406,67 @@ function Conclusion({ kind = "warn", children }) {
   );
 }
 
+// Botón "i" junto a un control y ventana con la explicación de cómo se estima la variable
+function BotonInfo({ onClick, titulo }) {
+  return (
+    <button
+      type="button"
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClick(); }}
+      title="¿Cómo se estima?"
+      aria-label={`¿Cómo se estima ${titulo}?`}
+      style={{ width: 18, height: 18, borderRadius: 999, border: "1px solid " + COLOR.accent, background: COLOR.accentSoft, color: COLOR.accent, fontSize: 11, fontWeight: 800, lineHeight: 1, padding: 0, cursor: "pointer", fontFamily: "Georgia, serif", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+    >i</button>
+  );
+}
+function VentanaInfo({ titulo, onCerrar, children }) {
+  useEffect(() => {
+    const esc = (e) => { if (e.key === "Escape") onCerrar(); };
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [onCerrar]);
+  return (
+    <div onClick={onCerrar} style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}>
+      <div role="dialog" aria-label={titulo} onClick={(e) => e.stopPropagation()} style={{ background: "#fff", width: 760, maxWidth: "100%", maxHeight: "92vh", overflow: "auto", boxShadow: "0 20px 50px rgba(15,23,42,0.25)", borderRadius: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "20px 26px", borderBottom: "1px solid " + COLOR.borderSoft, background: COLOR.accentSoft }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.accent, textTransform: "uppercase", letterSpacing: 0.8 }}>¿Cómo se estima?</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: COLOR.ink }}>{titulo}</div>
+          </div>
+          <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={onCerrar} aria-label="Cerrar">✕</button>
+        </div>
+        <div style={{ padding: "22px 26px 26px", display: "flex", flexDirection: "column", gap: 18, fontSize: 14, color: COLOR.text, lineHeight: 1.6 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+const infoEtiqueta = (t) => <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 8 }}>{t}</div>;
+function InfoTarjetas({ items }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 10 }}>
+      {items.map(([t, f, e]) => (
+        <div key={t} style={{ border: "1px solid " + COLOR.border, padding: "12px 14px" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: COLOR.ink, marginBottom: 4 }}>{t}</div>
+          <div style={{ fontSize: 12.5, color: COLOR.textSoft, marginBottom: 8 }}>{f}</div>
+          <div style={{ fontSize: 12.5, background: COLOR.accentSoft, borderLeft: `3px solid ${COLOR.accent}`, padding: "8px 10px" }}>{textoRico(e)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+function InfoReferencias({ filas }) {
+  return (
+    <table style={{ ...S.table, fontSize: 13 }}>
+      <tbody>
+        {filas.map(([a, b]) => (
+          <tr key={a}><td style={S.td}>{a}</td><td style={{ ...S.td, textAlign: "right", fontWeight: 700, color: COLOR.ink }}>{b}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 // Tarjetas de riesgo: [{ titulo, nivel: "Alto" | "Medio", que, ejemplo, mitiga, base }]
 // La explicación completa (pop-up) viene de aulaRiesgos.json por "<modulo>:<titulo>".
 function RiesgoTarjeta({ r, i }) {
@@ -2013,6 +2074,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
   const [multiplo, setMultiplo] = useState(2);
   const [cubren, setCubren] = useState(40);
   const [fee, setFee] = useState(54000); // costo del headhunter (monto fijo)
+  const [info, setInfo] = useState(null); // ventana de ayuda: "valor" | "cubren"
 
   const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
   const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
@@ -2103,7 +2165,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
     );
 
     const barras = [
-      { label: "Trabajo que nadie hace", v: cd.noGenerado * dias, color: "#b00020" },
+      { label: "Trabajo que nadie hace", v: cd.noGenerado * dias, color: "#b00020", info: "nadie" },
       { label: "Horas extra de compañeros", v: cd.extra * dias, color: "#d97706" },
       { label: "Sueldo que no se pagó", v: -cd.ahorro * dias, color: "#0a7d2c" },
     ];
@@ -2115,11 +2177,100 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
           <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
             Una vacante abierta parece ahorro: no se paga sueldo. Mueve los controles y mira lo que realmente se pierde cada día que la silla sigue vacía.
           </div>
-          {slider("Sueldo mensual del puesto", sueldo, setSueldo, 10000, 80000, 1000, fmt)}
+          {slider("Sueldo mensual del puesto", sueldo, (v) => setSueldo(v < 500 ? 1 : Math.round(v / 1000) * 1000), 1, 250000, 1, fmt)}
           {slider("Días que lleva abierta", dias, setDias, 0, 120, 1, (v) => `${v} días`)}
-          {slider("Valor que genera el puesto", multiplo, setMultiplo, 1, 5, 0.5, (v) => `${v}× su sueldo`)}
-          {slider("Trabajo que cubren compañeros", cubren, setCubren, 0, 100, 5, (v) => `${v}%`)}
+          {slider(<span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Valor que genera el puesto <BotonInfo titulo="el valor que genera el puesto" onClick={() => setInfo("valor")} /></span>, multiplo, setMultiplo, 1, 5, 0.5, (v) => `${v}× su sueldo`)}
+          {slider(<span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Trabajo que cubren compañeros <BotonInfo titulo="el trabajo que cubren los compañeros" onClick={() => setInfo("cubren")} /></span>, cubren, setCubren, 0, 100, 5, (v) => `${v}%`)}
           {slider("Costo del headhunter", fee, setFee, 15000, 100000, 1000, fmt)}
+          {info === "valor" && (
+            <VentanaInfo titulo="Valor que genera el puesto" onCerrar={() => setInfo(null)}>
+              <p style={{ margin: 0 }}>
+                Es <strong>cuántas veces su sueldo produce el puesto</strong> para la empresa: ventas, servicio, producción o ahorro. Si alguien gana $20,000 y su trabajo genera $60,000 al mes, el puesto vale <strong>3×</strong> su sueldo. Cuando la silla está vacía, ese valor se deja de generar.
+              </p>
+              <div>
+                {infoEtiqueta("Tres formas de estimarlo")}
+                <InfoTarjetas items={[
+                  ["Puestos de venta", "Margen bruto que genera al mes ÷ su sueldo.", "Ejecutivo de ventas: sueldo $20,000, vende $400,000 al mes con 20% de margen → $80,000 ÷ $20,000 = **4×**."],
+                  ["Promedio de la empresa", "Margen bruto mensual de la empresa ÷ nómina mensual total.", "Margen bruto $3,000,000 ÷ nómina $1,000,000 = **3×**. Sirve como referencia general."],
+                  ["Puestos de soporte", "No venden directo: estima cuánto costaría tercerizarlo o el error que evita.", "Contador de $25,000: un despacho cobraría ~$45,000 por el mismo trabajo → **1.8×**."],
+                ]} />
+              </div>
+              <div>
+                {infoEtiqueta("Referencias rápidas")}
+                <InfoReferencias filas={[["Ventas y comercial", "3× a 5×"], ["Operación, producción y logística", "2× a 3×"], ["Administración y soporte", "1.5× a 2×"]]} />
+              </div>
+              <div style={{ fontSize: 12.5, color: COLOR.textMuted }}>
+                Es un supuesto para el ejercicio, no una cifra contable. Lo importante es que el equipo acuerde un número razonable para su empresa y lo use igual en todas las vacantes.
+              </div>
+            </VentanaInfo>
+          )}
+          {info === "nadie" && (() => {
+            const diario = sueldo / 30;
+            const valorDia = diario * multiplo;
+            const sinCubrir = 1 - cubren / 100;
+            const fmt2 = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+            const paso = (n, t, cuenta) => (
+              <div style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 10, alignItems: "start", padding: "10px 0", borderBottom: "1px solid " + COLOR.borderSoft }}>
+                <span style={{ width: 22, height: 22, borderRadius: 6, background: "#b00020", color: "#fff", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</span>
+                <div>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: COLOR.ink }}>{t}</div>
+                  <div style={{ fontSize: 13, color: COLOR.textSoft, fontVariantNumeric: "tabular-nums" }}>{textoRico(cuenta)}</div>
+                </div>
+              </div>
+            );
+            return (
+              <VentanaInfo titulo="Trabajo que nadie hace" onCerrar={() => setInfo(null)}>
+                <p style={{ margin: 0 }}>
+                  Es <strong>el valor que el puesto dejaba de generar y que nadie está cubriendo</strong>: pedidos que no salen, clientes sin atender, cierres que se atrasan. Casi siempre es el costo más grande de una vacante, y no aparece en ningún reporte.
+                </p>
+                <div>
+                  {infoEtiqueta("La fórmula")}
+                  <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 13, background: COLOR.surfaceSoft, border: "1px dashed " + COLOR.border, padding: "10px 12px", color: COLOR.ink }}>
+                    Trabajo que nadie hace = (sueldo ÷ 30) × valor que genera × (100% − % que cubren) × días abierta
+                  </div>
+                </div>
+                <div>
+                  {infoEtiqueta("Cómo se integra, con tus números de arriba")}
+                  {paso(1, "Sueldo diario", `${fmt2(sueldo)} ÷ 30 días = **${fmt2(diario)}**`)}
+                  {paso(2, "Valor que genera el puesto al día", `${fmt2(diario)} × ${multiplo} = **${fmt2(valorDia)}**`)}
+                  {paso(3, "Parte del trabajo que nadie cubre", `100% − ${cubren}% = **${Math.round(sinCubrir * 100)}%**`)}
+                  {paso(4, "Lo que se pierde cada día", `${fmt2(valorDia)} × ${Math.round(sinCubrir * 100)}% = **${fmt2(cd.noGenerado)}**`)}
+                  {paso(5, `Acumulado en ${dias} días`, `${fmt2(cd.noGenerado)} × ${dias} = **${fmt2(cd.noGenerado * dias)}**`)}
+                </div>
+                <div style={{ fontSize: 13, background: COLOR.accentSoft, borderLeft: `3px solid ${ac}`, padding: "10px 12px", lineHeight: 1.6 }}>
+                  {textoRico("**Ejemplo:** coordinador de logística de $30,000 que genera 2× su sueldo; los compañeros cubren 40%.\n$30,000 ÷ 30 = $1,000 al día → × 2 = $2,000 de valor al día → nadie hace el 60% → **$1,200 que se pierden cada día**. En 60 días: **$72,000**.")}
+                </div>
+                <div style={{ fontSize: 12.5, color: COLOR.textMuted }}>
+                  Este monto baja si los compañeros cubren más, pero entonces sube el de "Horas extra de compañeros". Por eso la vacante cuesta aunque no se pague su sueldo.
+                </div>
+              </VentanaInfo>
+            );
+          })()}
+          {info === "cubren" && (
+            <VentanaInfo titulo="Trabajo que cubren compañeros" onCerrar={() => setInfo(null)}>
+              <p style={{ margin: 0 }}>
+                Es <strong>qué parte del trabajo de la vacante absorben los compañeros</strong> mientras la silla está vacía. Lo que cubren cuesta <strong>horas extra pagadas al doble</strong>; lo que nadie cubre simplemente <strong>no se hace</strong> y se pierde el valor que generaba el puesto.
+              </p>
+              <p style={{ margin: 0 }}>
+                Ejemplo: si el puesto tiene 10 tareas clave y los compañeros sacan 4, se cubre el <strong>40%</strong>. El otro 60% se queda sin hacer: pedidos que no salen, clientes sin atender, cierres que se atrasan.
+              </p>
+              <div>
+                {infoEtiqueta("Tres formas de estimarlo")}
+                <InfoTarjetas items={[
+                  ["Lista de tareas", "Pregúntale al jefe qué tareas del puesto se están haciendo hoy y quién las hace.", "Comprador: de 10 tareas clave, el equipo cubre 4 (cotizar, dar seguimiento a pedidos urgentes…) → **40%**."],
+                  ["Horas extra reales", "Horas extra que hace el equipo por la vacante ÷ horas del puesto al mes (192).", "Almacén: el equipo hizo 96 horas extra en el mes por la vacante → 96 ÷ 192 = **50%**."],
+                  ["Resultados del área", "Cuánto bajó lo que aportaba el puesto desde que quedó vacío.", "El ejecutivo vendía $400,000; con la cuenta repartida se venden $160,000 → se cubre **40%**."],
+                ]} />
+              </div>
+              <div>
+                {infoEtiqueta("Referencias rápidas")}
+                <InfoReferencias filas={[["Puesto con varios compañeros en el mismo rol (auxiliar, vendedor)", "50% a 80%"], ["Puesto especializado (contador, comprador, analista)", "20% a 40%"], ["Puesto único o de liderazgo (jefe, gerente)", "0% a 20%"]]} />
+              </div>
+              <div style={{ fontSize: 12.5, color: COLOR.textMuted }}>
+                Cubrir más no es gratis: las horas extra se pagan al doble (Art. 67 LFT) y la sobrecarga sostenida desgasta al equipo y puede provocar más renuncias (NOM-035).
+              </div>
+            </VentanaInfo>
+          )}
           <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
             <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
             <div style={{ marginTop: 10 }}>
@@ -2197,7 +2348,10 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
           <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
             {barras.map((b) => (
               <div key={b.label} style={{ display: "grid", gridTemplateColumns: "190px 1fr 100px", gap: 10, alignItems: "center", fontSize: 12 }}>
-                <div style={{ color: COLOR.textSoft }}>{b.label}</div>
+                <div style={{ color: COLOR.textSoft, display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  {b.label}
+                  {b.info && <BotonInfo titulo={b.label.toLowerCase()} onClick={() => setInfo(b.info)} />}
+                </div>
                 <div style={{ position: "relative", height: 14, background: "#f1f5f9" }}>
                   <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${(Math.abs(b.v) / maxBar) * 100}%`, background: b.color, opacity: 0.85, transition: "width 0.3s ease" }} />
                 </div>
