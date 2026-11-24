@@ -74,7 +74,7 @@ Al abrir la app aparece una pantalla de registro (nombre y correo) con el logo d
 
 - Cada registro se guarda en `asistencia/registro.csv` (no se sube a git).
 - Para descargar la lista: abre `/api/asistencia` en el navegador (ej. `http://localhost:5173/api/asistencia`).
-- En Vercel el disco no es permanente: los registros quedan en los logs de la función `api/asistencia`.
+- En Vercel la lista oficial está en Supabase (tabla `asistentes`); la descarga del CSV está deshabilitada en el sitio público.
 
 ## Supabase (asistencia y micro tests)
 
