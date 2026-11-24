@@ -1,0 +1,708 @@
+{
+ "nomina:Base vs. variable": {
+  "resumen": "La nómina tiene una parte fija y una que se mueve cada mes.",
+  "explicacion": [
+   "La **base** es el sueldo fijo: se paga igual, vendas mucho o poco. La **variable** es todo lo que cambia según resultados o decisiones del mes: comisiones, bonos, destajos y otros pagos.",
+   "La variable es buena porque premia resultados, pero es la parte de la nómina que más fácil se sale de control: un bono 'de una vez' que se repite cada mes ya no es extraordinario, es costo fijo disfrazado.",
+   "Separar las dos partes te deja ver si la nómina sube porque contrataste o diste aumentos (base) o porque se está pagando más variable de lo planeado."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "El ejecutivo de ventas",
+    "texto": "Sueldo base: **$18,000** al mes.\nEste mes cerró ventas y ganó comisiones por **$6,000**.\nBase = $18,000 · Variable = $6,000\nTotal que paga la empresa = $18,000 + $6,000 = **$24,000**."
+   }
+  ],
+  "recuerda": "La base es compromiso fijo; la variable es la parte que hay que vigilar cada mes."
+ },
+ "nomina:% variable": {
+  "resumen": "Qué parte de cada $100 de nómina es pago variable.",
+  "explicacion": [
+   "El **% variable** dice qué tanto depende la nómina de un área de pagos variables. Se calcula dividiendo la variable entre el total pagado (base + variable).",
+   "Es el número que se compara contra el límite de la política. Si un área de ventas tiene 20% variable puede ser sano; si un área administrativa tiene 20%, probablemente algo se está pagando de más o por costumbre.",
+   "Un % variable que sube mes con mes sin que suban los resultados es una señal de que el costo crece sin que crezca la utilidad."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Equipo de 4 vendedores",
+    "texto": "Base: 4 vendedores × $20,000 = **$80,000**\nComisiones del mes: **$20,000**\nTotal: $80,000 + $20,000 = $100,000\n% variable = $20,000 ÷ $100,000 = **20%**\nDe cada $100 de nómina del área, $20 son variables."
+   }
+  ],
+  "recuerda": "Siempre divide entre el total (base + variable), no solo entre la base."
+ },
+ "nomina:Límite de política y exceso": {
+  "resumen": "El tope de variable que decidió la empresa y lo que se paga encima.",
+  "explicacion": [
+   "Cada área tiene un **límite** de % variable que la empresa decidió. Con ese límite y la base se calcula cuánta variable está permitida: base × límite ÷ (1 − límite). Se hace así porque el límite es un porcentaje del total, no de la base.",
+   "Lo que se paga por encima de ese tope es el **exceso**: dinero que sale sin que nadie lo haya aprobado en la política. Y cuesta más de lo que se ve, porque encima lleva cargas sociales e impuesto sobre nómina.",
+   "Un exceso pequeño al mes, repetido 12 meses, se vuelve una cantidad que sí pega en la utilidad del año."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "El ejecutivo de cuenta con tope del 20%",
+    "texto": "Base: **$20,000** · Límite: **20%**\nVariable permitida = $20,000 × 0.20 ÷ 0.80 = **$5,000**\n(Comprueba: $5,000 ÷ $25,000 = 20%)\nSe le pagaron $8,000 de comisiones → exceso = $8,000 − $5,000 = **$3,000 al mes**."
+   },
+   {
+    "titulo": "El exceso en un año",
+    "texto": "Exceso: $3,000 al mes × 12 meses = $36,000\nCon la carga integral de 32%, la media aceptada (factor 1.32):\n$36,000 × 1.32 = **$47,520 al año** que no estaban en el plan."
+   }
+  ],
+  "recuerda": "El exceso de hoy, multiplicado por 12 y por las cargas, es la fuga del año."
+ },
+ "nomina:Media móvil (MA)": {
+  "resumen": "Compara el mes contra su propia tendencia para detectar lo raro.",
+  "explicacion": [
+   "La **media móvil** es el promedio de los últimos meses. Sirve como regla para medir: si este mes se aleja mucho de ese promedio, algo pasó.",
+   "No dice si un número es bueno o malo; dice si es **raro**. Una subida puede ser normal (contrataciones, aumentos anuales) o un error de captura o un pago duplicado. Los semáforos del módulo usan este criterio.",
+   "Revisar lo raro **antes de pagar** es mucho más barato que intentar recuperar un pago mal hecho después."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Nómina base del almacén",
+    "texto": "Jefe de almacén + auxiliares, últimos 3 meses:\n$300,000 · $306,000 · $294,000\nMedia móvil = ($300,000 + $306,000 + $294,000) ÷ 3 = **$300,000**\nEste mes: **$318,000** → $18,000 arriba = **6%** sobre su tendencia.\nSi normalmente se mueve ±2%, hay que revisar antes de dispersar (¿un pago duplicado?, ¿horas extra mal capturadas?)."
+   }
+  ],
+  "recuerda": "Lo raro se revisa antes de pagar, no después."
+ },
+ "nomina:Salario integrado": {
+  "resumen": "El salario que usa la ley para IMSS e indemnizaciones: incluye la variable habitual.",
+  "explicacion": [
+   "El **salario integrado** no es solo el sueldo base: suma prestaciones y la variable que se paga de forma habitual. Es la base que se usa para las cuotas del IMSS y para calcular indemnizaciones.",
+   "Por eso un bono o comisión que se paga cada mes no solo cuesta ese mes: hace más grande la base de cotización y lo que costaría una liquidación. **La variable de hoy es el pasivo laboral de mañana.**",
+   "Las reglas exactas de qué se integra y cómo se promedia tienen matices legales; tómalo como orientación y confírmalo con tu área fiscal o legal."
+  ],
+  "ejemplos": [],
+  "recuerda": "Si la variable es habitual, la ley la cuenta como salario.",
+  "tabla": {
+   "titulo": "¿Cuándo se considera habitual?",
+   "intro": "Estos son algunos criterios prácticos de evaluación:",
+   "columnas": [
+    "Concepto",
+    "¿Integra salario?"
+   ],
+   "filas": [
+    [
+     "Comisiones mensuales por ventas",
+     "Sí"
+    ],
+    [
+     "Bono trimestral por resultados",
+     "Sí"
+    ],
+    [
+     "Bono anual por cumplimiento de objetivos",
+     "Generalmente sí"
+    ],
+    [
+     "Incentivo mensual de productividad",
+     "Sí"
+    ],
+    [
+     "Bono extraordinario por desempeño, pagado una sola vez",
+     "Puede integrar"
+    ],
+    [
+     "Reembolso comprobado de gastos de viaje",
+     "Generalmente no"
+    ]
+   ],
+   "notas": [
+    "Incluso un bono que se paga **una sola vez al año** puede integrar el salario.",
+    "Que sea variable, condicionado al cumplimiento de objetivos o de monto indeterminado no lo excluye automáticamente."
+   ]
+  }
+ },
+ "nomina:Costo integral": {
+  "resumen": "Lo que de verdad cuesta cada peso pagado: el pago más 32% de carga integral.",
+  "explicacion": [
+   "Cuando pagas $1 al colaborador, la empresa además paga cuotas patronales (IMSS, retiro, INFONAVIT) y el impuesto estatal sobre nómina (ISN). El **costo integral** es la suma de todo.",
+   "La **media aceptada** de carga integral es **32%**: cuotas patronales (IMSS, retiro, INFONAVIT) más el impuesto sobre nómina. Es decir, un factor de **1.32**: cada $100 pagados cuestan $132. Es una referencia; tu empresa puede estar arriba o abajo según salarios, prima de riesgo y estado. Puedes ajustarla en \"El iceberg de un bono\".",
+   "Para decidir un bono, un aumento o una contratación, el número correcto es el costo integral, no el monto del recibo."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Bono de cierre al equipo de contabilidad",
+    "texto": "Bono total a los contadores: **$30,000**\nCarga integral 32% (media aceptada): $30,000 × 0.32 = $9,600\nCosto integral = $30,000 + $9,600 = **$39,600**"
+   },
+   {
+    "titulo": "El mismo bono cada mes",
+    "texto": "$39,600 × 12 meses = **$475,200 al año**\nLo que parecía 'un bono de $30 mil' es casi medio millón al año."
+   }
+  ],
+  "recuerda": "Multiplica cualquier pago por 1.32 antes de decir que sí."
+ },
+ "cobertura:% de cobertura": {
+  "resumen": "Qué parte de las plazas aprobadas tiene a alguien trabajando.",
+  "explicacion": [
+   "La **plantilla autorizada** son las plazas que el negocio aprobó para operar. La **plantilla cubierta** son las que tienen a una persona sentada. El % de cobertura divide la segunda entre la primera.",
+   "Cada plaza vacía es trabajo que hacen otros con horas extra, o trabajo que simplemente no se hace: ventas que no se cierran, pedidos que se atrasan, clientes que esperan.",
+   "Una cobertura baja no es ahorro: es capacidad que el negocio pidió y no tiene, y eso pega en ingresos."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Centro de distribución con 40 plazas",
+    "texto": "Plazas autorizadas: **40**\nPersonas trabajando: **34**\n% cobertura = 34 ÷ 40 = **85%**\nFaltan **6** personas (4 auxiliares de almacén y 2 choferes de reparto) para operar como se planeó."
+   }
+  ],
+  "recuerda": "Plaza vacía no es ahorro: es trabajo que nadie está haciendo."
+ },
+ "cobertura:Días abierta y SLA": {
+  "resumen": "Cuántos días lleva una vacante sin cubrir contra el tiempo comprometido.",
+  "explicacion": [
+   "**Días abierta** es simplemente cuánto tiempo ha pasado desde que se abrió la vacante. El **SLA** es el compromiso de tiempo para cubrirla; en este app es de **30 días**.",
+   "Más de 30 días es alerta; más de 60, crítica. Cada día extra tiene un costo (la silla vacía), aunque no aparezca en ningún reporte contable.",
+   "Medir días abierta contra el SLA convierte la conversación de 'ya casi' en un número que se puede seguir y cobrar."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Vacante de contador",
+    "texto": "Se abrió hace **50 días** · SLA: **30 días**\nDías arriba del SLA = 50 − 30 = **20 días**\nSi cada día vacío cuesta $1,000 (un puesto de $30,000 al mes):\n20 × $1,000 = **$20,000** solo por el retraso."
+   }
+  ],
+  "recuerda": "Cada día arriba del SLA tiene precio, aunque nadie lo facture."
+ },
+ "cobertura:Backlog de solicitudes": {
+  "resumen": "Solicitudes de personal pendientes que se van acumulando.",
+  "explicacion": [
+   "El **backlog** es la fila de solicitudes de contratación que llegaron y todavía no se cierran: recibidas menos cerradas.",
+   "Si cada mes entran más solicitudes de las que se cierran, la fila crece. Eso indica que reclutamiento necesita más capacidad o que hay un cuello de botella (aprobaciones lentas, perfiles mal definidos, entrevistas que se atoran).",
+   "Cada solicitud en la fila es una plaza vacía que cuesta todos los días, así que un backlog que sube es un costo que sube."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Solicitudes de ventas y almacén",
+    "texto": "Mes 1: 10 recibidas − 8 cerradas = 2 pendientes\nMes 2: 12 recibidas − 9 cerradas = 3 pendientes\nBacklog acumulado = 2 + 3 = **5 solicitudes**\n(por ejemplo: 3 ejecutivos de ventas y 2 auxiliares de almacén sin cubrir)\nLa fila creció aunque se cerraron 17 vacantes."
+   }
+  ],
+  "recuerda": "Si entra más de lo que sale, la fila y el costo crecen."
+ },
+ "cobertura:Conversión del embudo": {
+  "resumen": "De cada 100 candidatos que llegan, cuántos terminan contratados.",
+  "explicacion": [
+   "El **embudo** muestra cuántas personas pasan de una etapa a la siguiente: llegan, se entrevistan, pasan pruebas, reciben oferta y se contratan. En cada etapa se quedan algunos.",
+   "La **conversión total** divide los contratados entre los candidatos atraídos. Dice qué tan grande tiene que ser la entrada para lograr las contrataciones que se necesitan.",
+   "Una conversión muy baja cuesta dinero: más anuncios, más horas de entrevista y más días con la plaza vacía. Saber en qué etapa se caen los candidatos dice dónde arreglar."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Búsqueda de ejecutivos de ventas",
+    "texto": "Candidatos atraídos: **200**\nContratados: **4**\nConversión = 4 ÷ 200 = **2%**\nEs decir, se necesitan 50 candidatos por cada vendedor contratado."
+   }
+  ],
+  "recuerda": "Conversión baja significa más candidatos, más tiempo y más costo por plaza."
+ },
+ "cobertura:Candidatos necesarios": {
+  "resumen": "Cuántos candidatos hay que atraer para lograr las contrataciones que faltan.",
+  "explicacion": [
+   "Es la cuenta al revés de la conversión: si sé cuántas personas necesito contratar y qué % de candidatos termina contratado, sé cuántos candidatos tengo que conseguir.",
+   "Así se planea la búsqueda (cuántos anuncios, cuántas fuentes, cuántas entrevistas) en lugar de esperar a ver quién llega. Quedarse corto en la entrada alarga los días abiertos y el costo de la silla vacía.",
+   "Si el resultado es un número enorme, la mejor palanca casi nunca es atraer más: es mejorar la conversión."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Faltan 3 supervisores de producción",
+    "texto": "Contrataciones necesarias: **3**\nConversión del embudo: **2%**\nCandidatos = 3 ÷ 0.02 = **150 candidatos**\nSi la conversión sube a 4%: 3 ÷ 0.04 = **75**. La mitad del esfuerzo."
+   }
+  ],
+  "recuerda": "Primero calcula cuántos candidatos necesitas; luego sal a buscarlos."
+ },
+ "cobertura:Costo diario de la silla vacía": {
+  "resumen": "Lo que pierde la empresa cada día que un puesto sigue sin cubrir.",
+  "explicacion": [
+   "No pagar un sueldo parece ahorro, pero la persona en ese puesto **producía más de lo que ganaba**. Ese valor se deja de generar, y la parte del trabajo que sí se cubre la hacen compañeros con horas extra (que se pagan al doble).",
+   "El app lo calcula así: valor que no se genera + horas extra de quienes cubren − sueldo que no se paga. Usa supuestos que puedes mover en la pestaña 2: por default el puesto genera **2 veces** su sueldo y los compañeros cubren el **40%** del trabajo.",
+   "Multiplicado por los días que la vacante sigue abierta, este número muestra por qué cubrir rápido es una decisión de utilidad, no solo de servicio."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Coordinador de logística de $30,000 al mes",
+    "texto": "Sueldo diario: $30,000 ÷ 30 = **$1,000**\nValor que nadie genera (60% del trabajo): $1,000 × 2 × 0.60 = $1,200\nHoras extra de quienes cubren (40%, al doble): $1,000 × 0.40 × 2 = $800\nSueldo que no se paga: −$1,000\nCosto diario = $1,200 + $800 − $1,000 = **$1,000 por día**"
+   },
+   {
+    "titulo": "Un mes sin coordinador",
+    "texto": "30 días × $1,000 = **$30,000**\nTener la silla vacía un mes cuesta lo mismo que el sueldo que 'se ahorró'."
+   }
+  ],
+  "recuerda": "La silla vacía no ahorra: cada día cuesta, y el costo se acumula."
+ },
+ "rotacion:% de rotación": {
+  "resumen": "Cuánta gente se va; cada salida es dinero que se vuelve a gastar.",
+  "explicacion": [
+   "Es el porcentaje de personas que salieron de la empresa en un periodo, comparado con cuántas había en promedio. Se calcula dividiendo las bajas entre la plantilla promedio.",
+   "La plantilla promedio es la suma de cuántas personas había al inicio y al final del periodo, dividida entre dos. Se usa el promedio porque la plantilla sube y baja durante el mes.",
+   "Importa para la utilidad porque cada baja obliga a pagar otra vez reclutamiento, capacitación y meses de bajo rendimiento. Una rotación alta es una fuga constante de dinero que no se ve en una sola factura."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "El equipo de ventas de una distribuidora",
+    "texto": "Al inicio del mes había **38** ejecutivos de ventas y al final **42**.\nPlantilla promedio = (38 + 42) ÷ 2 = **40**.\nSe fueron **4** vendedores.\n% rotación = 4 ÷ 40 = **10%** en el mes."
+   },
+   {
+    "titulo": "Del mes al año",
+    "texto": "El almacén de una distribuidora tiene **50** personas (auxiliares, montacarguistas y choferes).\nHay **3** bajas al mes.\n3 ÷ 50 = **6%** mensual.\nSi pasa todos los meses: 6% × 12 = **72%** al año.\nEs como si casi 3 de cada 4 puestos del almacén se tuvieran que volver a llenar en un año."
+   }
+  ],
+  "recuerda": "Un 6% mensual parece poco, pero al año es reemplazar a casi tres cuartas partes del equipo."
+ },
+ "rotacion:Voluntaria vs. involuntaria": {
+  "resumen": "Quién decidió la salida: la persona o la empresa. Cuestan distinto.",
+  "explicacion": [
+   "Voluntaria es cuando la persona decide irse: renuncia por otra oferta, por el jefe, por el ambiente o por motivos personales. Involuntaria es cuando la empresa decide terminar la relación.",
+   "La voluntaria suele ser la más cara para el negocio porque muchas veces se va alguien que la empresa quería conservar, con su experiencia y sus clientes. La involuntaria cuesta más en lo inmediato: si el despido no tiene una causa justificada y documentada, se paga indemnización (como referencia, 3 meses de salario más otras prestaciones según el caso) y hay riesgo de demanda.",
+   "Separarlas ayuda a saber qué arreglar: la voluntaria se ataca con sueldo, liderazgo y carrera; la involuntaria, con mejor selección y mejor documentación."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Una distribuidora en un año",
+    "texto": "Hubo **10** bajas.\n**7** voluntarias: entre ellas su mejor ejecutivo de cuenta, que se fue a la competencia por **$3,000** más al mes (y se llevó la relación con sus clientes).\n**3** involuntarias: auxiliares de almacén que faltaban mucho.\nLectura: 7 de 10 salidas (**70%**) las decidió la gente. El problema principal no es a quién se despide, sino por qué se va la gente buena."
+   }
+  ],
+  "recuerda": "Si la mayoría de las bajas son voluntarias, la empresa está perdiendo gente que sí quería conservar."
+ },
+ "rotacion:Costo por baja": {
+  "resumen": "Lo que de verdad cuesta que alguien se vaya: mucho más que el finiquito.",
+  "explicacion": [
+   "El costo de una baja tiene cuatro partes: el finiquito (lo que se le paga a la persona al salir), el reemplazo (anunciar, entrevistar, contratar y capacitar), el costo oculto (el trabajo que no se hace o se hace mal mientras tanto) y el costo hundido (lo que se había invertido en esa persona y se pierde).",
+   "Casi siempre solo se mira el finiquito porque es lo único que aparece como un pago. Pero sumando todo, una baja puede costar uno o varios sueldos mensuales.",
+   "Ese dinero sale directo de la utilidad: no compra nada nuevo, solo sirve para volver a estar donde ya se estaba."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Un auxiliar de almacén de $12,000 al mes",
+    "texto": "Finiquito: **$3,600**\nReemplazo (anuncio, entrevistas, exámenes, inducción): **$4,800**\nCosto oculto (puesto vacío y aprendizaje): **$14,400**\nCosto hundido (curso de seguridad que ya se había pagado): **$2,400**\nTotal = 3,600 + 4,800 + 14,400 + 2,400 = **$25,200**, más de 2 sueldos ($24,000)."
+   },
+   {
+    "titulo": "Lo que hay que vender para cubrirlo",
+    "texto": "10 bajas al año × $25,200 = **$252,000** perdidos.\nSi la empresa gana 10 centavos por cada peso que vende (margen de 10%), para recuperar $252,000 tiene que vender: 252,000 ÷ 0.10 = **$2,520,000** extra."
+   }
+  ],
+  "recuerda": "El finiquito es la punta del iceberg; el resto del costo no llega en factura, pero sí pega en la utilidad."
+ },
+ "rotacion:Costo oculto": {
+  "resumen": "La productividad que se pierde al irse alguien; no llega factura, pero cuesta.",
+  "explicacion": [
+   "Es todo lo que la empresa pierde sin pagarlo directamente: el puesto vacío mientras se contrata, los meses en que la persona nueva todavía no rinde igual (curva de aprendizaje), los errores del principiante y el tiempo extra del jefe para enseñar y revisar.",
+   "Como no aparece en ningún recibo, casi nadie lo cuenta. Sin embargo suele ser la parte más grande del costo de una baja.",
+   "Para la utilidad significa menos ventas, más mermas, horas extra de los compañeros y clientes peor atendidos."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Un contador de $25,000 al mes",
+    "texto": "Puesto vacío 1 mes: los auxiliares contables cubren con horas extra = **$8,000**\nEl nuevo rinde la mitad durante 2 meses: se pagan $50,000 por $25,000 de trabajo = **$25,000** perdidos\nErrores (pólizas mal registradas, un recargo del SAT): **$5,000**\nEl gerente de finanzas dedica 10 horas a enseñarle, a $400 la hora = **$4,000**\nCosto oculto = 8,000 + 25,000 + 5,000 + 4,000 = **$42,000**"
+   }
+  ],
+  "recuerda": "Lo que no se ve en la factura suele ser lo más caro de una baja."
+ },
+ "rotacion:Costo hundido": {
+  "resumen": "Lo invertido en la persona que se va y ya no se recupera.",
+  "explicacion": [
+   "Son los cursos, certificaciones, coaching y las horas que los jefes y compañeros dedicaron a formar a alguien. Mientras la persona está, esa inversión rinde; cuando se va, se pierde.",
+   "Además de perderla, hay que volver a hacerla con quien llega. Es decir, la empresa paga dos veces por el mismo puesto.",
+   "Por eso capacitar sin retener es caro: la capacitación solo es rentable si la persona se queda el tiempo suficiente para devolverla en resultados."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Un montacarguista del almacén",
+    "texto": "Curso y certificación de montacargas: **$8,000**\nEl jefe de almacén le enseña 40 horas, a $150 la hora: 40 × 150 = **$6,000**\nInversión total = 8,000 + 6,000 = **$14,000**\nSe va a los 6 meses: esos $14,000 se pierden y con el reemplazo se vuelven a pagar.\nTotal por el mismo puesto: 14,000 × 2 = **$28,000**"
+   },
+   {
+    "titulo": "Un ejecutivo de cuenta",
+    "texto": "Capacitación en producto y en el CRM: **$15,000**\nEl gerente comercial lo acompaña a visitas 20 horas, a $400 la hora: 20 × 400 = **$8,000**\nInversión total = 15,000 + 8,000 = **$23,000**\nSi renuncia, el reemplazo vuelve a costar lo mismo: 23,000 × 2 = **$46,000** por el mismo puesto."
+   }
+  ],
+  "recuerda": "Cada persona que se va se lleva lo que la empresa invirtió en ella."
+ },
+ "rotacion:Rotación temprana": {
+  "resumen": "Gente que se va antes del año: se pagó contratarla y casi no rindió.",
+  "explicacion": [
+   "Es la parte de las bajas en la que la persona tenía menos de un año en la empresa. Se calcula dividiendo esas bajas entre el total de bajas.",
+   "Contratar y entrenar a alguien cuesta desde el primer día, pero la persona tarda meses en rendir al 100%. Si se va pronto, la empresa pagó la inversión completa y casi no recibió el regreso.",
+   "Un número alto casi siempre apunta a la selección (se contrató a quien no encajaba), a la inducción (nadie lo recibió bien) o a una promesa que no se cumplió (sueldo, horario o funciones)."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "El cálculo",
+    "texto": "Una distribuidora tuvo **20** bajas en el año.\n**8** de ellas tenían menos de 1 año.\nRotación temprana = 8 ÷ 20 = **40%**."
+   },
+   {
+    "titulo": "Por qué duele",
+    "texto": "Contratar a un ejecutivo de ventas cuesta **$15,000** (bolsa de trabajo, entrevistas, psicométricos, inducción).\nTarda **3 meses** en armar su cartera y rendir al 100%.\nSe va en el mes **4**: la empresa pagó los $15,000 y los meses de aprendizaje, y solo tuvo un mes de trabajo completo."
+   }
+  ],
+  "recuerda": "Si muchos se van antes del año, el problema empieza en cómo se contrata y se recibe a la gente."
+ },
+ "desempeno:ROB · Productividad por persona": {
+  "resumen": "Cuánto vende la empresa al mes por cada colaborador.",
+  "explicacion": [
+   "ROB significa Rentabilidad Organizacional Bruta. Se calcula dividiendo las ventas mensuales entre el número total de empleados. Responde: ¿cuánto vende la empresa por cada persona que tiene?",
+   "Es el punto de partida, porque de esas ventas hay que pagar todo: materia prima, renta, servicios y la nómina. Si cada persona no vende varias veces lo que cuesta, no queda de dónde salga la utilidad.",
+   "Sirve para comparar la empresa contra sí misma mes a mes: si se contrata más gente y las ventas no suben, el ROB baja."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Una distribuidora con 50 colaboradores",
+    "texto": "Ventas mensuales: **$3,000,000**\nColaboradores: **50**\nROB = 3,000,000 ÷ 50 = **$60,000** por persona al mes."
+   },
+   {
+    "titulo": "Una empresa comercial de 120 colaboradores",
+    "texto": "Vende **$9,000,000** al mes con **120** colaboradores.\nROB = 9,000,000 ÷ 120 = **$75,000** por persona.\nSi cada colaborador cuesta en promedio $25,000 al mes, cada uno vende 75,000 ÷ 25,000 = **3 veces** lo que cuesta. De ahí todavía hay que pagar la mercancía, los fletes y la renta del almacén."
+   }
+  ],
+  "recuerda": "El ROB dice cuánto vende cada persona, no cuánto deja; es el primer filtro de la rentabilidad."
+ },
+ "desempeno:IPCH · Productividad del capital humano": {
+  "resumen": "Cuánto EBITDA deja cada puesto, ya pagada la operación.",
+  "explicacion": [
+   "IPCH significa Índice de Productividad del Capital Humano. Se calcula dividiendo el EBITDA entre el total de puestos.",
+   "El EBITDA es, en palabras sencillas, lo que deja la operación del negocio después de pagar costos y gastos de operación (incluida la nómina), antes de intereses, impuestos, depreciación y amortización.",
+   "Mientras el ROB mide lo que vende cada persona, el IPCH mide lo que realmente queda por cada persona. Es una mirada más cercana a la rentabilidad."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Una distribuidora con 50 colaboradores",
+    "texto": "EBITDA: **$450,000**\nTotal de puestos: **50**\nIPCH = 450,000 ÷ 50 = **$9,000** por puesto."
+   },
+   {
+    "titulo": "La empresa comercial de 120 colaboradores",
+    "texto": "EBITDA del mes: **$1,200,000**, con **120** puestos.\nIPCH = 1,200,000 ÷ 120 = **$10,000** por puesto.\nComparado con su ROB de $75,000: de cada $75,000 que vende cada persona, quedan **$10,000** de EBITDA."
+   }
+  ],
+  "recuerda": "Vender mucho por persona no basta; el IPCH muestra cuánto queda de verdad por cada puesto."
+ },
+ "desempeno:RPE · Rentabilidad por empleado": {
+  "resumen": "Utilidad por empleado menos lo que cuesta cada uno: ¿genera o resta?",
+  "explicacion": [
+   "RPE significa Rentabilidad por Empleado. Primero se divide la utilidad operativa del periodo entre el total de empleados; a ese resultado se le resta el costo promedio por empleado (sueldo más prestaciones, al mes).",
+   "Muestra de forma directa el retorno que cada persona representa para la empresa. Si sale positivo, cada empleado genera más utilidad de lo que cuesta. Si sale negativo, cada empleado cuesta más de lo que genera en utilidad.",
+   "Un RPE negativo es una alerta: hay que subir la productividad, revisar la estructura (puestos de más o mal aprovechados) o ambas cosas."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Una distribuidora con 50 colaboradores (negativo)",
+    "texto": "Utilidad operativa: **$600,000**, con **50** empleados.\n600,000 ÷ 50 = **$12,000** de utilidad por empleado.\nCosto promedio por empleado: **$22,000**.\nRPE = 12,000 − 22,000 = **−$10,000**.\nCada empleado cuesta $10,000 más de la utilidad que genera."
+   },
+   {
+    "titulo": "Una firma de servicios contables con 80 colaboradores (positivo)",
+    "texto": "Utilidad operativa: **$2,400,000**, con **80** empleados.\n2,400,000 ÷ 80 = **$30,000** por empleado.\nCosto promedio: **$25,000**.\nRPE = 30,000 − 25,000 = **+$5,000**.\nCada persona deja $5,000 más de lo que cuesta."
+   }
+  ],
+  "recuerda": "Si el RPE es negativo, cada persona cuesta más de la utilidad que genera."
+ },
+ "desempeno:Cada persona es una inversión": {
+  "resumen": "El sueldo es una inversión; cada puesto debe generar varias veces lo que cuesta.",
+  "explicacion": [
+   "Una persona no cuesta solo su sueldo. Hay que sumar las cargas sociales e impuestos sobre nómina (IMSS, Infonavit, impuesto estatal sobre nómina); en la app se usa como referencia un **23%** adicional. Ese es el costo anual real.",
+   "La pregunta de rentabilidad no es cuánto cuesta, sino cuánto valor genera esa inversión. Por eso se espera que cada puesto produzca un múltiplo de su costo en ventas, servicio o producción; la app usa **3 veces** como referencia y se puede ajustar según el negocio.",
+   "Si un puesto no genera al menos ese múltiplo, la empresa está poniendo dinero en un lugar que no le regresa lo suficiente."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Un auxiliar de almacén de $12,000 al mes",
+    "texto": "Sueldo al año: 12,000 × 12 = **$144,000**\nCon cargas (23%): 144,000 × 1.23 = **$177,120**\nValor esperado (× 3): 177,120 × 3 = **$531,360** al año en pedidos surtidos y entregados."
+   },
+   {
+    "titulo": "Un contador de $25,000 al mes",
+    "texto": "Sueldo al año: 25,000 × 12 = **$300,000**\nCon cargas (23%): 300,000 × 1.23 = **$369,000**\nValor esperado (× 3): 369,000 × 3 = **$1,107,000** al año en control, cierres a tiempo y ahorro de multas."
+   }
+  ],
+  "recuerda": "No preguntes cuánto cuesta una persona, pregunta cuánto genera por lo que cuesta."
+ },
+ "desempeno:El mejor vs. el promedio": {
+  "resumen": "Por el mismo sueldo, el mejor puede aportar 50% más que el promedio.",
+  "explicacion": [
+   "En casi todos los puestos hay una gran diferencia entre lo que logran los mejores y lo que logra el promedio, aunque ganen lo mismo. La app usa como referencia que alguien de alto desempeño rinde **50%** más.",
+   "Por eso las personas de alto desempeño (las Estrellas) valen mucho más de lo que cuestan, y perderlas es tan caro: se va justo el que más aporta por cada peso de sueldo.",
+   "Para la utilidad, retener y desarrollar a los mejores suele dar más que cualquier recorte de gastos."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Dos ejecutivos de ventas con base de $20,000",
+    "texto": "El promedio vende **$400,000** al mes.\nEl mejor vende **$600,000** al mes (50% más).\nDiferencia: **$200,000** al mes.\nEn un año: 200,000 × 12 = **$2,400,000** más, por el mismo sueldo base."
+   },
+   {
+    "titulo": "Con la fórmula de la app",
+    "texto": "Sueldo base: $20,000 × 12 = **$240,000** al año.\nCon cargas: 240,000 × 1.23 = **$295,200**.\nValor esperado (× 3): 295,200 × 3 = **$885,600** al año.\nValor extra del mejor = 885,600 × 50% = **$442,800** al año."
+   }
+  ],
+  "recuerda": "El mejor no cuesta más que el promedio, pero aporta mucho más: perderlo es carísimo."
+ },
+ "desempeno:Lo que cuesta un bajo desempeño": {
+  "resumen": "El valor que el puesto deja de generar, más el retrabajo de otros.",
+  "explicacion": [
+   "El costo de un bajo desempeño no es el sueldo de la persona. Es el valor que su puesto deja de generar porque rinde menos de lo esperado, más las horas que sus compañeros dedican a corregir o cubrir su trabajo (retrabajo).",
+   "Se calcula multiplicando el valor esperado del puesto por lo que falta para llegar al 100% de rendimiento, y sumando el costo de esas horas de otros.",
+   "Este costo no aparece en ningún reporte, por eso se tolera durante meses o años. Cada mes que pasa se paga completo."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Un auxiliar contable que rinde al 60%",
+    "texto": "Valor esperado del puesto: **$400,000** al año.\nRinde al 60%, le falta 40%: 400,000 × 40% = **$160,000** que no se generan.\nEl contador general le dedica 5 horas a la semana a revisar y corregir sus pólizas, a $150 la hora: 5 × 52 semanas × 150 = **$39,000**.\nCosto total = 160,000 + 39,000 = **$199,000** al año."
+   }
+  ],
+  "recuerda": "Tolerar a alguien que no rinde se paga todos los meses, aunque no llegue ninguna factura."
+ },
+ "desempeno:Reemplazar a una Estrella": {
+  "resumen": "Si se va el mejor, reemplazarlo cuesta de 4 a 12 sueldos mensuales.",
+  "explicacion": [
+   "Cuando renuncia una persona clave hay que pagar la búsqueda y las entrevistas, aguantar la silla vacía y esperar los meses que tarda alguien nuevo en rendir igual. Todo eso se puede expresar en meses de sueldo.",
+   "La app usa estas referencias: operativo **4** meses, supervisión **6**, gerencia **9** y dirección **12** meses de sueldo. Entre más alto el puesto, más cuesta encontrar y preparar al reemplazo.",
+   "Si además tenía gente a su cargo, el equipo queda sin líder mientras tanto y también baja su rendimiento."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Una gerente comercial",
+    "texto": "Sueldo: **$60,000** al mes.\nReferencia para gerencia: **9** meses.\nCosto de reemplazo = 60,000 × 9 = **$540,000**."
+   },
+   {
+    "titulo": "Un jefe de almacén",
+    "texto": "Sueldo: **$25,000** al mes.\nReferencia para supervisión: **6** meses.\nCosto de reemplazo = 25,000 × 6 = **$150,000**."
+   }
+  ],
+  "recuerda": "Retener a una Estrella casi siempre cuesta mucho menos que reemplazarla."
+ },
+ "desempeno:El mal ascenso (principio de Peter)": {
+  "resumen": "Ascender al mejor sin preparación: se pierde un gran elemento y se gana un mal jefe.",
+  "explicacion": [
+   "El principio de Peter dice que la gente tiende a ascender hasta llegar a un puesto donde ya no es buena. Pasa cuando se asciende solo porque alguien es excelente en su puesto actual, sin revisar si tiene el potencial para el siguiente.",
+   "Ser el mejor vendedor no hace a alguien un buen jefe. Si no está preparado, se pierde su aporte extra como vendedor y, además, el equipo que dirige empieza a rendir menos.",
+   "Por eso en el 9 box se mira también el potencial (eje vertical), no solo el desempeño. Un mal ascenso es una de las decisiones más caras de RRHH."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "El mejor ejecutivo de ventas, ahora gerente de 10",
+    "texto": "Cada vendedor debería generar **$400,000** al año.\nEl mejor aportaba 50% más: 400,000 × 50% = **$200,000** extra, que se pierden al dejar de vender.\nSu equipo de 10 vendedores baja 10% su productividad: 10 × 400,000 × 10% = **$400,000**.\nCosto del mal ascenso = 200,000 + 400,000 = **$600,000** al año."
+   }
+  ],
+  "recuerda": "Antes de ascender, pregunta si puede con el siguiente puesto, no solo si es bueno en el actual."
+ },
+ "desempeno:Evaluar mal también cuesta": {
+  "resumen": "Evaluaciones sin evidencia terminan en bonos mal dados o despidos indefendibles.",
+  "explicacion": [
+   "Cuando se evalúa sin metas escritas ni evidencia, el dinero se reparte mal: aumentos, bonos o ascensos para quien no los ganó, y nada para quien sí.",
+   "El riesgo más caro es separar a alguien \"por bajo desempeño\" sin pruebas. Si el despido se declara injustificado, como referencia se pagan **3 meses** de salario de indemnización más hasta **12 meses** de salarios vencidos (los sueldos que corren mientras dura el juicio), además de otras prestaciones según el caso (Arts. 48 y 50 LFT).",
+   "Metas claras, seguimiento por escrito y calibración entre jefes protegen ese dinero y hacen que cada peso de compensación premie resultados reales."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Un coordinador de logística despedido sin evidencia",
+    "texto": "Sueldo: **$20,000** al mes.\nIndemnización: 3 meses = 3 × 20,000 = **$60,000**\nSalarios vencidos: hasta 12 meses = 12 × 20,000 = **$240,000**\nTotal posible = 60,000 + 240,000 = **$300,000**, solo por no tener las evaluaciones documentadas."
+   },
+   {
+    "titulo": "Bonos mal repartidos",
+    "texto": "Se dan bonos de **$20,000** a 5 ejecutivos de cuenta que en realidad no cumplieron su cuota, porque nadie la midió.\n5 × 20,000 = **$100,000** pagados sin resultado a cambio."
+   }
+  ],
+  "recuerda": "Evaluar sin evidencia no ahorra tiempo: cuesta dinero en premios mal dados y en demandas."
+ },
+ "clima:eNPS": {
+  "resumen": "Cuánta gente recomendaría trabajar aquí y cuánta está en contra.",
+  "explicacion": [
+   "Se hace una sola pregunta: del 0 al 10, ¿qué tanto recomendarías esta empresa como lugar para trabajar? Quien pone 9 o 10 es **promotor**, quien pone 7 u 8 es **pasivo** y quien pone de 0 a 6 es **detractor**.",
+   "El eNPS es el % de promotores menos el % de detractores. Los pasivos no suman ni restan. Puede ir de −100 a +100; arriba de cero ya es buena señal.",
+   "Importa en dinero porque los detractores son los que más faltan, menos rinden y primero renuncian. Saber cuántos son te dice cuánta gente está costando sin que nadie lo vea."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Equipo comercial de 20 vendedores",
+    "texto": "10 ponen 9 o 10 → promotores = 10 ÷ 20 = **50%**\n6 ponen 7 u 8 → pasivos (no cuentan)\n4 ponen de 0 a 6 → detractores = 4 ÷ 20 = **20%**\neNPS = 50% − 20% = **+30**"
+   },
+   {
+    "titulo": "Cuando sale negativo",
+    "texto": "Distribuidora de 100 personas (ventas, almacén, cobranza y oficinas): 30 promotores y 40 detractores.\neNPS = 30% − 40% = **−10**\nHay más gente en contra que a favor: **40 personas** que no recomendarían trabajar ahí."
+   }
+  ],
+  "recuerda": "No mires solo el número: cuenta cuántas personas son detractores, ahí está el costo."
+ },
+ "clima:Pulso y compromiso": {
+  "resumen": "El ánimo de la semana y las ganas de dar el extra que mueven la productividad.",
+  "explicacion": [
+   "El **pulso** es una encuesta corta y frecuente (por ejemplo, semanal) que toma la temperatura del equipo. El **compromiso** es más profundo: las ganas de dar el extra y la intención de quedarse.",
+   "Una persona comprometida resuelve el problema del cliente; una no comprometida cumple el mínimo. Esa diferencia no sale en la nómina, pero sí en ventas, quejas y errores.",
+   "Fíjate también en cuánta gente contesta y en si tienen lo que necesitan para trabajar. Si falta equipo o información, la productividad se pierde por culpa de la empresa, no de la persona."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Auxiliares de almacén sin lo necesario",
+    "texto": "10 auxiliares de almacén ganan **$12,000** al mes. 3 dicen que no tienen lo necesario (el escáner falla, el sistema de inventario se cae).\nPierden 1 de 8 horas al día = 12.5% de su tiempo.\n$12,000 × 12.5% = $1,500 al mes por persona\n3 × $1,500 = **$4,500 al mes**\n× 12 meses = **$54,000 al año** pagados sin producir."
+   },
+   {
+    "titulo": "Poca respuesta también es dato",
+    "texto": "El área de cobranza saca un pulso de **6 / 10**, pero solo contestaron 4 de 10 personas (40%).\nSi 6 de cada 10 no contestan, puede ser que no confían en que sirva de algo: eso también habla del clima."
+   }
+  ],
+  "recuerda": "El compromiso es la diferencia entre cumplir el mínimo y resolver; esa diferencia vale dinero."
+ },
+ "clima:Ausentismo": {
+  "resumen": "Faltas no planeadas que se pagan igual y alguien más tiene que cubrir.",
+  "explicacion": [
+   "Son las faltas que no estaban en el plan: incapacidades cortas, \"asuntos personales\", retardos. El día se paga aunque no se trabaje.",
+   "Para costearlo se usa el sueldo diario (sueldo mensual ÷ 30) multiplicado por **1.35**, porque a cada peso de sueldo se le suman prestaciones y cuotas.",
+   "Y casi nunca termina ahí: si otra persona cubre el hueco con horas extra, que se pagan más caras que la hora normal, el costo sube todavía más."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Dos auxiliares de almacén que faltan de más",
+    "texto": "Sueldo de **$12,000** al mes → $12,000 ÷ 30 = **$400** al día\nCon cargas: $400 × 1.35 = **$540** por día\n2 personas × 4 días extra al año × $540 = **$4,320** al año pagados sin trabajo."
+   },
+   {
+    "titulo": "A escala de empresa",
+    "texto": "60 personas desenganchadas en almacén y planta, con el mismo sueldo:\n60 × 4 días × $540 = **$129,600** al año, sin contar las horas extra de quien cubre."
+   }
+  ],
+  "recuerda": "Cada falta se paga dos veces: el día de quien falta y el extra de quien cubre."
+ },
+ "clima:Presentismo": {
+  "resumen": "Estar presente sin rendir: no sale en reportes y suele costar más que faltar.",
+  "explicacion": [
+   "Es cuando la persona sí llega y sí checa, pero no rinde: está distraída, desmotivada, enferma o estresada. Ningún reporte lo muestra.",
+   "Se calcula sobre el **valor que la persona genera**, no solo sobre su sueldo. En la app ese valor se estima como el sueldo anual multiplicado por 2: la gente produce más de lo que cuesta.",
+   "Suele costar más que el ausentismo porque afecta a muchas personas un poquito todos los días, y como no se ve, nadie lo corrige."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Equipo de 10 ejecutivos de cuenta",
+    "texto": "Sueldo de **$20,000** al mes → $240,000 al año\nValor que genera cada uno: $240,000 × 2 = **$480,000** al año\nSi pierden 3% de su tiempo: $480,000 × 3% = $14,400 por persona\n10 personas × $14,400 = **$144,000 al año**"
+   },
+   {
+    "titulo": "Compáralo con faltar",
+    "texto": "Esa misma pérdida de 3% equivale a unos **7 días** de trabajo por persona al año (3% de ~240 días laborables), sin que nadie haya faltado."
+   }
+  ],
+  "recuerda": "Lo que no se ve no se corrige: el presentismo es el costo escondido del mal clima."
+ },
+ "clima:Rotación voluntaria": {
+  "resumen": "Las renuncias: el síntoma más caro del mal clima.",
+  "explicacion": [
+   "Es el porcentaje de la plantilla que se va **por decisión propia** en un año: renuncias del año ÷ plantilla. No incluye despidos.",
+   "Cada salida cuesta: buscar, contratar, capacitar y esperar a que la nueva persona rinda. En la app se estima en **6 meses de sueldo** por baja.",
+   "La gente no deja empresas: deja jefes, falta de crecimiento y ambientes que no tolera. Por eso es el dato que mejor conecta el clima con el dinero."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Equipo de 10 vendedores",
+    "texto": "3 renuncias en el año ÷ 10 vendedores = **30%** de rotación voluntaria\nSueldo base de **$18,000** al mes\nCosto por baja: 6 meses × $18,000 = $108,000\n3 × $108,000 = **$324,000** al año"
+   },
+   {
+    "titulo": "De trimestre a año",
+    "texto": "Empresa de 50 personas: en 3 meses renuncian 2 (un analista y un auxiliar contable).\n2 × 4 trimestres ≈ 8 al año\n8 ÷ 50 = **16%** de rotación voluntaria."
+   }
+  ],
+  "recuerda": "Cada renuncia evitable es dinero que se queda en la utilidad."
+ },
+ "clima:La cadena clima → utilidad": {
+  "resumen": "El clima es el primer eslabón de una cadena que termina en la utilidad.",
+  "explicacion": [
+   "La cadena es: **clima → compromiso → productividad y servicio → ventas y utilidad**. Si el clima es malo, la gente se compromete menos, rinde menos, atiende peor y eso termina en el estado de resultados.",
+   "El costo del mal clima es la suma de lo que vimos: desenganche, ausentismo, presentismo y rotación. Todo eso es utilidad que la empresa podría tener y no tiene.",
+   "Por eso el clima no es un tema de \"ánimo\": es un tema de dinero. Si se rompe al principio de la cadena, se paga al final."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Cuánta utilidad se queda en el camino",
+    "texto": "Una distribuidora gana **$4,000,000** de utilidad al año.\nEl mal clima le cuesta **$2,000,000** al año:\nrotación de vendedores $1,200,000 + presentismo $500,000 + ausentismo en almacén $300,000\nUtilidad que podría tener: $4,000,000 + $2,000,000 = $6,000,000\n$2,000,000 ÷ $6,000,000 = **33%** de la utilidad posible se pierde por clima."
+   }
+  ],
+  "recuerda": "Mejorar el clima no es gasto en ánimo: es recuperar utilidad."
+ },
+ "capacitacion:Costo real de un curso": {
+  "resumen": "La factura es la punta: las horas fuera del puesto también cuestan.",
+  "explicacion": [
+   "Cuando se habla del costo de un curso casi siempre se piensa en la factura del proveedor. Pero mientras el equipo está en el aula, se les sigue pagando y no producen.",
+   "El costo real suma tres cosas: **colegiatura + horas fuera del puesto + viáticos**. Para las horas se usa el sueldo por hora (en la app, sueldo mensual ÷ 192 horas al mes).",
+   "Si solo ves la factura, vas a creer que el curso se paga más rápido de lo que en realidad se paga."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Curso de Excel avanzado para 5 analistas",
+    "texto": "Factura del proveedor: **$10,000**\nSueldo de $19,200 al mes ÷ 192 horas = **$100** la hora\n5 personas × 8 horas = 40 horas × $100 = **$4,000**\nViáticos: 5 × $500 = **$2,500**\nCosto real: $10,000 + $4,000 + $2,500 = **$16,500**, 65% más que la factura."
+   }
+  ],
+  "recuerda": "Antes de aprobar un curso, súmale las horas de la gente."
+ },
+ "capacitacion:ROI": {
+  "resumen": "Cuánto gana la empresa por cada peso invertido, ya descontado el costo.",
+  "explicacion": [
+   "ROI significa retorno sobre la inversión. Se calcula: **(beneficio − costo) ÷ costo**. Dice cuánto ganaste por encima de lo que pusiste.",
+   "Ojo con la confusión más común: si un curso \"regresa 3 veces\" lo invertido, el ROI no es 300%, es **200%**, porque una de esas tres veces solo es recuperar lo que costó.",
+   "Un ROI de 0% significa que solo se recuperó lo invertido; si es negativo, el curso costó más de lo que dejó."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Curso de negociación para vendedores: \"regresa 3 veces\"",
+    "texto": "Inversión: **$50,000**. Beneficio (utilidad de las ventas extra): **$150,000**.\nGanancia: $150,000 − $50,000 = $100,000\nROI = $100,000 ÷ $50,000 = **200%** (no 300%)"
+   },
+   {
+    "titulo": "Curso de liderazgo para supervisores que no alcanza",
+    "texto": "Inversión: $50,000. Beneficio: $50,000 → ROI = **0%** (solo se recuperó).\nBeneficio: $40,000 → ($40,000 − $50,000) ÷ $50,000 = **−20%** (se perdió dinero)."
+   }
+  ],
+  "recuerda": "El ROI cuenta la ganancia, no lo que regresa en total."
+ },
+ "capacitacion:Payback (recuperación)": {
+  "resumen": "Cuántos meses tarda el curso en regresar lo que costó.",
+  "explicacion": [
+   "El payback es el tiempo de recuperación: **inversión ÷ beneficio mensual**. Mientras no se cumple, el curso es gasto; después, empieza a ser ganancia.",
+   "Hay que calcularlo con el **costo real** (factura + horas + viáticos), no solo con la factura, o se verá más rápido de lo que es.",
+   "Es útil para comparar cursos: entre dos opciones parecidas, la que se recupera antes arriesga menos, sobre todo si hay rotación."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Factura contra costo real",
+    "texto": "Tras el curso de Excel, los 5 analistas ahorran 30 horas al mes en reportes.\n30 horas × $100 = **$3,000** al mes de beneficio.\nSolo con la factura: $10,000 ÷ $3,000 = **3.3 meses**\nCon el costo real: $16,500 ÷ $3,000 = **5.5 meses**\nCasi dos meses más de lo que parecía."
+   }
+  ],
+  "recuerda": "Calcula la recuperación con el costo real, no con la factura."
+ },
+ "capacitacion:Los 5 niveles de evaluación": {
+  "resumen": "De \"¿les gustó?\" a \"¿cuánto dinero dejó?\": cinco preguntas para medir un curso.",
+  "explicacion": [
+   "Un curso se puede evaluar en cinco niveles: **1. Reacción** (¿les gustó?), **2. Aprendizaje** (¿aprendieron?), **3. Aplicación** (¿lo usan en su puesto?), **4. Resultados** (¿cambió un indicador?) y **5. ROI** (¿cuánto valió ese cambio en dinero?).",
+   "La mayoría de las empresas se queda en el nivel 1: una encuesta de satisfacción al salir. Eso dice si el instructor cayó bien, no si el curso sirvió.",
+   "Una constancia DC-3 demuestra que la persona tomó el curso, no que le dejó algo a la empresa. Para hablar de rentabilidad hay que llegar a los niveles 4 y 5."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Curso de venta consultiva para 10 vendedores",
+    "texto": "1. Reacción: califican el curso con 9/10\n2. Aprendizaje: aprueban un examen de cómo ofrecer productos complementarios\n3. Aplicación: el gerente comercial ve en el CRM que sí los ofrecen en sus visitas\n4. Resultados: el pedido promedio sube de $20,000 a **$22,000**\n5. ROI: $2,000 extra × 100 pedidos al mes = $200,000 en ventas; con 30% de margen = **$60,000** al mes de utilidad → $720,000 al año.\nSi el curso costó $120,000: ($720,000 − $120,000) ÷ $120,000 = **500%**"
+   }
+  ],
+  "recuerda": "Que les guste no es que sirva: mide hasta llegar al dinero."
+ },
+ "capacitacion:Costo hundido": {
+  "resumen": "Lo invertido en quien se va ya no regresa: la rotación se come el ROI.",
+  "explicacion": [
+   "Un costo hundido es dinero que ya se gastó y no se puede recuperar. En capacitación pasa cuando alguien se va después de que la empresa invirtió en él.",
+   "Se calcula: **inversión por persona × personas que se van**. Lo que esa persona aprendió se va con ella, muchas veces a la competencia.",
+   "Por eso la rotación es el peor enemigo del ROI de capacitación: un curso excelente puede salir perdiendo si la gente capacitada no se queda."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Diplomado para 4 ejecutivos de cuenta",
+    "texto": "Costó **$80,000** → $80,000 ÷ 4 = $20,000 por persona\n1 ejecutivo renuncia al mes siguiente y se va a la competencia\n1 × $20,000 = **$20,000** que no regresan (25% de la inversión)."
+   },
+   {
+    "titulo": "Curso para 10 supervisores de producción",
+    "texto": "Costó **$100,000** → $10,000 por persona\nEn el año se van 2 (1 de cada 5)\n2 × $10,000 = **$20,000** hundidos, el **20%** de la inversión."
+   }
+  ],
+  "recuerda": "Antes de capacitar, pregúntate quién se va a quedar para aprovecharlo."
+ },
+ "capacitacion:Proteger la inversión": {
+  "resumen": "Aplicar rápido lo aprendido y retener a quien se capacitó.",
+  "explicacion": [
+   "La inversión en un curso se protege de dos formas: que la persona **aplique lo aprendido pronto** (en un proyecto real en los primeros 60 a 90 días) y que **tenga razones para quedarse**.",
+   "Los convenios para \"devolver el curso\" tienen límites en México: nadie puede ser obligado a quedarse en un trabajo y los descuentos al salario están acotados por la ley. Si se quiere usar uno, hay que revisarlo con un abogado laboral.",
+   "Lo que más protege no es una penalización, sino que el curso se convierta rápido en resultados y que la persona vea un camino de crecimiento en la empresa."
+  ],
+  "ejemplos": [
+   {
+    "titulo": "Aplicar rápido",
+    "texto": "Se capacita a 3 jefes de almacén en control de inventario (**$8,000** cada uno = $24,000).\nEl mes siguiente, cada uno hace el conteo cíclico de su almacén con lo aprendido.\nSi detectan **$4,000** al mes de merma evitable, el curso se paga en $24,000 ÷ $4,000 = **6 meses**."
+   },
+   {
+    "titulo": "Retener cuesta menos que reemplazar",
+    "texto": "Un contador capacitado gana **$25,000** al mes. Darle **$1,000** más al mes cuesta $1,000 × 12 = **$12,000** al año.\nSi se va, se pierde su curso ($10,000) y reemplazarlo cuesta unos 6 meses de sueldo: 6 × $25,000 = $150,000.\nTotal si se va: **$160,000** contra $12,000 por retenerlo."
+   }
+  ],
+  "recuerda": "La mejor garantía de un curso es usarlo pronto y cuidar a quien lo tomó."
+ }
+}

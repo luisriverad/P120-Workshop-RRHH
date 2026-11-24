@@ -9,7 +9,7 @@ const MAX_HISTORIAL = 12; // mensajes que se reenvían al modelo
 export const MODULOS = {
   nomina: {
     nombre: "Variaciones de Nómina",
-    tema: "el costo de las variaciones de nómina y de la compensación variable: bonos, comisiones, destajos, horas extra, percepciones extraordinarias, su costo real con cargas (IMSS, INFONAVIT, ISN, integración al SDI), límites de % variable por área, políticas de autorización y el riesgo de que un pago se vuelva derecho adquirido",
+    tema: "el costo de las variaciones de nómina y de la compensación variable: bonos, comisiones, destajos, horas extra, percepciones extraordinarias, su costo real con la carga integral (IMSS, INFONAVIT, ISN; en el workshop se usa 32% como media aceptada), la integración al SDI, límites de % variable por área, políticas de autorización y el riesgo de que un pago se vuelva derecho adquirido",
   },
   rotacion: {
     nombre: "Rotación",
@@ -21,7 +21,7 @@ export const MODULOS = {
   },
   desempeno: {
     nombre: "Desempeño",
-    tema: "el valor económico de gestionar el desempeño: matriz 9 box, alto y bajo desempeño, planes de mejora (PIP), sucesión, costo de mantener a una persona de bajo rendimiento, retorno de desarrollar talento y evaluación del desempeño",
+    tema: "el valor económico de gestionar el desempeño: matriz 9 box, alto y bajo desempeño, planes de mejora (PIP), sucesión, costo de mantener a una persona de bajo rendimiento, retorno de desarrollar talento, evaluación del desempeño y los indicadores de rentabilidad del capital humano: ROB o productividad por persona (ventas mensuales ÷ número de empleados), IPCH o Índice de Productividad del Capital Humano (EBITDA ÷ total de puestos) y RPE o Rentabilidad Por Empleado ((utilidad operativa del periodo ÷ total de empleados) − costo promedio por empleado)",
   },
   clima: {
     nombre: "Clima Laboral",

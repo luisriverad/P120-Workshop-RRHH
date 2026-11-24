@@ -1,7 +1,9 @@
-import { useState, useEffect, useMemo, useRef, useCallback, Fragment } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback, Fragment, createContext, useContext } from "react";
 import GuiaEntrevista from "./GuiaEntrevista.jsx";
 import plantillaDetalleUrl from "./assets/plantilla-detalle-por-area.xlsx?url";
 import logoAxon from "./assets/axon-logo.png";
+import AULA_DETALLES from "./aulaDetalles.json";
+import AULA_RIESGOS_DET from "./aulaRiesgos.json";
 
 // Demo: configurar VITE_CATALOGOS_PASSWORD en .env para producción (no commitear secretos reales).
 const CATALOGOS_ADMIN_PASSWORD = import.meta.env.VITE_CATALOGOS_PASSWORD ?? "12345";
@@ -995,9 +997,9 @@ const AULA_RIESGOS = [
 const AULA_QUIZ = [
   {
     p: "Pagas un bono de $30,000. ¿Cuánto le cuesta realmente a la empresa?",
-    o: ["$30,000: es lo que dice el recibo", "$60,000: se duplica por impuestos", "Cerca de $36,900: se suman cuotas e impuesto sobre nómina"],
+    o: ["$30,000: es lo que dice el recibo", "$60,000: se duplica por impuestos", "Cerca de $39,600: se suma la carga integral (cuotas e impuesto sobre nómina)"],
     c: 2,
-    e: "Al bono se le suman cuotas patronales (IMSS, retiro, INFONAVIT, cerca de 20%) y el impuesto estatal sobre nómina (cerca de 3%). $30,000 × 1.23 ≈ $36,900. Si se vuelve recurrente, además sube el costo de una futura indemnización.",
+    e: "Al bono se le suma la carga integral: cuotas patronales (IMSS, retiro, INFONAVIT) e impuesto estatal sobre nómina. La media aceptada es 32%: $30,000 × 1.32 = $39,600. Si se vuelve recurrente, además sube el costo de una futura indemnización.",
   },
   {
     p: "Un asesor gana $20,000 de base y lleva 2 años recibiendo $10,000 de comisión cada mes. Si se le despide sin causa, ¿sobre qué salario se calcula su indemnización?",
@@ -1056,7 +1058,7 @@ const CHAT_MODULOS = {
   nomina: { nombre: "Variaciones de Nómina", sugerencias: ["¿Cuánto me cuesta realmente un bono de $10,000?", "¿Cuándo un bono se vuelve derecho adquirido?", "¿Qué % de variable es sano para un área comercial?"] },
   rotacion: { nombre: "Rotación", sugerencias: ["¿Cómo calculo el costo de reemplazar a un vendedor?", "¿Qué diferencia hay entre finiquito y liquidación?", "¿Qué tasa de rotación es preocupante?"] },
   cobertura: { nombre: "Cobertura de Plantilla", sugerencias: ["¿Cuánto cuesta un puesto vacío 60 días?", "¿Cómo reduzco el tiempo para cubrir una vacante?", "¿Qué conviene: horas extra o contratar?"] },
-  desempeno: { nombre: "Desempeño", sugerencias: ["¿Cuánto cuesta mantener a alguien de bajo desempeño?", "¿Cómo armo un plan de mejora (PIP)?", "¿Cómo justifico invertir en mis estrellas?"] },
+  desempeno: { nombre: "Desempeño", sugerencias: ["¿Qué significa que mi RPE salga negativo?", "¿Cuánto cuesta mantener a alguien de bajo desempeño?", "¿Cómo subo el IPCH de mi empresa?"] },
   clima: { nombre: "Clima Laboral", sugerencias: ["¿Cómo traduzco el eNPS a pesos?", "¿Qué pide la NOM-035 y cuánto cuesta no cumplir?", "¿Qué hago con un área con clima bajo?"] },
   capacitacion: { nombre: "Capacitación", sugerencias: ["¿Cómo calculo el ROI de un curso?", "¿Qué métrica uso para medir un curso de ventas?", "¿Cómo justifico el presupuesto de capacitación?"] },
 };
@@ -1212,7 +1214,7 @@ function AulaShell({ titulo, pasos, paso, setPaso, modulo, children }) {
           })}
         </div>
         <div style={{ padding: 20 }}>
-          {children}
+          <AulaModuloCtx.Provider value={modulo}>{children}</AulaModuloCtx.Provider>
           {modulo && <ChatAula modulo={modulo} paso={pasos[paso]} />}
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 18, paddingTop: 14, borderTop: "1px solid " + COLOR.borderSoft }}>
             <button style={{ ...S.btnGhost, visibility: paso > 0 ? "visible" : "hidden" }} onClick={() => setPaso(paso - 1)}>← {pasos[paso - 1] || ""}</button>
@@ -1224,57 +1226,261 @@ function AulaShell({ titulo, pasos, paso, setPaso, modulo, children }) {
   );
 }
 
+// Módulo del Aula actual (lo pone AulaShell) para buscar la explicación completa de cada concepto
+const AulaModuloCtx = createContext(null);
+
+// Texto con **negritas** y saltos de línea
+function textoRico(t) {
+  return String(t || "").split("\n").map((linea, i) => (
+    <Fragment key={i}>
+      {i > 0 && <br />}
+      {linea.split(/(\*\*[^*]+\*\*)/g).map((p, j) =>
+        p.startsWith("**") && p.endsWith("**") ? <strong key={j}>{p.slice(2, -2)}</strong> : <Fragment key={j}>{p}</Fragment>
+      )}
+    </Fragment>
+  ));
+}
+
 function AulaConcepto({ n, titulo, children, formula, ejemploTxt }) {
+  const modulo = useContext(AulaModuloCtx);
+  const det = AULA_DETALLES[`${modulo}:${titulo}`];
+  const [abierto, setAbierto] = useState(false);
+  const [hover, setHover] = useState(false);
   const ac = COLOR.accent;
+  useEffect(() => {
+    if (!abierto) return undefined;
+    const esc = (e) => { if (e.key === "Escape") setAbierto(false); };
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [abierto]);
+
+  const numero = (size) => (
+    <span style={{ width: size, height: size, borderRadius: 6, background: `linear-gradient(135deg, ${COLOR.accentLight} 0%, ${ac} 100%)`, color: "#fff", fontSize: size > 26 ? 14 : 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{n}</span>
+  );
+  const etiqueta = (t) => <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 8 }}>{t}</div>;
+
   return (
-    <div style={{ border: "1px solid " + COLOR.border, background: "#fff", padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <span style={{ width: 24, height: 24, borderRadius: 6, background: `linear-gradient(135deg, ${COLOR.accentLight} 0%, ${ac} 100%)`, color: "#fff", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{n}</span>
-        <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink }}>{titulo}</div>
-      </div>
-      <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55 }}>{children}</div>
-      {formula && <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12, background: COLOR.surfaceSoft, border: "1px dashed " + COLOR.border, padding: "8px 10px", color: COLOR.ink }}>{formula}</div>}
-      {ejemploTxt && <div style={{ fontSize: 12, color: COLOR.textSoft, background: COLOR.accentSoft, borderLeft: `3px solid ${ac}`, padding: "8px 10px", lineHeight: 1.5 }}>{ejemploTxt}</div>}
-    </div>
+    <>
+      <button
+        type="button"
+        onClick={() => setAbierto(true)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
+          border: "1px solid " + (hover ? "#fedc66" : COLOR.border), background: hover ? COLOR.accentSoft : "#fff", padding: 16,
+          display: "flex", flexDirection: "column", gap: 8, textAlign: "left", cursor: "pointer", fontFamily: FONT_STACK,
+          transition: "background 0.15s, border-color 0.15s, box-shadow 0.15s", boxShadow: hover ? COLOR.shadowHover : "none",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {numero(24)}
+          <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink }}>{titulo}</div>
+        </div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, flex: 1 }}>{det ? det.resumen : children}</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: ac, display: "flex", alignItems: "center", gap: 4 }}>
+          Ver explicación <span style={{ transform: hover ? "translateX(2px)" : "none", transition: "transform 0.15s" }}>→</span>
+        </div>
+      </button>
+
+      {abierto && (
+        <div
+          onClick={() => setAbierto(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}
+        >
+          <div
+            role="dialog"
+            aria-label={titulo}
+            onClick={(e) => e.stopPropagation()}
+            style={{ background: "#fff", width: 980, maxWidth: "100%", maxHeight: "92vh", overflow: "auto", boxShadow: "0 20px 50px rgba(15,23,42,0.25)", borderRadius: 12 }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "22px 30px", borderBottom: "1px solid " + COLOR.borderSoft, background: COLOR.accentSoft, position: "sticky", top: 0 }}>
+              {numero(30)}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: ac, textTransform: "uppercase", letterSpacing: 0.8 }}>Lo básico</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: COLOR.ink }}>{titulo}</div>
+              </div>
+              <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={() => setAbierto(false)} aria-label="Cerrar">✕</button>
+            </div>
+
+            <div style={{ padding: "26px 30px 30px", display: "flex", flexDirection: "column", gap: 24 }}>
+              <div>
+                {etiqueta("¿Qué es y por qué importa?")}
+                <div style={{ fontSize: 14, color: COLOR.text, lineHeight: 1.65, display: "flex", flexDirection: "column", gap: 10 }}>
+                  {det ? det.explicacion.map((p, i) => <p key={i} style={{ margin: 0 }}>{textoRico(p)}</p>) : <p style={{ margin: 0 }}>{children}</p>}
+                </div>
+              </div>
+
+              {formula && (
+                <div>
+                  {etiqueta("La fórmula")}
+                  <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 13, background: COLOR.surfaceSoft, border: "1px dashed " + COLOR.border, padding: "12px 16px", color: COLOR.ink, lineHeight: 1.5 }}>{formula}</div>
+                </div>
+              )}
+
+              {det?.ejemplos?.length > 0 && (
+                <div>
+                  {etiqueta(det.ejemplos.length > 1 ? "Ejemplos sencillos" : "Ejemplo sencillo")}
+                  <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fit, minmax(${det.ejemplos.length > 1 ? 340 : 400}px, 1fr))`, gap: 10 }}>
+                    {det.ejemplos.map((e) => (
+                      <div key={e.titulo} style={{ border: "1px solid " + COLOR.border, padding: "16px 18px", background: "#fff" }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: COLOR.ink, marginBottom: 6 }}>{e.titulo}</div>
+                        <div style={{ fontSize: 13, color: COLOR.text, lineHeight: 1.6, fontVariantNumeric: "tabular-nums" }}>{textoRico(e.texto)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {det?.tabla && (
+                <div>
+                  {etiqueta(det.tabla.titulo)}
+                  {det.tabla.intro && <div style={{ fontSize: 13.5, color: COLOR.text, lineHeight: 1.6, marginBottom: 8 }}>{textoRico(det.tabla.intro)}</div>}
+                  <table style={{ ...S.table, fontSize: 13, marginBottom: 0 }}>
+                    <thead>
+                      <tr>{det.tabla.columnas.map((c, i) => <th key={c} style={{ ...S.th, textAlign: i === 0 ? "left" : "left", textTransform: "none", fontSize: 12 }}>{c}</th>)}</tr>
+                    </thead>
+                    <tbody>
+                      {det.tabla.filas.map((f) => (
+                        <tr key={f[0]}>{f.map((c, i) => <td key={i} style={{ ...S.td, padding: "12px 14px", fontWeight: i > 0 ? 600 : 400, color: i > 0 ? (/^no|generalmente no/i.test(c) ? COLOR.textMuted : c === "Sí" ? "#0a7d2c" : "#a16207") : COLOR.text }}>{c}</td>)}</tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {det.tabla.notas?.map((t, i) => <div key={i} style={{ fontSize: 13.5, color: COLOR.text, lineHeight: 1.6, marginTop: 10 }}>{textoRico(t)}</div>)}
+                </div>
+              )}
+
+              {ejemploTxt && (
+                <div>
+                  {etiqueta("Con los datos de este módulo")}
+                  <div style={{ fontSize: 13, color: COLOR.textSoft, background: COLOR.accentSoft, borderLeft: `3px solid ${ac}`, padding: "14px 16px", lineHeight: 1.6 }}>{ejemploTxt}</div>
+                </div>
+              )}
+
+              {det?.recuerda && (
+                <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#060606", color: "#fff", padding: "16px 18px", borderRadius: 8 }}>
+                  <span style={{ color: COLOR.accentLight, fontWeight: 800, fontSize: 13, whiteSpace: "nowrap" }}>Para recordar</span>
+                  <span style={{ fontSize: 13, lineHeight: 1.55 }}>{textoRico(det.recuerda)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 // Tarjetas de riesgo: [{ titulo, nivel: "Alto" | "Medio", que, ejemplo, mitiga, base }]
-function AulaRiesgos({ riesgos, intro }) {
-  const [abierto, setAbierto] = useState(null);
+// La explicación completa (pop-up) viene de aulaRiesgos.json por "<modulo>:<titulo>".
+function RiesgoTarjeta({ r, i }) {
+  const modulo = useContext(AulaModuloCtx);
+  const det = AULA_RIESGOS_DET[`${modulo}:${r.titulo}`];
+  const [abierto, setAbierto] = useState(false);
+  const [hover, setHover] = useState(false);
   const ac = COLOR.accent;
+  const alto = r.nivel === "Alto";
+  const colorNivel = alto ? "#b00020" : "#a16207";
+  useEffect(() => {
+    if (!abierto) return undefined;
+    const esc = (e) => { if (e.key === "Escape") setAbierto(false); };
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [abierto]);
+  const etiqueta = (t) => <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 8 }}>{t}</div>;
+  const badge = <span style={{ ...S.badge(alto ? "#fdecea" : "#fff7e0"), whiteSpace: "nowrap", color: colorNivel }}>Riesgo {r.nivel.toLowerCase()}</span>;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setAbierto(true)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
+          border: "1px solid " + (hover ? "#fedc66" : COLOR.border), background: hover ? COLOR.accentSoft : "#fff", padding: 14,
+          display: "flex", flexDirection: "column", gap: 8, textAlign: "left", cursor: "pointer", fontFamily: FONT_STACK,
+          boxShadow: hover ? COLOR.shadowHover : COLOR.shadow, transition: "background 0.15s, border-color 0.15s, box-shadow 0.15s",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, width: "100%" }}>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: COLOR.ink }}>{i + 1}. {r.titulo}</div>
+          {badge}
+        </div>
+        <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, flex: 1 }}>{det ? det.resumen : r.que}</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: ac, display: "flex", alignItems: "center", gap: 4 }}>
+          Ver explicación <span style={{ transform: hover ? "translateX(2px)" : "none", transition: "transform 0.15s" }}>→</span>
+        </div>
+      </button>
+
+      {abierto && (
+        <div onClick={() => setAbierto(false)} style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 16 }}>
+          <div role="dialog" aria-label={r.titulo} onClick={(e) => e.stopPropagation()} style={{ background: "#fff", width: 980, maxWidth: "100%", maxHeight: "92vh", overflow: "auto", boxShadow: "0 20px 50px rgba(15,23,42,0.25)", borderRadius: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "22px 30px", borderBottom: "1px solid " + COLOR.borderSoft, background: alto ? "#fef2f2" : COLOR.accentSoft, position: "sticky", top: 0 }}>
+              <span style={{ width: 30, height: 30, borderRadius: 6, background: colorNivel, color: "#fff", fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{i + 1}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: colorNivel, textTransform: "uppercase", letterSpacing: 0.8 }}>Riesgos que se asumen · Riesgo {r.nivel.toLowerCase()}</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: COLOR.ink }}>{r.titulo}</div>
+              </div>
+              <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={() => setAbierto(false)} aria-label="Cerrar">✕</button>
+            </div>
+
+            <div style={{ padding: "26px 30px 30px", display: "flex", flexDirection: "column", gap: 24 }}>
+              <div>
+                {etiqueta("¿Cuál es el riesgo?")}
+                <div style={{ fontSize: 14, color: COLOR.text, lineHeight: 1.65, display: "flex", flexDirection: "column", gap: 10 }}>
+                  {det ? det.explicacion.map((p, k) => <p key={k} style={{ margin: 0 }}>{textoRico(p)}</p>) : <p style={{ margin: 0 }}>{r.que}</p>}
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: 14 }}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {etiqueta("Ejemplo")}
+                  <div style={{ border: "1px solid " + COLOR.border, padding: "14px 16px", flex: 1 }}>
+                    {det?.ejemplo?.titulo && <div style={{ fontSize: 13, fontWeight: 700, color: COLOR.ink, marginBottom: 6 }}>{det.ejemplo.titulo}</div>}
+                    <div style={{ fontSize: 13, color: COLOR.text, lineHeight: 1.6, fontVariantNumeric: "tabular-nums" }}>{textoRico(det ? det.ejemplo.texto : r.ejemplo)}</div>
+                    {det?.costo && (
+                      <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed " + COLOR.border, fontSize: 13, color: colorNivel, fontWeight: 600, lineHeight: 1.5 }}>{textoRico(det.costo)}</div>
+                    )}
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {etiqueta("¿Cómo se controla?")}
+                  <div style={{ background: "#f0fdf4", borderLeft: "3px solid #0a7d2c", padding: "14px 16px", flex: 1 }}>
+                    {det?.controles?.length ? (
+                      <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 6 }}>
+                        {det.controles.map((c, k) => <li key={k} style={{ fontSize: 13, color: COLOR.text, lineHeight: 1.55 }}>{textoRico(c)}</li>)}
+                      </ul>
+                    ) : (
+                      <div style={{ fontSize: 13, color: COLOR.text, lineHeight: 1.55 }}>{r.mitiga}</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {r.base && <div style={{ fontSize: 12, color: COLOR.textMuted, lineHeight: 1.5 }}><strong>Fundamento:</strong> {r.base}</div>}
+
+              {det?.recuerda && (
+                <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#060606", color: "#fff", padding: "16px 18px", borderRadius: 8 }}>
+                  <span style={{ color: COLOR.accentLight, fontWeight: 800, fontSize: 13, whiteSpace: "nowrap" }}>Para recordar</span>
+                  <span style={{ fontSize: 13, lineHeight: 1.55 }}>{textoRico(det.recuerda)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function AulaRiesgos({ riesgos, intro }) {
   return (
     <div>
       <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
-        {intro || "Haz clic en una tarjeta para ver un ejemplo y cómo se controla."}
+        {intro || "Haz clic en una tarjeta para ver la explicación, un ejemplo y cómo se controla."}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12 }}>
-        {riesgos.map((r, i) => {
-          const esAbierto = abierto === i;
-          const alto = r.nivel === "Alto";
-          return (
-            <div
-              key={r.titulo}
-              onClick={() => setAbierto(esAbierto ? null : i)}
-              style={{ border: `1px solid ${esAbierto ? ac : COLOR.border}`, background: "#fff", padding: 14, cursor: "pointer", boxShadow: esAbierto ? COLOR.shadowHover : COLOR.shadow, transition: "all 0.15s ease" }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 700, color: COLOR.ink }}>{i + 1}. {r.titulo}</div>
-                <span style={{ ...S.badge(alto ? "#fdecea" : "#fff7e0"), whiteSpace: "nowrap" }}>Riesgo {r.nivel.toLowerCase()}</span>
-              </div>
-              <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginTop: 8 }}>{r.que}</div>
-              {esAbierto ? (
-                <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
-                  <div style={{ fontSize: 12, background: COLOR.surfaceSoft, borderLeft: "3px solid #94a3b8", padding: "8px 10px", lineHeight: 1.5 }}><strong>Ejemplo:</strong> {r.ejemplo}</div>
-                  <div style={{ fontSize: 12, background: "#f0fdf4", borderLeft: "3px solid #0a7d2c", padding: "8px 10px", lineHeight: 1.5 }}><strong>Cómo se controla:</strong> {r.mitiga}</div>
-                  {r.base && <div style={{ fontSize: 11, color: COLOR.textMuted }}>Fundamento: {r.base}</div>}
-                </div>
-              ) : (
-                <div style={{ fontSize: 11, color: ac, fontWeight: 600, marginTop: 8 }}>Ver ejemplo y cómo se controla →</div>
-              )}
-            </div>
-          );
-        })}
+        {riesgos.map((r, i) => <RiesgoTarjeta key={r.titulo} r={r} i={i} />)}
       </div>
     </div>
   );
@@ -1351,12 +1557,12 @@ function AulaVariaciones({ data = [] }) {
   const [monto, setMonto] = useState(30000);
   const [recurrente, setRecurrente] = useState(true);
   const [antig, setAntig] = useState(3);
-  const [carga, setCarga] = useState(20);
-  const [isn, setIsn] = useState(3);
+  // Carga integral que no se ve: media aceptada de 32% (cuotas patronales IMSS, retiro, INFONAVIT + ISN)
+  const [cargaInt, setCargaInt] = useState(32);
 
   const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
   const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
-  const factor = 1 + (carga + isn) / 100;
+  const factor = 1 + cargaInt / 100;
   const ac = COLOR.accent;
 
   const pasos = ["Lo básico", "El iceberg de un bono", "El exceso de este mes", "Riesgos que se asumen", "Pon a prueba al equipo"];
@@ -1406,9 +1612,9 @@ function AulaVariaciones({ data = [] }) {
         Es el salario que la ley usa para cuotas del IMSS e indemnizaciones. Incluye la variable que se paga de forma habitual. Por eso <strong>la variable de hoy es el pasivo laboral de mañana</strong>.
       </AulaConcepto>
       <AulaConcepto n="6" titulo="Costo integral"
-        formula={`Costo integral = pago × (1 + cargas ${carga}% + ISN ${isn}%) = pago × ${factor.toFixed(2)}`}
+        formula={`Costo integral = pago × (1 + carga integral ${cargaInt}%) = pago × ${factor.toFixed(2)}`}
         ejemploTxt={`Un bono de ${fmt(30000)} cuesta ${fmt(30000 * factor)}.`}>
-        Lo que la empresa paga de verdad: el pago al colaborador más las cuotas patronales y el impuesto sobre nómina. Puedes ajustar los porcentajes en "El iceberg de un bono".
+        Lo que la empresa paga de verdad: el pago al colaborador más la carga integral (cuotas patronales e impuesto sobre nómina). La media aceptada es 32%. Puedes ajustarla en "El iceberg de un bono".
       </AulaConcepto>
     </div>
   );
@@ -1418,8 +1624,7 @@ function AulaVariaciones({ data = [] }) {
     const extraDiario = recurrente ? monto / 30 : 0;
     const visible = monto;
     const capas = [
-      { label: "IMSS, retiro e INFONAVIT", v: monto * carga / 100, nota: `cuotas patronales · ${carga}% del bono` },
-      { label: "Impuesto sobre nómina", v: monto * isn / 100, nota: `estatal · ${isn}% del bono` },
+      { label: "Carga integral que no se ve", v: monto * cargaInt / 100, nota: `${cargaInt}% del bono${cargaInt === 32 ? " (media aceptada)" : ""} · IMSS, retiro, INFONAVIT e ISN` },
     ];
     if (recurrente) {
       capas.push({ label: "Otros 11 meses del año", v: monto * factor * 11, nota: "si se paga cada mes, con cargas" });
@@ -1458,20 +1663,51 @@ function AulaVariaciones({ data = [] }) {
             Un bono es como un iceberg: el recibo muestra solo la punta. Mueve los controles y mira lo que queda debajo del agua.
           </div>
           {slider("Monto del bono", monto, setMonto, 5000, 150000, 1000, fmt)}
+          {(() => {
+            const MIN = 20, MAX = 45, MEDIA = 32;
+            const pos = (v) => ((v - MIN) / (MAX - MIN)) * 100;
+            const enMedia = cargaInt === MEDIA;
+            return (
+              <div style={{ marginBottom: 18 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: 12, color: COLOR.textSoft, marginBottom: 4 }}>
+                  <span>Carga integral que no se ve</span>
+                  <strong style={{ color: COLOR.ink, fontVariantNumeric: "tabular-nums" }}>{cargaInt}%</strong>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <input type="range" min={MIN} max={MAX} step={1} value={cargaInt} onChange={(e) => setCargaInt(Number(e.target.value))} style={{ width: "100%", accentColor: ac, position: "relative", zIndex: 1 }} aria-label="Carga integral" />
+                </div>
+                <div style={{ position: "relative", height: 34, marginTop: 2 }}>
+                  <span style={{ position: "absolute", left: 0, top: 4, fontSize: 11, color: COLOR.textMuted }}>{MIN}% mín.</span>
+                  <span style={{ position: "absolute", right: 0, top: 4, fontSize: 11, color: COLOR.textMuted }}>{MAX}% máx.</span>
+                  <button
+                    type="button"
+                    onClick={() => setCargaInt(MEDIA)}
+                    title="Volver a la media aceptada"
+                    style={{
+                      position: "absolute", left: `${pos(MEDIA)}%`, top: 0, transform: "translateX(-50%)",
+                      display: "flex", flexDirection: "column", alignItems: "center", gap: 1,
+                      border: "none", background: "none", padding: 0, cursor: "pointer", fontFamily: FONT_STACK,
+                    }}
+                  >
+                    <span style={{ width: 2, height: 6, background: ac }} />
+                    <span style={{ fontSize: 11, fontWeight: 700, whiteSpace: "nowrap", padding: "2px 8px", borderRadius: 999, background: enMedia ? ac : COLOR.accentLight, color: enMedia ? "#fff" : "#2a1f00", boxShadow: enMedia ? "0 0 0 3px " + hexA(COLOR.accentLight, 0.35) : "none" }}>
+                      Media {MEDIA}%
+                    </span>
+                  </button>
+                </div>
+                <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.45 }}>
+                  {enMedia ? "Media aceptada: IMSS, retiro, INFONAVIT e impuesto sobre nómina." : cargaInt > MEDIA ? `${cargaInt - MEDIA} puntos arriba de la media.` : `${MEDIA - cargaInt} puntos abajo de la media.`}
+                </div>
+              </div>
+            );
+          })()}
           <div style={{ fontSize: 12, color: COLOR.textSoft, marginBottom: 6 }}>¿Cómo se paga?</div>
           <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
             <button style={tipoBtn(!recurrente)} onClick={() => setRecurrente(false)}>Una sola vez</button>
-            <button style={tipoBtn(recurrente)} onClick={() => setRecurrente(true)}>Cada mes</button>
+            <button style={tipoBtn(recurrente)} onClick={() => setRecurrente(true)}>Frecuente</button>
           </div>
           {recurrente && slider("Antigüedad del colaborador", antig, setAntig, 1, 20, 1, (v) => `${v} año${v > 1 ? "s" : ""}`)}
-          <details style={{ fontSize: 12, color: COLOR.textSoft, marginTop: 4 }}>
-            <summary style={{ cursor: "pointer", fontWeight: 600 }}>Supuestos (ajústalos a tu empresa)</summary>
-            <div style={{ marginTop: 10 }}>
-              {slider("Cuotas patronales (IMSS, retiro, INFONAVIT)", carga, setCarga, 10, 35, 1, (v) => v + "%")}
-              {slider("Impuesto sobre nómina estatal", isn, setIsn, 0, 4, 0.5, (v) => v + "%")}
-              <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5 }}>Valores de referencia. Las cuotas reales dependen del salario, la prima de riesgo de trabajo y el estado. Valídalos con tu área fiscal.</div>
-            </div>
-          </details>
+          <div style={{ fontSize: 11, color: COLOR.textMuted, lineHeight: 1.5, marginTop: 4 }}>Las cuotas reales dependen del salario, la prima de riesgo de trabajo y el estado. Valídalas con tu área fiscal.</div>
         </div>
 
         <div>
@@ -1527,11 +1763,16 @@ function AulaVariaciones({ data = [] }) {
           </svg>
           </div>
 
-          <div style={{ ...S.alert(recurrente ? "warn" : "info"), marginTop: 12, marginBottom: 0 }}>
+          <div style={{
+            ...S.alert(recurrente ? "warn" : "info"), marginTop: 14, marginBottom: 0,
+            fontSize: 15, lineHeight: 1.6, padding: "16px 20px", color: COLOR.ink,
+            borderLeftWidth: 5, boxShadow: COLOR.shadowHover,
+            ...(recurrente ? { background: "#fff4c7", borderColor: "#fedc66", borderLeftColor: "#8c6900" } : {}),
+          }}>
             {recurrente ? (
-              <>Pagar <strong>{fmt(monto)}</strong> cada mes cuesta <strong>{fmtM(monto * factor * 12)}</strong> al año con cargas. Y como se vuelve parte del salario integrado, si esta persona sale con {antig} año{antig > 1 ? "s" : ""} de antigüedad su liquidación puede subir hasta <strong>{fmtM(90 * extraDiario + 20 * antig * extraDiario)}</strong>. Ese pasivo no aparece en el recibo de nómina.</>
+              <>Pagar <strong>{fmt(monto)}</strong> cada mes cuesta <strong style={{ fontSize: 18, color: "#b00020" }}>{fmtM(monto * factor * 12)}</strong> al año con cargas. Y como se vuelve parte del salario integrado, si esta persona sale con {antig} año{antig > 1 ? "s" : ""} de antigüedad su liquidación puede subir hasta <strong style={{ fontSize: 18, color: "#b00020" }}>{fmtM(90 * extraDiario + 20 * antig * extraDiario)}</strong>. <strong>Ese pasivo no aparece en el recibo de nómina.</strong></>
             ) : (
-              <>Un pago único cuesta <strong>{fmt(monto * factor)}</strong> con cargas. Es el escenario más sano, siempre que tenga reglas, autorizador y evidencia. El riesgo aparece cuando "una sola vez" se repite cada mes. Cambia a "Cada mes" para verlo.</>
+              <>Un pago único cuesta <strong style={{ fontSize: 18, color: "#1d4ed8" }}>{fmt(monto * factor)}</strong> con cargas. Es el escenario más sano, siempre que tenga reglas, autorizador y evidencia. El riesgo aparece cuando "una sola vez" se repite cada mes. Cambia a "Frecuente" para verlo.</>
             )}
           </div>
         </div>
@@ -1545,7 +1786,7 @@ function AulaVariaciones({ data = [] }) {
     return (
       <div>
         <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
-          Con los números de la tabla de arriba: ¿cuánto dinero se está pagando <strong>por encima</strong> de la política, y cuánto costaría si se mantiene un año? (Cargas de {carga}% + ISN de {isn}%).
+          Con los números de la tabla de arriba: ¿cuánto dinero se está pagando <strong>por encima</strong> de la política, y cuánto costaría si se mantiene un año? (Carga integral de {cargaInt}%{cargaInt === 32 ? ", la media aceptada" : ""}).
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
           <div style={{ ...S.kpi, padding: 12 }}>
@@ -1596,7 +1837,7 @@ function AulaVariaciones({ data = [] }) {
     );
   };
 
-  const contenido = [pasoBasico, pasoIceberg, pasoExceso, () => <AulaRiesgos riesgos={AULA_RIESGOS} intro="Cada peso variable trae riesgos que no se ven en el recibo. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />, () => <AulaQuiz preguntas={AULA_QUIZ} repaso={"Vale la pena repasar \"El iceberg de un bono\" y \"Riesgos que se asumen\" antes de autorizar el próximo bono."} />][paso]();
+  const contenido = [pasoBasico, pasoIceberg, pasoExceso, () => <AulaRiesgos riesgos={AULA_RIESGOS} intro="Cada peso variable trae riesgos que no se ven en el recibo. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />, () => <AulaQuiz preguntas={AULA_QUIZ} repaso={"Vale la pena repasar \"El iceberg de un bono\" y \"Riesgos que se asumen\" antes de autorizar el próximo bono."} />][paso]();
 
   return (
     <AulaShell titulo="Aula · El costo real de la compensación variable" pasos={pasos} paso={paso} setPaso={setPaso} modulo="nomina">
@@ -2002,7 +2243,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
     pasoBasico,
     pasoSilla,
     pasoDatos,
-    () => <AulaRiesgos riesgos={AULA_COB_RIESGOS} intro="Una vacante abierta no es solo un número en el tablero: tiene efectos en el equipo, en los clientes y en la empresa. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaRiesgos riesgos={AULA_COB_RIESGOS} intro="Una vacante abierta no es solo un número en el tablero: tiene efectos en el equipo, en los clientes y en la empresa. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />,
     () => <AulaQuiz preguntas={AULA_COB_QUIZ} repaso={"Vale la pena repasar \"El costo de la silla vacía\" y \"Riesgos que se asumen\" antes de priorizar las próximas vacantes."} />,
   ][paso]();
 
@@ -2430,7 +2671,7 @@ function AulaRotacion({ bajas = [], porArea = [], mensual = [], totalBajas = 0, 
     pasoBasico,
     pasoCurva,
     pasoDatos,
-    () => <AulaRiesgos riesgos={AULA_ROT_RIESGOS} intro="Cada salida trae riesgos legales, de operación y de clima que no se ven en el finiquito. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaRiesgos riesgos={AULA_ROT_RIESGOS} intro="Cada salida trae riesgos legales, de operación y de clima que no se ven en el finiquito. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />,
     () => <AulaQuiz preguntas={AULA_ROT_QUIZ} repaso={"Vale la pena repasar \"La curva del reemplazo\" y \"Riesgos que se asumen\" antes de la próxima salida."} />,
   ][paso]();
 
@@ -2567,6 +2808,8 @@ function AulaDesempeno({ colaboradores = [] }) {
   const [utilidad, setUtilidad] = useState(15000000);
   const [margen, setMargen] = useState(10);
   // Sueldos de referencia por nivel (para "Con tus datos")
+  // Indicadores de rentabilidad del capital humano (ROB · IPCH · RPE)
+  const [rch, setRch] = useState(() => ({ ...RCH_DEFAULT, ...(leerStore(RCH_STORAGE_KEY) || {}) }));
   const [sueldosNivel, setSueldosNivel] = useState({ "Dirección": 90000, "Gerencia": 60000, "Supervisión": 35000, "Operativo": 20000 });
 
   const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
@@ -2631,34 +2874,51 @@ function AulaDesempeno({ colaboradores = [] }) {
     const equipoAsc = 15;
     const costoAscenso = esperadoOp * 0.5 + equipoAsc * esperadoOp * 0.1;
     const despido = sueldosNivel["Operativo"] * (3 + 12);
+    const [tRob, tIpch, tRpe] = tarjetasRCH(rch);
+    const cuentaTxt = (t) => t.cuenta.length ? <>{t.cuenta.join(" · ")}. <strong style={{ color: t.luz === "red" ? "#b00020" : undefined }}>{t.lectura}</strong></> : null;
     return (
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 12 }}>
-        <AulaConcepto n="1" titulo="Cada persona es una inversión"
+        <AulaConcepto n="1" titulo="ROB · Productividad por persona"
+          formula="ROB = Ventas mensuales ÷ Número total de empleados"
+          ejemploTxt={cuentaTxt(tRob)}>
+          Rentabilidad Organizacional Bruta: cuánto vende la empresa por cada colaborador. Es el punto de partida; si cada persona no vende varias veces lo que cuesta, no hay de dónde salga la utilidad.
+        </AulaConcepto>
+        <AulaConcepto n="2" titulo="IPCH · Productividad del capital humano"
+          formula="IPCH = EBITDA ÷ Total de puestos"
+          ejemploTxt={cuentaTxt(tIpch)}>
+          Índice de Productividad del Capital Humano: muestra cuánta rentabilidad aporta cada persona. Ya no es lo que vende, sino lo que deja de EBITDA después de pagar la operación.
+        </AulaConcepto>
+        <AulaConcepto n="3" titulo="RPE · Rentabilidad por empleado"
+          formula="RPE = (Utilidad operativa ÷ Total de empleados) − Costo promedio por empleado"
+          ejemploTxt={cuentaTxt(tRpe)}>
+          Muestra de forma directa el retorno que cada persona representa para la empresa. Si sale negativo, cada empleado cuesta más de lo que genera en utilidad. Cambia los datos en "El costo de tolerar".
+        </AulaConcepto>
+        <AulaConcepto n="4" titulo="Cada persona es una inversión"
           formula={`Valor esperado = costo anual × ${multiplo} (múltiplo del puesto)`}
           ejemploTxt={<>Un puesto operativo de {fmt(sueldosNivel["Operativo"])} al mes cuesta {fmt(costoOp)} al año con cargas. Para ser rentable debería generar cerca de <strong>{fmtM(esperadoOp)}</strong> en ventas, servicio o producción.</>}>
           El sueldo no es el costo de una persona: es la inversión. La pregunta de rentabilidad es cuánto valor genera esa inversión. El múltiplo depende del negocio; ajústalo en "El costo de tolerar".
         </AulaConcepto>
-        <AulaConcepto n="2" titulo="El mejor vs. el promedio"
+        <AulaConcepto n="5" titulo="El mejor vs. el promedio"
           formula="Valor extra del mejor = valor esperado × 50%"
           ejemploTxt={<>Si alguien de alto desempeño rinde 50% más que el promedio en el mismo puesto operativo, aporta <strong>{fmtM(difTop)}</strong> más al año por el mismo sueldo.</>}>
           En casi todos los puestos hay una gran diferencia de productividad entre los mejores y el promedio. Por eso las Estrellas valen mucho más de lo que cuestan, y perderlas es tan caro.
         </AulaConcepto>
-        <AulaConcepto n="3" titulo="Lo que cuesta un bajo desempeño"
+        <AulaConcepto n="6" titulo="Lo que cuesta un bajo desempeño"
           formula="Costo = valor esperado × (1 − rendimiento) + retrabajo de otros"
           ejemploTxt={bajoEj ? <><strong>{nombreCorto(bajoEj.nombre)}</strong> ({bajoEj.puesto}) rindiendo al {productividad}%: el puesto deja de generar cerca de <strong>{fmtM(bajoPerdido)}</strong> al año, sin contar el retrabajo de sus compañeros.</> : null}>
           No es su sueldo: es el valor que el puesto deja de generar, más las horas que otros dedican a corregir o cubrir. Ese costo no aparece en ningún reporte.
         </AulaConcepto>
-        <AulaConcepto n="4" titulo="Reemplazar a una Estrella"
+        <AulaConcepto n="7" titulo="Reemplazar a una Estrella"
           formula="Costo de reemplazo ≈ sueldo mensual × meses (según nivel)"
           ejemploTxt={estrella ? <>Si se va <strong>{nombreCorto(estrella.nombre)}</strong> ({estrella.puesto}, nivel {estrella.nivel.toLowerCase()}), reemplazarla cuesta cerca de <strong>{fmtM(estrella.reemplazo)}</strong> ({AULA_DES_MESES_REEMPLAZO[estrella.nivel]} meses de sueldo), y su equipo de {estrella.aCargo} personas queda sin líder mientras tanto.</> : null}>
           Búsqueda, entrevistas, la silla vacía y los meses que tarda alguien nuevo en rendir igual. Referencias usadas: operativo 4, supervisión 6, gerencia 9 y dirección 12 meses de sueldo.
         </AulaConcepto>
-        <AulaConcepto n="5" titulo="El mal ascenso (principio de Peter)"
+        <AulaConcepto n="8" titulo="El mal ascenso (principio de Peter)"
           formula="Costo = valor que deja de aportar + equipo rindiendo menos"
           ejemploTxt={<>Ascender al mejor ejecutivo a jefe de {equipoAsc} personas sin preparación: se pierde su aporte extra y, si el equipo baja 10% su productividad, el costo ronda <strong>{fmtM(costoAscenso)}</strong> al año.</>}>
           La gente tiende a ascender hasta un puesto donde ya no es buena. Ascender solo por desempeño, sin mirar el potencial (eje vertical del 9 box), es una de las decisiones más caras de RH.
         </AulaConcepto>
-        <AulaConcepto n="6" titulo="Evaluar mal también cuesta"
+        <AulaConcepto n="9" titulo="Evaluar mal también cuesta"
           formula="Despido injustificado = 3 meses + hasta 12 meses de salarios vencidos"
           ejemploTxt={<>Un operador de {fmt(sueldosNivel["Operativo"])} despedido "por bajo desempeño" sin evidencia puede costar cerca de <strong>{fmtM(despido)}</strong> si gana la demanda (Arts. 48 y 50 LFT).</>}>
           Cada evaluación sin evidencia termina en un aumento, bono o ascenso mal invertido, o en una separación que no se puede defender. Las metas escritas y la calibración protegen ese dinero.
@@ -2703,6 +2963,7 @@ function AulaDesempeno({ colaboradores = [] }) {
     ];
 
     return (
+      <>
       <div style={{ display: "grid", gridTemplateColumns: "minmax(240px, 300px) 1fr", gap: 20, alignItems: "start" }}>
         <div>
           <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
@@ -2784,6 +3045,8 @@ function AulaDesempeno({ colaboradores = [] }) {
           </div>
         </div>
       </div>
+      <CalculadoraRCH v={rch} setV={setRch} costoTolerarAnual={totalCosto} equipo={equipo} />
+      </>
     );
   };
 
@@ -2877,7 +3140,7 @@ function AulaDesempeno({ colaboradores = [] }) {
     pasoBasico,
     pasoSimulador,
     pasoDatos,
-    () => <AulaRiesgos riesgos={AULA_DES_RIESGOS} intro="Cada decisión de desempeño mueve dinero: aumentos, bonos, ascensos, renuncias y demandas. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaRiesgos riesgos={AULA_DES_RIESGOS} intro="Cada decisión de desempeño mueve dinero: aumentos, bonos, ascensos, renuncias y demandas. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />,
     () => <AulaQuiz preguntas={AULA_DES_QUIZ} repaso={"Vale la pena repasar \"Lo básico\" y \"El costo de tolerar\" antes de la próxima sesión de calibración."} />,
   ][paso]();
 
@@ -3291,7 +3554,7 @@ function AulaClima({ pulso = 7.2, enps = 18, promotores = 42, detractores = 24, 
     pasoBasico,
     pasoCascada,
     pasoDatos,
-    () => <AulaRiesgos riesgos={AULA_CLI_RIESGOS} intro="El mal clima no solo cuesta productividad: también abre riesgos legales, de reputación y de servicio. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaRiesgos riesgos={AULA_CLI_RIESGOS} intro="El mal clima no solo cuesta productividad: también abre riesgos legales, de reputación y de servicio. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />,
     () => <AulaQuiz preguntas={AULA_CLI_QUIZ} repaso={"Vale la pena repasar \"La cascada de la utilidad\" antes de presentar el clima a Dirección."} />,
   ][paso]();
 
@@ -3734,7 +3997,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
     pasoBasico,
     pasoSimulador,
     pasoDatos,
-    () => <AulaRiesgos riesgos={AULA_CAP_RIESGOS} intro="Cada peso en capacitación puede volverse inversión o gasto hundido. Haz clic en una tarjeta para ver un ejemplo y cómo se controla." />,
+    () => <AulaRiesgos riesgos={AULA_CAP_RIESGOS} intro="Cada peso en capacitación puede volverse inversión o gasto hundido. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />,
     () => <AulaQuiz preguntas={AULA_CAP_QUIZ} repaso={"Vale la pena repasar \"¿Gasto o inversión?\" y \"Riesgos que se asumen\" antes de aprobar el próximo curso."} />,
   ][paso]();
 
@@ -12898,6 +13161,138 @@ const COLABORADORES_INICIALES = [
 
 const AREAS_EMPRESA = ["Comercial", "Posventa", "Operaciones", "Administración", "Dirección", "RH"];
 const iniciales = (nombre) => nombre.split(" ").filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
+
+// ---------- Desempeño: indicadores de rentabilidad del capital humano (ROB · IPCH · RPE) ----------
+// Se usan en el Aula de Desempeño: conceptos en "Lo básico" y calculadora en "El costo de tolerar".
+const RCH_STORAGE_KEY = "rrhh.desempeno.rentabilidad.v1";
+const RCH_DEFAULT = { ventas: 3000000, ebitda: 450000, utilidad: 600000, empleados: 50, costo: 22000 };
+const RCH_CAMPOS = [
+  { key: "ventas", label: "Ventas mensuales", prefijo: "$" },
+  { key: "ebitda", label: "EBITDA mensual", prefijo: "$" },
+  { key: "utilidad", label: "Utilidad operativa mensual", prefijo: "$" },
+  { key: "empleados", label: "Total de empleados activos", prefijo: "" },
+  { key: "costo", label: "Costo promedio por empleado", prefijo: "$", ayuda: "Sueldo + prestaciones, al mes" },
+];
+const fmtRch = (n) => (n < 0 ? "−$" : "$") + Math.round(Math.abs(n)).toLocaleString("es-MX");
+
+// Calcula ROB, IPCH y RPE a partir de los datos mensuales de la empresa
+function calcularRCH(v) {
+  const emp = v.empleados > 0 ? v.empleados : null;
+  const rob = emp ? v.ventas / emp : null;
+  const ipch = emp ? v.ebitda / emp : null;
+  const utilEmp = emp ? v.utilidad / emp : null;
+  const rpe = emp ? utilEmp - v.costo : null;
+  const veces = (x) => (v.costo > 0 && x != null ? x / v.costo : null);
+  return { emp, rob, ipch, utilEmp, rpe, veces };
+}
+
+function tarjetasRCH(v) {
+  const { emp, rob, ipch, utilEmp, rpe, veces } = calcularRCH(v);
+  return [
+    {
+      sigla: "ROB", nombre: "Rentabilidad Organizacional Bruta", valor: rob,
+      formula: "Ventas mensuales ÷ Número total de empleados",
+      cuenta: emp ? [`${fmtRch(v.ventas)} ÷ ${emp} = ${fmtRch(rob)} por persona`] : [],
+      luz: rob == null ? "yellow" : veces(rob) == null || veces(rob) >= 1 ? "green" : "red",
+      lectura: rob == null || veces(rob) == null ? "" : veces(rob) >= 1 ? `Cada persona vende ${veces(rob).toFixed(1)} veces lo que cuesta.` : "Las ventas por persona no alcanzan a cubrir lo que cuesta cada persona.",
+    },
+    {
+      sigla: "IPCH", nombre: "Índice de Productividad del Capital Humano", valor: ipch,
+      formula: "EBITDA ÷ Total de puestos",
+      cuenta: emp ? [`${fmtRch(v.ebitda)} ÷ ${emp} = ${fmtRch(ipch)} por persona`] : [],
+      luz: ipch == null ? "yellow" : ipch <= 0 ? "red" : "green",
+      lectura: ipch == null ? "" : ipch <= 0 ? "El EBITDA es negativo: la operación no alcanza a pagar lo que cuesta." : `Cada persona deja ${fmtRch(ipch)} de EBITDA al mes${veces(ipch) != null ? `, ${Math.round(veces(ipch) * 100)}% de lo que cuesta` : ""}.`,
+    },
+    {
+      sigla: "RPE", nombre: "Rentabilidad Por Empleado", valor: rpe,
+      formula: "(Utilidad operativa ÷ Total de empleados) − Costo promedio por empleado",
+      cuenta: emp ? [`${fmtRch(v.utilidad)} ÷ ${emp} = ${fmtRch(utilEmp)}`, `${fmtRch(utilEmp)} − ${fmtRch(v.costo)} = ${fmtRch(rpe)}`] : [],
+      luz: rpe == null ? "yellow" : rpe < 0 ? "red" : "green",
+      lectura: rpe == null ? "" : rpe < 0 ? "Resultado negativo: cada empleado le cuesta más a la empresa de lo que genera en utilidad." : `Cada empleado genera ${fmtRch(rpe)} más de lo que cuesta.`,
+    },
+  ];
+}
+
+// Calculadora para "El costo de tolerar": datos editables + los 3 indicadores
+// + cuánto subiría el RPE si se dejara de pagar el costo de tolerar.
+function CalculadoraRCH({ v, setV, costoTolerarAnual = 0, equipo = 0 }) {
+  const cambiar = (k, texto) => {
+    const n = Number(String(texto).replace(/[^0-9.-]/g, ""));
+    const next = { ...v, [k]: Number.isFinite(n) ? n : 0 };
+    setV(next);
+    guardarStore(RCH_STORAGE_KEY, next);
+  };
+  const restaurar = () => { setV(RCH_DEFAULT); guardarStore(RCH_STORAGE_KEY, null); };
+  const esDefault = RCH_CAMPOS.every((c) => v[c.key] === RCH_DEFAULT[c.key]);
+  const tarjetas = tarjetasRCH(v);
+  const colorLuz = { green: "#0a7d2c", yellow: "#a16207", red: "#b00020" };
+
+  const base = calcularRCH(v);
+  const recuperado = costoTolerarAnual / 12;
+  const despues = calcularRCH({ ...v, utilidad: v.utilidad + recuperado, ebitda: v.ebitda + recuperado });
+
+  return (
+    <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid " + COLOR.borderSoft }}>
+      <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink, marginBottom: 4 }}>¿Cómo se ve en los indicadores de tu empresa?</div>
+      <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 12 }}>
+        Escribe los datos del mes de tu empresa. Los tres indicadores de "Lo básico" se calculan al instante, y abajo ves cuánto cambiarían si el costo de tolerar se convirtiera en utilidad.
+      </div>
+
+      <div style={{ border: "1px solid " + COLOR.border, background: COLOR.surfaceSoft, padding: 12, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, alignItems: "start", marginBottom: 12 }}>
+        {RCH_CAMPOS.map((c) => (
+          <label key={c.key} style={{ display: "block" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: COLOR.textMuted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 5, minHeight: 28, display: "flex", alignItems: "flex-end" }}>{c.label}</div>
+            <div style={{ position: "relative" }}>
+              {c.prefijo && <span style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: COLOR.textMuted }}>{c.prefijo}</span>}
+              <input
+                inputMode="numeric"
+                value={v[c.key] ? v[c.key].toLocaleString("es-MX") : ""}
+                onChange={(e) => cambiar(c.key, e.target.value)}
+                style={{ ...S.input, width: "100%", boxSizing: "border-box", background: "#fff", paddingLeft: c.prefijo ? 22 : 10, fontVariantNumeric: "tabular-nums" }}
+              />
+            </div>
+            {c.ayuda && <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 4 }}>{c.ayuda}</div>}
+          </label>
+        ))}
+      </div>
+      {!esDefault && (
+        <button style={{ ...S.btnGhost, fontSize: 12, marginBottom: 12 }} onClick={restaurar}>Restaurar ejemplo</button>
+      )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10 }}>
+        {tarjetas.map((t) => (
+          <div key={t.sigla} style={{ ...S.kpi, padding: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={S.kpiLabel}>{t.sigla} · {t.nombre}</div>
+                <div style={{ fontSize: 22, fontWeight: 700, marginTop: 4, color: t.valor != null && t.valor < 0 ? "#b00020" : COLOR.ink, fontVariantNumeric: "tabular-nums" }}>
+                  {t.valor != null ? fmtRch(t.valor) : "—"}
+                  <span style={{ fontSize: 12, fontWeight: 500, color: COLOR.textMuted, marginLeft: 6 }}>por persona / mes</span>
+                </div>
+              </div>
+              <TrafficLight light={t.luz} />
+            </div>
+            {t.cuenta.length > 0 && (
+              <div style={{ fontSize: 12, color: COLOR.textSoft, lineHeight: 1.55, fontVariantNumeric: "tabular-nums" }}>
+                {t.cuenta.map((l) => <div key={l}>{l}</div>)}
+              </div>
+            )}
+            {t.lectura && <div style={{ fontSize: 12, fontWeight: 600, color: colorLuz[t.luz], lineHeight: 1.45 }}>{t.lectura}</div>}
+          </div>
+        ))}
+      </div>
+
+      {base.emp && costoTolerarAnual > 0 && (
+        <div style={{ ...S.alert(despues.rpe >= 0 ? "info" : "warn"), marginTop: 12, marginBottom: 0 }}>
+          El simulador de arriba calcula <strong>{fmtRch(costoTolerarAnual)}</strong> al año por tolerar el bajo desempeño en un equipo de {equipo} personas
+          (<strong>{fmtRch(recuperado)}</strong> al mes). Si ese dinero se convirtiera en utilidad, el <strong>IPCH</strong> pasaría de {fmtRch(base.ipch)} a <strong>{fmtRch(despues.ipch)}</strong> por persona
+          y el <strong>RPE</strong> de {fmtRch(base.rpe)} a <strong style={{ color: despues.rpe < 0 ? "#b00020" : "#0a7d2c" }}>{fmtRch(despues.rpe)}</strong>.
+          {despues.rpe < 0 && base.rpe < 0 && <> Aun así sigue negativo: el bajo desempeño no es el único problema; también hay que revisar plantilla, precios o costos.</>}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Desempeno() {
   const [cargaDes, setCargaDes] = useState(() => leerStore(DES_STORAGE_KEY));

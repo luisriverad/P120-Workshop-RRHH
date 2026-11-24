@@ -1,0 +1,843 @@
+{
+ "nomina:Se vuelve derecho adquirido": {
+  "resumen": "Un bono pagado siempre igual y sin reglas puede volverse parte del salario.",
+  "explicacion": [
+   "Un bono nace como premio, pero si se paga **igual, cada periodo y sin reglas escritas**, deja de parecer premio y empieza a verse como parte del sueldo. La ley considera salario cualquier pago que la persona recibe por su trabajo, incluidas gratificaciones y primas.",
+   "En la práctica pasa así: se crea un bono \"temporal\" para un cierre difícil, nadie define cuándo termina y se sigue pagando mes tras mes. Cuando la empresa quiere quitarlo, el equipo lo reclama como un derecho y el conflicto llega a Jurídico.",
+   "El golpe a la utilidad es doble: el pago se vuelve **costo fijo** que ya no se puede ajustar cuando bajan las ventas, y además se suma al salario integrado que se usa para calcular indemnizaciones."
+  ],
+  "ejemplo": {
+   "titulo": "Bono de fin de mes en Posventa",
+   "texto": "12 ejecutivos de cuenta de Posventa reciben $5,000 de \"bono de fin de mes\".\nSe paga 18 meses seguidos, sin meta ni vigencia por escrito.\nCosto mensual: 12 × $5,000 = **$60,000**\nCon carga integral (32%): $60,000 × 1.32 = **$79,200 al mes**\nAl año: $79,200 × 12 = **$950,400**\nAl suspenderlo, el equipo lo reclama como parte de su sueldo."
+  },
+  "costo": "Cerca de **$950,400 al año** que pasan de \"premio\" a costo fijo difícil de retirar.",
+  "controles": [
+   "Escribir reglas por bono: métrica, meta, periodo, monto o fórmula y vigencia.",
+   "Pagar solo si se cumple la meta y guardar la evidencia del cálculo.",
+   "Poner fecha de término a todo bono temporal y comunicarla por escrito.",
+   "Revisar cada semestre los bonos que se han pagado igual varios periodos seguidos."
+  ],
+  "recuerda": "Si se paga igual siempre y sin reglas, ya no es bono: es sueldo."
+ },
+ "nomina:Encarece la indemnización": {
+  "resumen": "Lo variable se suma al salario con el que se calcula una indemnización.",
+  "explicacion": [
+   "Para indemnizar, la ley no usa solo el sueldo base: usa el **salario integrado**. Si la persona tiene comisiones o bonos, se toma el promedio de lo que ganó en los últimos 30 días trabajados.",
+   "Muchas empresas provisionan su pasivo laboral con el sueldo base porque es el dato que está en el contrato. Cuando llega una salida sin causa, la cifra real resulta bastante mayor a la presupuestada.",
+   "En puestos comerciales con mucha comisión y alta rotación, esa diferencia se repite varias veces al año y pega directo en la utilidad del periodo en que se paga."
+  ],
+  "ejemplo": {
+   "titulo": "Ejecutivo de ventas con comisión",
+   "texto": "Sueldo base: $20,000 al mes.\nComisión promedio: $10,000 al mes.\nSalario para indemnizar: $20,000 + $10,000 = **$30,000**\n3 meses de indemnización: 3 × $30,000 = **$90,000**\nSi se hubiera provisionado con el base: 3 × $20,000 = $60,000\nDiferencia no provisionada: **$30,000 por persona**\nEn un equipo de 10 vendedores: 10 × $30,000 = **$300,000**"
+  },
+  "costo": "**$30,000 por vendedor** no provisionados; **$300,000** en un equipo de 10.",
+  "controles": [
+   "Provisionar el pasivo laboral con el salario integrado real, no con el base.",
+   "Actualizar la provisión cuando cambian las comisiones o los bonos de un puesto.",
+   "Revisar la mezcla base/variable en puestos con alta rotación.",
+   "Incluir el costo de salida en las decisiones de reestructura desde el inicio."
+  ],
+  "recuerda": "Cada peso variable recurrente también cuenta el día que la persona se va."
+ },
+ "nomina:Sube IMSS, INFONAVIT e impuesto estatal": {
+  "resumen": "Cada peso variable paga cuotas patronales e impuesto estatal sobre nómina.",
+  "explicacion": [
+   "Los pagos variables, como bonos y comisiones, **integran el Salario Base de Cotización**. Eso significa que sobre ellos la empresa paga cuotas patronales al IMSS, aportaciones de retiro e INFONAVIT, y además el impuesto sobre nómina del estado.",
+   "El error común es autorizar un bono por el monto que aparece en el recibo. El costo real para la empresa es mayor: en este workshop usamos una **carga integral media de 32%**, aunque varía según el salario, la prima de riesgo y el estado.",
+   "Si los bonos se presupuestan sin su carga, el área termina el año arriba de presupuesto sin haber pagado un peso más a su gente."
+  ],
+  "ejemplo": {
+   "titulo": "Bono trimestral de gerentes regionales",
+   "texto": "8 gerentes regionales reciben un bono de $25,000 cada trimestre.\nBono del trimestre: 8 × $25,000 = **$200,000**\nCarga integral: $200,000 × 32% = **$64,000**\nCosto real del trimestre: $200,000 + $64,000 = **$264,000**\nCarga no presupuestada al año: 4 × $64,000 = **$256,000**"
+  },
+  "costo": "**$256,000 al año** de carga que no se ve si solo se presupuesta el bono.",
+  "controles": [
+   "Presupuestar toda compensación variable con su carga integral, nunca solo el monto bruto.",
+   "Mostrar al autorizador el costo total (bono × 1.32), no solo lo que recibe la persona.",
+   "Comparar alternativas, como prestaciones que la ley excluye dentro de sus topes.",
+   "Validar con Nómina y Fiscal la tasa estatal y la prima de riesgo que aplican a la empresa."
+  ],
+  "recuerda": "Un bono de $100,000 cuesta cerca de $132,000."
+ },
+ "nomina:Bola de nieve presupuestal": {
+  "resumen": "Lo variable se vuelve fijo y la nómina crece sin que nadie lo decida.",
+  "explicacion": [
+   "Lo variable tiende a volverse fijo en la práctica: nadie quiere ser quien lo quite. Cada ajuste \"por esta vez\" se queda, y el siguiente año se suma uno nuevo.",
+   "Así la nómina crece año con año **sin que exista una decisión formal de aumentarla**. Nadie aprobó el incremento, pero ahí está en el estado de resultados.",
+   "Como el exceso se acumula mes a mes y además lleva carga integral, una cifra que parece manejable en un mes se convierte en millones al año."
+  ],
+  "ejemplo": {
+   "titulo": "Exceso de variable en Comercial",
+   "texto": "El área Comercial paga $100,000 al mes de variable por arriba de su política.\nAl año: $100,000 × 12 = **$1,200,000**\nCon carga integral: $1,200,000 × 1.32 = **$1,584,000**\nSi el siguiente año el exceso sube a $120,000 al mes:\n$120,000 × 12 × 1.32 = **$1,900,800**"
+  },
+  "costo": "**$1,584,000 al año** por un exceso de $100,000 mensuales que nadie decidió.",
+  "controles": [
+   "Fijar un límite de % variable por área y una alerta cuando se rebasa (el semáforo de esta pantalla).",
+   "Revisar cada esquema de variable cada trimestre con Finanzas.",
+   "Exigir autorización por escrito para pasar el límite, con evidencia del resultado que se compra.",
+   "Dar fecha de vencimiento a cada excepción para que no se quede de forma permanente."
+  ],
+  "recuerda": "Lo que nadie revisa, se queda; y lo que se queda, crece."
+ },
+ "nomina:Inequidad y daño al clima": {
+  "resumen": "Bonos distintos para el mismo puesto y desempeño generan injusticia y renuncias.",
+  "explicacion": [
+   "Si dos personas con el mismo puesto y el mismo desempeño ganan distinto por bonos discrecionales, se percibe injusticia. La ley establece que **a trabajo igual corresponde salario igual**, y la diferencia puede terminar en un reclamo.",
+   "En la práctica, el bono depende de qué tan cerca está la persona de su jefe o de quién lo pidió con más insistencia. Los equipos hablan entre sí y la diferencia se conoce rápido.",
+   "El costo no se queda en el clima: la persona que se siente tratada injustamente suele ser la que renuncia, y reemplazarla cuesta búsqueda, curva de aprendizaje y semanas de vacante."
+  ],
+  "ejemplo": {
+   "titulo": "Dos supervisores de almacén",
+   "texto": "Dos supervisores de almacén, mismo sueldo de $30,000 y mismos resultados.\nUno recibe un bono mensual de $6,000; el otro no.\nDiferencia al año: $6,000 × 12 = **$72,000**\nEl segundo renuncia y lo menciona en su entrevista de salida.\nReemplazo con headhunter (20% del sueldo anual):\n$30,000 × 12 = $360,000 → $360,000 × 20% = **$72,000**"
+  },
+  "costo": "Cerca de **$72,000** solo en búsqueda, más las semanas de vacante y un posible reclamo.",
+  "controles": [
+   "Aplicar los mismos criterios de bono a puestos iguales.",
+   "Ligar cada bono a resultados medibles, no a la relación con el jefe.",
+   "Revisar cada semestre la equidad interna de bonos por puesto.",
+   "Documentar por escrito la razón de cualquier diferencia entre personas del mismo puesto."
+  ],
+  "recuerda": "Mismo puesto y mismo resultado deben tener la misma regla."
+ },
+ "nomina:Discrecionalidad y fraude": {
+  "resumen": "Bonos sin autorizador ni evidencia abren la puerta a favoritismos y pagos indebidos.",
+  "explicacion": [
+   "Cuando un bono no tiene autorizador definido ni evidencia del resultado, cualquiera con acceso puede pedirlo o aprobarlo. Eso abre la puerta a **favoritismos, pagos duplicados o pagos a personas que no cumplieron la meta**.",
+   "Casi nunca empieza como fraude: empieza como un \"bono por proyecto especial\" que nadie cuestiona. Con el tiempo se vuelve costumbre y nadie puede explicar por qué se pagó.",
+   "Además del dinero perdido, en auditoría un pago sin soporte es una observación de control interno. Y para efectos fiscales, la deducción exige que el pago esté correctamente timbrado en CFDI de nómina y con su retención."
+  ],
+  "ejemplo": {
+   "titulo": "Bono autoaprobado de un gerente",
+   "texto": "Un gerente autoriza su propio bono de $80,000 \"por proyecto especial\".\nNo hay documento que describa el proyecto ni su resultado.\nCosto real: $80,000 × 1.32 = **$105,600**\nSe repite 3 veces en el año: 3 × $105,600 = **$316,800**\nEn auditoría nadie puede justificar ninguno de los tres."
+  },
+  "costo": "**$316,800 al año** en pagos que nadie puede justificar.",
+  "controles": [
+   "Establecer un flujo de autorización con dos niveles para todo bono.",
+   "Prohibir que alguien apruebe su propio pago o el de su jefe directo.",
+   "Exigir evidencia del resultado antes de liberar el pago.",
+   "Revisar cada trimestre los bonos fuera de esquema con Contraloría."
+  ],
+  "recuerda": "Sin autorizador y sin evidencia, un bono es un riesgo, no un premio."
+ },
+ "nomina:Incentivo mal diseñado": {
+  "resumen": "Pagar por volumen premia vender, aunque sea con descuento o sin cobrar.",
+  "explicacion": [
+   "Lo que se mide es lo que se hace. Si la comisión se paga sobre **ventas facturadas**, el equipo buscará facturar más, aunque sea con descuentos agresivos o a clientes que después no pagan.",
+   "Es muy común al cierre de trimestre: se otorgan descuentos para alcanzar la cuota, sube la venta y la comisión, pero baja el margen. En otros casos se vende a clientes con mal historial y la cartera vencida crece.",
+   "El resultado es que la empresa **paga más comisión por ganar menos dinero**. El problema no es la gente: es la regla con la que se le paga."
+  ],
+  "ejemplo": {
+   "titulo": "Comisión de 3% sobre venta facturada",
+   "texto": "Plan del trimestre: $10,000,000 de venta con 30% de margen.\nMargen: **$3,000,000** · Comisión 3%: **$300,000**\nCon descuentos agresivos: $12,000,000 de venta con 20% de margen.\nMargen: $12,000,000 × 20% = **$2,400,000**\nComisión: $12,000,000 × 3% = **$360,000**\nResultado: la comisión sube $60,000 y el margen baja $600,000.\nSi se pagara 10% del margen: $300,000 en el plan y $240,000 con descuentos."
+  },
+  "costo": "**$600,000 menos de margen** en un trimestre, pagando $60,000 más de comisión.",
+  "controles": [
+   "Pagar la comisión sobre margen o sobre cobranza, no solo sobre facturación.",
+   "Poner topes a la comisión y límites de descuento por nivel de autorización.",
+   "Incluir métricas de calidad: devoluciones y cartera vencida.",
+   "Simular el esquema con Finanzas antes de lanzarlo, incluyendo escenarios de descuento."
+  ],
+  "recuerda": "Paga por lo que deja dinero, no solo por lo que se factura."
+ },
+ "cobertura:Sobrecarga y desgaste del equipo": {
+  "resumen": "El trabajo de la vacante lo absorben otros, y eso genera desgaste y más renuncias.",
+  "explicacion": [
+   "Cuando una plaza queda vacía, el trabajo no desaparece: **lo absorben los compañeros**. Durante unas semanas se puede sostener, pero si se alarga aparecen cansancio, errores y renuncias.",
+   "El patrón típico: la cobertura \"temporal\" se vuelve permanente, nadie mide la carga real y el mejor elemento del equipo, que fue quien más absorbió, es el siguiente en irse. Una vacante termina generando otras.",
+   "Además del costo de cada nueva vacante, las cargas de trabajo excesivas son un factor de riesgo psicosocial que la NOM-035 obliga a identificar y atender."
+  ],
+  "ejemplo": {
+   "titulo": "Coordinadores de logística en un CEDIS",
+   "texto": "Equipo de 8 coordinadores de logística de $30,000 al mes; faltan 2.\nCon los supuestos del simulador (múltiplo 2, 40% cubierto con horas extra), cada vacante cuesta neto $1,000 al día.\n2 vacantes × 90 días × $1,000 = **$180,000**\nAl cuarto mes renuncia otro por agotamiento: ahora son 3.\n3 vacantes × 60 días más × $1,000 = **$180,000**\nTotal: $180,000 + $180,000 = **$360,000**"
+  },
+  "costo": "Cerca de **$360,000** de silla vacía, sin contar el costo de las nuevas búsquedas.",
+  "controles": [
+   "Medir la carga real del equipo mientras la vacante siga abierta.",
+   "Poner fecha límite a toda cobertura temporal.",
+   "Priorizar las vacantes que sostienen el trabajo de otros puestos.",
+   "Incluir la carga de trabajo en las evaluaciones de NOM-035 del área."
+  ],
+  "recuerda": "Una vacante que se alarga suele convertirse en dos."
+ },
+ "cobertura:Horas extra sin control": {
+  "resumen": "Cubrir la vacante con tiempo extra cuesta doble y, pasado el límite, triple.",
+  "explicacion": [
+   "Cubrir una vacante con tiempo extra parece la salida rápida, pero **cada hora extra cuesta el doble** y, las que pasan de 9 a la semana, **el triple**.",
+   "Suele pasar sin autorización formal: el jefe pide \"apoyo\" para no frenar la operación, las horas se acumulan semana tras semana y Nómina se entera hasta el cierre.",
+   "Además del costo, las jornadas largas sostenidas aumentan errores y desgaste, y pagar las horas no elimina el riesgo de nuevas renuncias."
+  ],
+  "ejemplo": {
+   "titulo": "Auxiliares de almacén cubriendo una plaza",
+   "texto": "2 auxiliares de almacén de $15,000 al mes cubren una vacante.\nSalario diario: $15,000 ÷ 30 = $500 · Hora (jornada de 8 h): $62.50\nCada uno hace 12 horas extra por semana durante 8 semanas.\n9 horas al doble: 9 × $125 = $1,125\n3 horas al triple: 3 × $187.50 = $562.50\nPor persona a la semana: **$1,687.50** · Los dos: **$3,375**\n8 semanas: $3,375 × 8 = **$27,000**\nSi el jefe de almacén aplica lo mismo a 10 personas: **$135,000**"
+  },
+  "costo": "**$27,000** en 2 meses por 2 personas; **$135,000** si son 10.",
+  "controles": [
+   "Autorizar el tiempo extra por escrito y con tope semanal por persona.",
+   "Evitar pasar de 9 horas extra por semana, donde el costo se triplica.",
+   "Comparar cada mes el costo del tiempo extra contra el de acelerar la contratación.",
+   "Revisar con Nómina el reporte semanal de horas extra por área."
+  ],
+  "recuerda": "La hora extra es la forma más cara de cubrir una vacante."
+ },
+ "cobertura:Contratar rápido y mal": {
+  "resumen": "Saltarse pruebas para cerrar rápido puede costar más que la vacante abierta.",
+  "explicacion": [
+   "La presión por cumplir el indicador lleva a **saltarse pruebas, entrevistas o referencias**. La vacante se cierra a tiempo, pero el riesgo de elegir mal sube.",
+   "Una mala contratación cuesta más que la silla vacía: se pagan meses de sueldo con su carga, capacitación, los errores de la persona y, al final, una búsqueda nueva desde cero.",
+   "Lo que se ganó en días se pierde en meses. Y si la salida es por despido, puede sumarse una indemnización."
+  ],
+  "ejemplo": {
+   "titulo": "Supervisor de almacén sin referencias",
+   "texto": "Se contrata a un supervisor de $35,000 al mes sin verificar referencias, para cumplir el SLA.\nA los 4 meses sale por mal desempeño.\nSueldo con carga: 4 × $35,000 × 1.32 = **$184,800**\nCapacitación e inducción: **$20,000**\nNueva búsqueda con headhunter (18% del sueldo anual):\n$35,000 × 12 = $420,000 → $420,000 × 18% = **$75,600**\nTotal: $184,800 + $20,000 + $75,600 = **$280,400**"
+  },
+  "costo": "Más de **$280,400**, sin contar errores operativos ni una posible indemnización.",
+  "controles": [
+   "No eliminar etapas del proceso para ganar días.",
+   "Acortar los tiempos entre etapas: agendas, respuestas y aprobaciones.",
+   "Verificar siempre referencias en puestos de mando.",
+   "Medir la calidad de la contratación (permanencia y desempeño a 6 meses), no solo la velocidad."
+  ],
+  "recuerda": "Cerrar rápido no sirve si hay que volver a abrir la vacante."
+ },
+ "cobertura:Ventas y servicio que no regresan": {
+  "resumen": "En puestos de cara al cliente, cada día vacío es ingreso que no se recupera.",
+  "explicacion": [
+   "En puestos de cara al cliente, cada día sin la persona es una visita que no se hace, una cotización que no sale o una renovación que se lleva la competencia. **Ese ingreso no regresa** cuando por fin se contrata.",
+   "El sueldo que no se paga parece un ahorro, pero es mucho menor que el margen que el puesto genera. Por eso la silla vacía cuesta más de lo que ahorra.",
+   "Además, algunos clientes que se van con la competencia no vuelven, lo que alarga la pérdida mucho más allá de los días de vacante."
+  ],
+  "ejemplo": {
+   "titulo": "Ejecutivo de cuenta 60 días vacante",
+   "texto": "Un ejecutivo de cuenta genera en promedio $120,000 de margen al mes. Sueldo: $35,000.\nMargen perdido en 60 días: 2 × $120,000 = **$240,000**\nAhorro aparente en sueldo con carga: 2 × $35,000 × 1.32 = **$92,400**\nPérdida neta: $240,000 − $92,400 = **$147,600**"
+  },
+  "costo": "**$147,600 de pérdida neta** en 60 días, más los clientes que no regresen.",
+  "controles": [
+   "Clasificar vacantes por impacto: críticas, importantes y normales.",
+   "Dar prioridad y presupuesto de búsqueda a las vacantes críticas.",
+   "Asignar la cartera del puesto vacante a un responsable desde el primer día.",
+   "Tener candidatos precalificados para los puestos comerciales clave."
+  ],
+  "recuerda": "En ventas, el sueldo que no pagas es mucho menor que el margen que pierdes."
+ },
+ "cobertura:El buen candidato se va": {
+  "resumen": "Si el proceso tarda, los mejores candidatos aceptan otra oferta.",
+  "explicacion": [
+   "Los mejores candidatos tienen varias opciones al mismo tiempo. Si el proceso se detiene semanas entre entrevistas o en la aprobación de la oferta, **aceptan otra propuesta**.",
+   "Casi siempre la demora es interna: agendas de los entrevistadores, una banda salarial que no se aprobó antes o una firma que tarda. Cuando la finalista se va, se pierde todo el trabajo previo.",
+   "La búsqueda vuelve a empezar y la silla vacía sigue costando, justo en un puesto clave."
+  ],
+  "ejemplo": {
+   "titulo": "Finalista para Contador General",
+   "texto": "La finalista para Contador General ($60,000 al mes) espera 3 semanas la aprobación de su oferta.\nAcepta otra propuesta y el proceso se reinicia: 45 días más.\nCon los supuestos del simulador, la vacante cuesta neto: $60,000 ÷ 30 = **$2,000 al día**\n45 días × $2,000 = **$90,000**\nMás las horas de entrevistas perdidas y un cierre contable en riesgo."
+  },
+  "costo": "Cerca de **$90,000** de silla vacía por reiniciar el proceso.",
+  "controles": [
+   "Acordar tiempos máximos por etapa, por ejemplo 48 horas para dar respuesta.",
+   "Tener la banda salarial aprobada antes de abrir la vacante.",
+   "Definir desde el inicio quién firma la oferta y en cuánto tiempo.",
+   "Mantener contacto semanal con los finalistas mientras avanza el proceso."
+  ],
+  "recuerda": "Cada semana de espera es una oportunidad para que otro contrate a tu candidato."
+ },
+ "cobertura:Dependencia de headhunters": {
+  "resumen": "Usar agencias para todo encarece cada contratación y no construye fuentes propias.",
+  "explicacion": [
+   "Las agencias de búsqueda resuelven rápido, pero cobran **entre 15% y 25% del sueldo anual** del puesto. Usarlas para todo convierte cada contratación en un gasto alto.",
+   "Además, la empresa no construye sus propias fuentes de talento: cada nueva vacante vuelve a depender de un tercero y de su tarifa.",
+   "Las agencias tienen sentido en puestos difíciles o confidenciales; para el resto, las fuentes propias son más baratas."
+  ],
+  "ejemplo": {
+   "titulo": "10 puestos al año con headhunter",
+   "texto": "10 puestos con sueldo promedio de $30,000 al mes.\nSueldo anual por puesto: $30,000 × 12 = $360,000\nComisión de 18%: $360,000 × 18% = **$64,800 por puesto**\n10 puestos: 10 × $64,800 = **$648,000**\nSi 6 se cubren con referidos (bono de $10,000 cada uno):\n4 × $64,800 + 6 × $10,000 = $259,200 + $60,000 = **$319,200**\nAhorro: $648,000 − $319,200 = **$328,800**"
+  },
+  "costo": "Cerca de **$650,000 al año** en comisiones; se pueden ahorrar unos **$328,800**.",
+  "controles": [
+   "Reservar las agencias para puestos difíciles o confidenciales.",
+   "Lanzar un programa de referidos internos con bono claro.",
+   "Trabajar con bolsas universitarias y una base de candidatos propia.",
+   "Negociar tarifas y garantías de reemplazo con las agencias que sí se usen."
+  ],
+  "recuerda": "Una agencia resuelve una vacante; una fuente propia resuelve muchas."
+ },
+ "cobertura:Discriminación en el proceso": {
+  "resumen": "Filtrar por edad, género, embarazo o apariencia está prohibido, aunque sea por rapidez.",
+  "explicacion": [
+   "Filtrar candidatos por **edad, género, estado civil, embarazo, apariencia o discapacidad** está prohibido por la Constitución y por la Ley Federal del Trabajo, aunque se haga \"para cubrir más rápido\".",
+   "Suele aparecer en anuncios con requisitos como \"hombres de 25 a 35 años\" o en prácticas como pedir prueba de no embarazo. A veces lo pide el jefe del área y nadie lo cuestiona.",
+   "La exposición es legal y de reputación: quejas, inspecciones, sanciones y daño a la marca empleadora. Además, la empresa deja fuera a candidatos que podrían ser los mejores."
+  ],
+  "ejemplo": {
+   "titulo": "Vacante de ejecutivo de cuenta",
+   "texto": "El gerente comercial pide publicar la vacante de ejecutivo de cuenta para \"hombres de 25 a 35 años\".\nPara una coordinadora de logística se solicita prueba de no embarazo.\nUna candidata descartada presenta una queja.\nLa empresa queda expuesta a sanciones y a un daño a su reputación que no se mide en el recibo."
+  },
+  "costo": null,
+  "controles": [
+   "Definir perfiles basados en competencias, no en características personales.",
+   "Hacer que RH revise todos los anuncios antes de publicarlos.",
+   "Usar entrevistas estructuradas con las mismas preguntas para todos.",
+   "Capacitar a los jefes que entrevistan sobre lo que no se puede preguntar ni pedir."
+  ],
+  "recuerda": "Se contrata por competencias, nunca por edad, género o apariencia."
+ },
+ "rotacion:Despido mal documentado": {
+  "resumen": "Despedir sin causa probada ni aviso escrito convierte la salida en un juicio que se pierde.",
+  "explicacion": [
+   "Cuando la empresa separa a alguien sin una causa clara y sin entregarle el **aviso de rescisión por escrito**, la ley presume que el despido fue **injustificado**. La carga de probar lo contrario es de la empresa, no de la persona.",
+   "En la práctica pasa así: el jefe decide que alguien \"ya no da el ancho\", RH arma la salida en una semana y no existe una sola evaluación, acta o correo que lo respalde. Ante el Centro de Conciliación o en juicio, la palabra del jefe no alcanza.",
+   "El golpe a la utilidad no es el finiquito, es lo que se suma después: la persona puede pedir **reinstalación o indemnización de 3 meses**, más **salarios vencidos** que corren mientras dura el juicio (hasta 12 meses), más abogados y horas de gerencia en audiencias."
+  ],
+  "ejemplo": {
+   "titulo": "Supervisor de almacén despedido \"por bajo desempeño\"",
+   "texto": "Sueldo: **$30,000 al mes**.\nNo hay evaluaciones, actas ni plan de mejora.\nDemanda y la empresa no puede probar la causa.\nIndemnización: 3 meses × $30,000 = **$90,000**.\nSalarios vencidos: hasta 12 meses × $30,000 = **$360,000**.\nTotal: $90,000 + $360,000 = **$450,000**, sin contar finiquito ni abogados."
+  },
+  "costo": "Hasta **$450,000** por un supervisor de $30,000, más partes proporcionales y honorarios legales.",
+  "controles": [
+   "Documentar desempeño y faltas en el momento: evaluaciones, actas administrativas y planes de mejora firmados.",
+   "Entregar siempre el aviso de rescisión por escrito, con la causa y la fecha.",
+   "Revisar cada despido con el área legal antes de comunicarlo.",
+   "Si la evidencia es débil, negociar una salida por convenio en lugar de despedir \"con causa\"."
+  ],
+  "recuerda": "Sin papeles no hay causa: lo que no está documentado, en juicio no existió."
+ },
+ "rotacion:Renuncia o convenio que no protege": {
+  "resumen": "Una renuncia forzada o un convenio sin desglose no cierra el caso: lo abre.",
+  "explicacion": [
+   "Muchas empresas creen que con una firma de renuncia ya están protegidas. Pero si la renuncia fue **forzada, firmada en blanco** o el convenio no detalla qué se paga por cada concepto, no se sostiene: la ley considera **nula cualquier renuncia a derechos** del trabajador.",
+   "El caso típico: para ahorrarse la liquidación, se le pide a la persona que firme su renuncia \"para no afectar su historial\". Meses después demanda por despido injustificado y argumenta que la obligaron. Si lo demuestra, la renuncia pierde valor.",
+   "El ahorro inicial se convierte en un pasivo mucho mayor: lo que se dejó de pagar en una negociación limpia se paga después con indemnización, salarios vencidos y costos de juicio."
+  ],
+  "ejemplo": {
+   "titulo": "Ejecutiva de cuenta presionada a renunciar",
+   "texto": "Sueldo: **$40,000 al mes**.\nSe le pide firmar su renuncia en lugar de liquidarla.\nDemanda y demuestra que la renuncia fue forzada.\nIndemnización: 3 meses × $40,000 = **$120,000**.\nSalarios vencidos: hasta 12 meses × $40,000 = **$480,000**.\nTotal posible: **$600,000**.\nUn convenio ratificado con 3 meses habría costado cerca de **$120,000** más finiquito."
+  },
+  "costo": "Hasta **$600,000** en juicio contra cerca de **$120,000** de una salida negociada y ratificada.",
+  "controles": [
+   "Aceptar solo renuncias voluntarias, escritas y firmadas por la persona con fecha real.",
+   "Nunca pedir hojas firmadas en blanco ni condicionar referencias a una firma.",
+   "Hacer convenios por escrito con el desglose de cada concepto pagado.",
+   "Ratificar los convenios ante el Centro de Conciliación."
+  ],
+  "recuerda": "Una firma forzada no ahorra la liquidación: la pospone y la encarece."
+ },
+ "rotacion:Finiquito mal calculado": {
+  "resumen": "Pagar de menos en el finiquito genera reclamos, diferencias y gastos que sí se pagan.",
+  "explicacion": [
+   "Aunque la persona renuncie por su voluntad, la empresa le debe sus **partes proporcionales**: aguinaldo, vacaciones pendientes, prima vacacional y, cuando aplica, prima de antigüedad.",
+   "Los errores más comunes son olvidar los días de vacaciones no disfrutados del año anterior, calcular el aguinaldo con el sueldo equivocado o no incluir la prima vacacional. Casi nunca es mala fe: es falta de un cálculo estándar revisado.",
+   "Cada error pequeño se multiplica por el número de bajas del año. Además, un finiquito mal hecho abre la puerta a un reclamo formal, con gastos legales y horas de RH y nómina."
+  ],
+  "ejemplo": {
+   "titulo": "Analista contable que renuncia en marzo",
+   "texto": "Sueldo: **$24,000 al mes** → $800 diarios.\nTenía **12 días** de vacaciones del año anterior sin disfrutar.\nVacaciones: 12 × $800 = **$9,600**.\nPrima vacacional (25%): $9,600 × 25% = **$2,400**.\nDiferencia no pagada: $9,600 + $2,400 = **$12,000**.\nSi el error se repite en 30 finiquitos al año: 30 × $12,000 = **$360,000**."
+  },
+  "costo": "Cerca de **$12,000** por caso y hasta **$360,000** al año si el error es sistemático, más gastos del reclamo.",
+  "controles": [
+   "Usar una plantilla estándar de finiquito con todos los conceptos.",
+   "Revisar cada cálculo entre nómina y RH antes de pagar.",
+   "Llevar el control de vacaciones pendientes por persona durante el año.",
+   "Obtener recibo firmado por la persona con el desglose de cada concepto."
+  ],
+  "recuerda": "El finiquito correcto cuesta lo mismo hoy; el incorrecto cuesta más mañana."
+ },
+ "rotacion:Efecto contagio": {
+  "resumen": "Cuando se va alguien respetado, otros lo siguen; una baja se vuelve varias.",
+  "explicacion": [
+   "Las personas clave son referentes del equipo. Cuando una de ellas se va, los demás se preguntan si también deberían buscar algo mejor, sobre todo si la causa (sueldo, jefe, falta de carrera) también les afecta.",
+   "Es frecuente que la persona que se fue **recluta a sus excompañeros** desde el competidor: conoce su sueldo, su potencial y lo que les molesta de la empresa.",
+   "Para la utilidad, el problema es que el costo se multiplica: cada salida adicional trae su propio reemplazo, su curva de aprendizaje y más carga para quienes se quedan."
+  ],
+  "ejemplo": {
+   "titulo": "Ejecutivo de cuenta Sr. que se lleva a su Jr.",
+   "texto": "Se va el ejecutivo Sr. (**$45,000 al mes**) a un competidor.\nEn 3 meses recluta a su mentee Jr. (**$25,000 al mes**).\nReemplazo estimado: 6 meses de sueldo por puesto.\nSr.: 6 × $45,000 = **$270,000**.\nJr.: 6 × $25,000 = **$150,000**.\nTotal: $270,000 + $150,000 = **$420,000** por una sola causa."
+  },
+  "costo": "Cerca de **$420,000** en reemplazos, más la venta que se pierde mientras los nuevos aprenden.",
+  "controles": [
+   "Hacer entrevistas de permanencia con el equipo cercano después de cada baja clave.",
+   "Analizar si la causa de la salida afecta a más personas y corregirla rápido.",
+   "Identificar a quién podría reclutar la persona que se fue y hablar primero con ellos.",
+   "Revisar sueldos de los puestos expuestos contra el mercado."
+  ],
+  "recuerda": "Después de una baja clave, la siguiente conversación es con quienes se quedan."
+ },
+ "rotacion:Fuga de conocimiento y clientes": {
+  "resumen": "Lo que la persona sabía y los clientes que atendía pueden irse con ella.",
+  "explicacion": [
+   "Procesos, contactos, acuerdos de palabra y contexto de cada cliente viven muchas veces solo en la cabeza de una persona. Cuando se va, ese conocimiento se va con ella.",
+   "Si atendía clientes, la relación es con la persona, no con la empresa. Es común que algunas cuentas **migren total o parcialmente** al nuevo empleador, sobre todo si nadie más conocía a los contactos clave.",
+   "El impacto en la utilidad no es el sueldo del reemplazo: es el **margen de la venta que se pierde**, que puede valer varias veces el sueldo anual del puesto."
+  ],
+  "ejemplo": {
+   "titulo": "Gerente comercial con 8 años que se va",
+   "texto": "Atendía 2 cuentas que facturan **$6,000,000 al año** cada una.\nNadie más conocía a los contactos clave.\nSe pierde 40% de la venta de esas cuentas:\n2 × $6,000,000 × 40% = **$4,800,000** de venta.\nCon margen de 20%: $4,800,000 × 20% = **$960,000** de utilidad.\nAparte, el reemplazo: 9 meses × $70,000 = **$630,000**."
+  },
+  "costo": "Cerca de **$960,000** de utilidad al año por las cuentas, más **$630,000** de reemplazo.",
+  "controles": [
+   "Asignar al menos dos personas de contacto a cada cuenta importante.",
+   "Documentar procesos, acuerdos y contactos en el CRM, no en libretas personales.",
+   "Tener un plan de sucesión para cada puesto crítico.",
+   "Hacer una transición formal de cuentas antes de la última semana de la persona."
+  ],
+  "recuerda": "Si solo una persona conoce al cliente, el cliente es de esa persona."
+ },
+ "rotacion:Rotación temprana: falla de selección": {
+  "resumen": "Si alguien se va antes del año, casi siempre falló la contratación o la inducción.",
+  "explicacion": [
+   "Una baja en los primeros meses rara vez es mala suerte. Casi siempre hubo un problema al **contratar** (perfil equivocado, sin prueba técnica), al **vender el puesto** (expectativas falsas) o al **recibir** a la persona (inducción pobre).",
+   "La empresa paga sueldo, reclutamiento y capacitación justo en la etapa en que la persona todavía no rinde al 100%. Si se va en ese momento, la inversión se pierde completa.",
+   "Y el contador vuelve a cero: hay que reclutar otra vez, con el riesgo de repetir el error si no se corrige el proceso de selección."
+  ],
+  "ejemplo": {
+   "titulo": "Coordinador de logística que sale a los 3 meses",
+   "texto": "Sueldo: **$28,000 al mes**. Factor de cargas: 1.23.\nNunca se le aplicó una prueba técnica; no alcanzó la curva esperada.\nSueldo con cargas: 3 × $28,000 × 1.23 = **$103,320**.\nReclutamiento (1 mes de sueldo): **$28,000**.\nCapacitación y tiempo del jefe: **$15,000**.\nTotal: $103,320 + $28,000 + $15,000 = **$146,320**.\nY hay que volver a reclutar."
+  },
+  "costo": "Cerca de **$146,000** perdidos por una contratación que no funcionó.",
+  "controles": [
+   "Aplicar pruebas técnicas antes de contratar, sobre todo en puestos especializados.",
+   "Escribir una descripción de puesto honesta: retos, horarios y metas reales.",
+   "Dar seguimiento formal a los 30, 60 y 90 días con el jefe y RH.",
+   "Medir la rotación de menos de un año por reclutador y por área."
+  ],
+  "recuerda": "La rotación temprana se previene en la entrevista, no en la salida."
+ },
+ "rotacion:Sobrecarga del equipo que se queda": {
+  "resumen": "La vacante abierta carga al equipo y aumenta el riesgo de una segunda renuncia.",
+  "explicacion": [
+   "Mientras el puesto está vacío, el trabajo no desaparece: lo absorben los demás. Al principio se resuelve con buena voluntad, pero después de unas semanas se vuelve **horas extra, errores y cansancio**.",
+   "Si la carga se prolonga, quienes se quedan empiezan a buscar trabajo. Así una vacante se convierte en dos, y casi siempre se van primero los más capaces, porque son a quienes más carga se les asigna.",
+   "Además, la carga de trabajo excesiva es un **factor de riesgo psicosocial** que la empresa debe identificar y atender."
+  ],
+  "ejemplo": {
+   "titulo": "Salida de la asistente de RH",
+   "texto": "3 procesos críticos se reparten entre 2 personas de **$24,000 al mes** durante 4 meses (16 semanas).\nHora normal: $800 diarios ÷ 8 = $100. Hora extra al doble: **$200**.\nHoras extra: 2 personas × 8 h × 16 semanas = 256 h.\nCosto: 256 × $200 = **$51,200**.\nUna de ellas renuncia: reemplazo 6 × $24,000 = **$144,000**.\nTotal: $51,200 + $144,000 = **$195,200**."
+  },
+  "costo": "Cerca de **$195,000** por no cubrir a tiempo una vacante de apoyo.",
+  "controles": [
+   "Dar prioridad a cubrir rápido las vacantes de procesos críticos.",
+   "Redistribuir la carga con criterio y por tiempo definido, no \"mientras tanto\".",
+   "Considerar apoyo temporal cuando la vacante vaya a tardar más de un mes.",
+   "Vigilar las cargas de trabajo como factor de riesgo psicosocial."
+  ],
+  "recuerda": "Una vacante que se alarga suele terminar en dos vacantes."
+ },
+ "desempeno:Perder al talento clave sin aviso": {
+  "resumen": "Las Estrellas son las más buscadas; perder una cuesta meses de sueldo y resultados.",
+  "explicacion": [
+   "Quienes más aportan son también quienes más ofertas reciben. Si nadie habla con ellos de su carrera y su sueldo, la primera noticia suele ser su **renuncia**.",
+   "Reemplazar a alguien clave cuesta entre **6 y 12 meses de su sueldo** (reclutamiento, vacante, curva de aprendizaje), y eso sin contar los resultados que se dejan de generar mientras el nuevo aprende.",
+   "Por eso retener casi siempre es más barato: igualar una oferta suele costar una fracción de lo que cuesta reemplazar."
+  ],
+  "ejemplo": {
+   "titulo": "Gerente que sostiene 30% de las ventas",
+   "texto": "Sueldo: **$60,000 al mes**. Recibe una oferta 25% mayor ($75,000).\nNo hubo conversación de retención y renuncia.\nReemplazo (9 meses): 9 × $60,000 = **$540,000**.\nSu cartera vende $12,000,000 al año; en 9 meses baja 20%:\n$12,000,000 × 9/12 × 20% = $1,800,000 de venta.\nCon margen de 15%: **$270,000** de utilidad.\nTotal: $540,000 + $270,000 = **$810,000**.\nRetenerla: $15,000 × 12 × 1.23 = **$221,400** al año."
+  },
+  "costo": "Cerca de **$810,000** por perderla, contra **$221,400** al año por retenerla.",
+  "controles": [
+   "Tener una conversación de carrera y retención al menos dos veces al año con cada Estrella.",
+   "Revisar cada año el sueldo de los puestos clave contra el mercado.",
+   "Identificar un sucesor para cada puesto crítico.",
+   "Tener un presupuesto de retención aprobado antes de que llegue la oferta."
+  ],
+  "recuerda": "Retener a una Estrella cuesta mucho menos que reemplazarla."
+ },
+ "desempeno:Separar por bajo desempeño sin evidencia": {
+  "resumen": "Estar en \"Bajo rendimiento\" no basta para despedir: sin evidencia, el juicio se pierde.",
+  "explicacion": [
+   "Que alguien aparezca en la caja de **Bajo rendimiento** del 9 box no es, por sí solo, una causa de despido sin responsabilidad para la empresa. Es una calificación interna, no una prueba.",
+   "Sin metas firmadas, seguimiento por escrito ni un plan de mejora, el despido puede declararse **injustificado**. Entonces se paga indemnización, salarios vencidos y, en ciertos casos, otros conceptos adicionales.",
+   "Lo más rentable casi siempre es hacer bien el proceso: un plan de mejora documentado y, si no funciona, una salida negociada y ratificada, que cuesta mucho menos que un juicio."
+  ],
+  "ejemplo": {
+   "titulo": "Auxiliar contable despedido sin plan de mejora",
+   "texto": "Sueldo: **$20,000 al mes**.\nNo había metas firmadas ni plan de mejora. Demanda y gana.\nIndemnización: 3 meses × $20,000 = **$60,000**.\nSalarios vencidos: hasta 12 meses × $20,000 = **$240,000**.\nTotal: $60,000 + $240,000 = **$300,000**.\nUna salida negociada con 3 meses habría costado cerca de **$60,000** más finiquito."
+  },
+  "costo": "Hasta **$300,000** en juicio contra cerca de **$60,000** de una salida ordenada.",
+  "controles": [
+   "Establecer metas por escrito y firmadas al inicio del periodo.",
+   "Aplicar un plan de mejora (PIP) con metas, fechas y seguimiento documentado.",
+   "Pedir asesoría legal antes de cualquier separación.",
+   "Si procede la salida, negociar un convenio y ratificarlo ante el Centro de Conciliación."
+  ],
+  "recuerda": "El 9 box califica; solo la evidencia documentada protege."
+ },
+ "desempeno:El mal ascenso": {
+  "resumen": "Ascender al mejor ejecutor sin preparación: se pierde un gran vendedor y se gana un mal jefe.",
+  "explicacion": [
+   "Es la decisión más común: ascender a jefe a quien tiene los mejores resultados técnicos o comerciales. Pero vender bien y dirigir personas son habilidades distintas.",
+   "Al ascenderlo sin preparación, la empresa pierde a su mejor ejecutor y gana un jefe que no sabe delegar, retroalimentar ni retener. Es el **principio de Peter**: se asciende hasta el nivel de la incompetencia.",
+   "El costo no lo paga solo él: lo paga **todo su equipo**, con menor productividad y renuncias."
+  ],
+  "ejemplo": {
+   "titulo": "El mejor ejecutivo ascendido a gerente de 15 personas",
+   "texto": "El equipo vende **$60,000,000 al año**.\nDeja de vender y el equipo baja 10% su productividad:\n$60,000,000 × 10% = $6,000,000 de venta.\nCon margen de 15%: **$900,000** de utilidad.\nDos ejecutivos de $30,000 renuncian en el semestre.\nReemplazo (4 meses c/u): 2 × 4 × $30,000 = **$240,000**.\nTotal: $900,000 + $240,000 = **$1,140,000**."
+  },
+  "costo": "Cerca de **$1,140,000** en el primer año por un ascenso sin preparación.",
+  "controles": [
+   "Ascender por potencial y no solo por desempeño (eje vertical del 9 box).",
+   "Probar antes con un proyecto de liderazgo o una jefatura interina.",
+   "Acompañar el primer año con mentoría y formación de jefes.",
+   "Ofrecer una carrera técnica para quien es excelente ejecutor pero no quiere dirigir."
+  ],
+  "recuerda": "El mejor vendedor no es automáticamente el mejor gerente."
+ },
+ "desempeno:Pagar igual a todos": {
+  "resumen": "Dar el mismo aumento a todos subsidia al bajo desempeño con el dinero de los mejores.",
+  "explicacion": [
+   "Cuando el aumento y el bono son iguales sin importar los resultados, el mensaje es claro: **dar más no se paga**. Quien está en plan de mejora recibe lo mismo que quien sostiene al área.",
+   "Las Estrellas lo notan primero, comparan con el mercado y aceptan la siguiente oferta. Los de bajo desempeño, en cambio, se quedan cómodos.",
+   "Diferenciar no cuesta más: se trata de mover el mismo presupuesto hacia quien más aporta, y es mucho más barato que reemplazar a una Estrella."
+  ],
+  "ejemplo": {
+   "titulo": "Ejecutiva de cuenta Estrella con el mismo 5%",
+   "texto": "Sueldo: **$40,000 al mes**. Genera el doble que el promedio.\nTodos reciben 5%: ella, $2,000 más al mes.\nCon una matriz por desempeño le tocaría 12%: $4,800.\nDiferencia: $2,800 × 12 × 1.23 = **$41,328** al año.\nSeis meses después acepta otra oferta.\nReemplazo (6 meses): 6 × $40,000 = **$240,000**."
+  },
+  "costo": "Cerca de **$240,000** de reemplazo por ahorrar **$41,328** al año en su aumento.",
+  "controles": [
+   "Usar una matriz de aumentos por desempeño: más a quien más aporta.",
+   "Dar cero o un mínimo a quien no cumple sus metas.",
+   "Financiar los aumentos altos con lo que se deja de dar al bajo desempeño.",
+   "Explicar el criterio a todos para que se entienda y se respete."
+  ],
+  "recuerda": "Pagar igual a todos es pagar de más a unos y de menos a otros."
+ },
+ "desempeno:Decidir con evaluaciones sesgadas": {
+  "resumen": "Cada error de evaluación se vuelve un bono, aumento o ascenso mal invertido.",
+  "explicacion": [
+   "Los sesgos más comunes son el **efecto halo** (alguien agrada y todo se le califica alto), el **sesgo de lo reciente** (solo cuentan los últimos meses) y la **tendencia central** (poner a todos en medio para no discutir).",
+   "Estas evaluaciones alimentan decisiones con dinero: aumentos, bonos, ascensos y programas de desarrollo. Si la evaluación está mal, el dinero se invierte en la persona equivocada.",
+   "Y quien sí da resultados pero queda mal evaluado lo percibe como injusticia: es un riesgo directo de renuncia."
+  ],
+  "ejemplo": {
+   "titulo": "Bono al carisma, no a los resultados",
+   "texto": "Un ejecutivo carismático cumple **70%** de su cuota y queda en \"Estrella\": bono de **$120,000**.\nSu compañera cumple **115%** y queda en \"Pilar\": bono de **$60,000**.\nBono mal asignado: $120,000 − $60,000 = **$60,000**.\nSi ella se va por la injusticia, reemplazo (6 meses de $40,000): 6 × $40,000 = **$240,000**.\nTotal en riesgo: $60,000 + $240,000 = **$300,000**."
+  },
+  "costo": "Cerca de **$60,000** mal invertidos en bono y hasta **$300,000** si se pierde a quien sí cumplió.",
+  "controles": [
+   "Definir metas escritas y medibles al inicio del periodo.",
+   "Pedir evidencia por cada criterio evaluado, no impresiones.",
+   "Hacer una sesión de calibración entre jefes antes de cerrar aumentos, bonos o ascensos.",
+   "Revisar todo el periodo, no solo los últimos meses."
+  ],
+  "recuerda": "Si la evaluación está sesgada, el bono también."
+ },
+ "desempeno:Tolerar el bajo desempeño": {
+  "resumen": "No decidir también cuesta: el trabajo no hecho lo cargan los mejores, que terminan yéndose.",
+  "explicacion": [
+   "Cuando el bajo desempeño se tolera, la empresa **paga el 100% del sueldo y recibe una parte del trabajo**. La diferencia la absorbe el resto del equipo.",
+   "Los primeros en cansarse son los mejores, porque son a quienes se les asigna el trabajo que otros no hacen. Ven que no pasa nada y se van.",
+   "Corregir a tiempo con un plan de mejora con fecha de cierre casi siempre cuesta menos que dejar pasar dos años."
+  ],
+  "ejemplo": {
+   "titulo": "Cuentas por cobrar con 3 analistas de bajo desempeño",
+   "texto": "3 analistas de **$25,000 al mes** rinden al 70% durante 2 años.\nCosto anual de cada uno: $25,000 × 12 × 1.23 = $369,000.\nTrabajo pagado y no recibido: $369,000 × 30% = $110,700 por persona al año.\n3 personas × 2 años: 3 × 2 × $110,700 = **$664,200**.\nLos 2 mejores ($30,000) renuncian por la carga extra.\nReemplazo (4 meses c/u): 2 × 4 × $30,000 = **$240,000**.\nTotal: $664,200 + $240,000 = **$904,200**."
+  },
+  "costo": "Cerca de **$904,000** en dos años por no decidir a tiempo.",
+  "controles": [
+   "Fijar metas claras y medibles para cada puesto.",
+   "Dar retroalimentación mensual, no solo en la evaluación anual.",
+   "Abrir un plan de mejora con fecha de cierre cuando no se cumplen las metas.",
+   "Al cierre del plan, decidir: mejora, cambio de puesto o salida ordenada."
+  ],
+  "recuerda": "Tolerar el bajo desempeño se paga con la renuncia de los mejores."
+ },
+ "desempeno:Potencial sesgado por edad, género u origen": {
+  "resumen": "Si un prejuicio define el potencial, se invierte en las personas equivocadas y hay exposición legal.",
+  "explicacion": [
+   "El **potencial** es la parte más subjetiva del 9 box. Si no se define con criterios claros, es fácil que se cuelen prejuicios por edad, género u origen.",
+   "Así se descarta a personas con resultados probados y se invierte el desarrollo en otras que no necesariamente lo merecen. La inversión rinde menos y quienes fueron descartados se desmotivan.",
+   "Además, la ley **prohíbe la discriminación** entre trabajadores: una decisión de este tipo puede convertirse en un reclamo."
+  ],
+  "ejemplo": {
+   "titulo": "Supervisor de 52 años fuera del programa de liderazgo",
+   "texto": "Se le descarta \"por su edad\", pese a tener los mejores resultados.\nEl lugar se le da a otra persona con menos resultados.\nCosto del programa por participante: **$150,000**.\nLa persona elegida se va al año: se pierden los **$150,000**.\nEl supervisor descartado baja su compromiso y la empresa queda expuesta a un reclamo por discriminación."
+  },
+  "costo": "Cerca de **$150,000** de inversión perdida, más la exposición a un reclamo por discriminación.",
+  "controles": [
+   "Definir potencial con criterios observables: aprendizaje, agilidad y aspiración expresada.",
+   "Revisar que la distribución del 9 box no cambie por edad, género u origen.",
+   "Pedir evidencia concreta cuando alguien se califica con bajo potencial.",
+   "Incluir este tema en la sesión de calibración entre jefes."
+  ],
+  "recuerda": "El potencial se mide con evidencia, no con la edad ni el género."
+ },
+ "clima:Incumplir la NOM-035": {
+  "resumen": "No identificar ni atender riesgos psicosociales: multa segura y un diagnóstico que nadie usó.",
+  "explicacion": [
+   "La **NOM-035** obliga a la empresa a identificar, analizar y prevenir los factores de riesgo psicosocial (cargas excesivas, jornadas largas, violencia laboral, falta de control sobre el trabajo) y a promover un entorno organizacional favorable.",
+   "En la práctica muchas empresas la ven como un trámite: se aplica el cuestionario una vez, se archiva y nadie arma el plan de acción. En una inspección no hay política escrita, ni resultados documentados, ni evidencia de seguimiento.",
+   "El golpe es doble: la **multa** por no observar normas de seguridad e higiene y, peor aún, perder el diagnóstico que explicaba por qué se va la gente. Esa rotación sí aparece en la utilidad."
+  ],
+  "ejemplo": {
+   "titulo": "Posventa sin diagnóstico",
+   "texto": "Área de Posventa: 40 ejecutivos de servicio.\nRotación anual: 30% → 40 × 30% = 12 salidas.\nCosto de reemplazo por persona: $60,000.\n12 × $60,000 = **$720,000 al año**.\nEl cuestionario NOM-035 que no se aplicó habría mostrado cargas y jornadas excesivas en esa área.\nA eso se suma la multa de la inspección."
+  },
+  "costo": "Multa de la STPS más **$720,000 al año** en rotación que el diagnóstico habría ayudado a frenar.",
+  "controles": [
+   "Publicar una política de prevención de riesgos psicosociales firmada por Dirección.",
+   "Aplicar el cuestionario que corresponde al tamaño del centro de trabajo.",
+   "Documentar resultados y un plan de acción con responsables y fechas.",
+   "Cruzar los resultados con rotación y ausentismo por área.",
+   "Guardar evidencia de cada paso para una inspección."
+  ],
+  "recuerda": "La NOM-035 no es un trámite: es el diagnóstico más barato de tu rotación."
+ },
+ "clima:Renuncia con indemnización por malos tratos": {
+  "resumen": "Un jefe que maltrata convierte renuncias en indemnizaciones, como si fueran despidos injustificados.",
+  "explicacion": [
+   "Si un jefe maltrata a su equipo (gritos, humillaciones, amenazas), el trabajador puede **dejar el empleo por causa imputable a la empresa** y reclamar la indemnización como si lo hubieran despedido.",
+   "Suele pasar con un supervisor o gerente que \"da resultados\" y al que nadie corrige. Las quejas llegan a RH de manera informal, no se investigan y, cuando el equipo se cansa, renuncian varios a la vez y demandan juntos.",
+   "Para la empresa es pagar indemnizaciones completas por una conducta que pudo frenarse a tiempo, además de reemplazar a la gente y cargar con el juicio."
+  ],
+  "ejemplo": {
+   "titulo": "Tres coordinadores de logística",
+   "texto": "Tres coordinadores de logística renuncian y demandan por gritos y humillaciones del gerente de operaciones.\nSueldo mensual de cada uno: $30,000.\nIndemnización base: 3 meses → $30,000 × 3 = $90,000.\nTres personas: $90,000 × 3 = **$270,000**.\nSin contar partes proporcionales, salarios caídos, abogados ni reemplazos."
+  },
+  "costo": "Desde **$270,000** solo en indemnizaciones base por tres renuncias, antes de juicio y reemplazos.",
+  "controles": [
+   "Tener un canal de denuncia confiable y fuera de la línea del jefe.",
+   "Investigar cada queja en días, no en meses, y documentar la conclusión.",
+   "Aplicar consecuencias reales a los jefes con conductas reportadas, aunque den resultados.",
+   "Revisar rotación y quejas por jefe cada trimestre."
+  ],
+  "recuerda": "El jefe que maltrata no sale gratis: lo pagas en indemnizaciones."
+ },
+ "clima:Acoso y hostigamiento sin protocolo": {
+  "resumen": "Sin protocolo obligatorio, cada caso de acoso es un riesgo legal y reputacional abierto.",
+  "explicacion": [
+   "La ley exige que la empresa tenga un **protocolo** para prevenir la discriminación por género y atender casos de violencia, hostigamiento y acoso sexual.",
+   "Sin protocolo no hay responsable, ni ruta, ni plazos. La persona afectada no sabe a quién acudir, el caso se maneja \"entre conocidos\" y termina en redes sociales, en una demanda o en ambas antes de que RH se entere.",
+   "El costo no es solo la indemnización: es la reputación como empleador, la pérdida de talento que observa cómo se manejó el caso y el tiempo de la Dirección apagando el incendio."
+  ],
+  "ejemplo": {
+   "titulo": "Ejecutiva de cuenta sin a quién acudir",
+   "texto": "Una ejecutiva de cuenta reporta hostigamiento de su gerente.\nNo hay protocolo ni responsable designado; el caso llega a redes antes que a RH.\nElla renuncia y demanda. Sueldo: $35,000 al mes.\nIndemnización base: $35,000 × 3 = **$105,000**.\nAdemás, su cartera queda sin atender mientras se contrata a alguien."
+  },
+  "costo": "Alrededor de **$105,000** de indemnización base, más juicio, reemplazo y daño a la marca empleadora.",
+  "controles": [
+   "Publicar el protocolo y darlo a conocer a todo el personal.",
+   "Designar un comité o responsable con autoridad para investigar.",
+   "Capacitar a gerentes y supervisores en cómo recibir y escalar un caso.",
+   "Dar seguimiento confidencial y documentado a cada reporte."
+  ],
+  "recuerda": "El protocolo es obligatorio y es más barato que un caso en redes."
+ },
+ "clima:Se van primero los mejores": {
+  "resumen": "Cuando el clima se deteriora, se va quien tiene opciones; se queda quien no.",
+  "explicacion": [
+   "El talento con más opciones en el mercado es el primero en irse cuando el ambiente se deteriora. Se quedan, sobre todo, quienes no tienen a dónde ir.",
+   "No suele ser solo el sueldo: en las entrevistas de salida aparecen techo de crecimiento, falta de reconocimiento y un jefe que no escucha. Como nadie pregunta antes, la renuncia llega por sorpresa.",
+   "Perder a un gerente o a un vendedor senior cuesta reclutamiento, curva de aprendizaje, clientes que se van con él y ventas que no se cierran mientras se cubre la vacante."
+  ],
+  "ejemplo": {
+   "titulo": "Comercial pierde a sus mejores",
+   "texto": "En un trimestre se van el gerente regional y dos asesores Sr.\nSupuesto: reemplazar cuesta 50% del sueldo anual.\nGerente: $80,000 × 12 = $960,000 → 50% = $480,000.\nAsesor Sr.: $40,000 × 12 = $480,000 → 50% = $240,000.\nDos asesores: $240,000 × 2 = $480,000.\nTotal: $480,000 + $480,000 = **$960,000**, sin contar ventas perdidas."
+  },
+  "costo": "Cerca de **$960,000** en reemplazos por tres salidas clave, más las ventas que se van con ellos.",
+  "controles": [
+   "Hacer entrevistas de permanencia con el talento clave antes de que renuncie.",
+   "Definir planes de carrera visibles para los puestos críticos.",
+   "Revisar cada trimestre los motivos de salida por jefe y por área.",
+   "Identificar quién es crítico y quién tiene riesgo alto de salida."
+  ],
+  "recuerda": "Pregunta por qué se quedan antes de tener que preguntar por qué se fueron."
+ },
+ "clima:Encuesta sin acción": {
+  "resumen": "Preguntar y no actuar enseña que opinar no sirve; la siguiente encuesta vale menos.",
+  "explicacion": [
+   "Aplicar una encuesta de clima o compromiso genera una expectativa: \"ahora sí van a hacer algo\". Si no se comunica ninguna acción, la gente aprende que su opinión no cuenta.",
+   "En la siguiente medición contestan menos personas y las que contestan son más \"neutras\" o menos honestas. Los datos pierden valor justo cuando más se necesitan.",
+   "El dinero de la encuesta se gastó sin producir una sola decisión, y además se dañó la herramienta para el futuro."
+  ],
+  "ejemplo": {
+   "titulo": "De 81% a 55% de respuesta",
+   "texto": "Plantilla: 500 colaboradores. Encuesta con consultora: $110,000.\nPrimera medición: 500 × 81% = 405 respuestas.\nNo se comunica ninguna acción.\nSeis meses después: 500 × 55% = 275 respuestas.\n405 − 275 = **130 voces menos**, y las que quedan, menos honestas."
+  },
+  "costo": "**$110,000** de encuesta sin una sola decisión, más una herramienta que pierde confiabilidad.",
+  "controles": [
+   "Aplicar la regla de 30 días: compartir resultados en ese plazo.",
+   "Elegir 2 o 3 acciones concretas con responsable y fecha.",
+   "Comunicar avances, aunque sean pequeños, antes de la siguiente medición.",
+   "Volver a medir para cerrar el ciclo y mostrar qué cambió."
+  ],
+  "recuerda": "Si no vas a actuar, mejor no preguntes."
+ },
+ "clima:Romper el anonimato": {
+  "resumen": "Si se adivina quién respondió qué, se pierde la confianza y se exponen datos personales.",
+  "explicacion": [
+   "En áreas pequeñas es fácil deducir quién contestó qué. Si un jefe ve los resultados de un equipo de 3 o 4 personas, el anonimato prometido desaparece.",
+   "A partir de ahí la gente deja de contestar con honestidad, o deja de contestar. Y la empresa queda expuesta por el mal uso de datos personales si no respetó lo que dijo su aviso de privacidad.",
+   "El resultado es pagar por una medición que ya no dice la verdad y abrir un riesgo legal que no tenía por qué existir."
+  ],
+  "ejemplo": {
+   "titulo": "El gerente de Cobranza quiere ver todo",
+   "texto": "El gerente de Cobranza pide \"ver las respuestas de su equipo\".\nEl equipo tiene 4 gestores; con la regla de mínimo 5, ese grupo no debía mostrarse.\nCon solo 4 respuestas, adivina quién lo calificó mal.\nAl mes siguiente nadie contesta con honestidad.\nLa siguiente encuesta de esa área ya no sirve para decidir."
+  },
+  "costo": null,
+  "controles": [
+   "No mostrar resultados de grupos con menos de 5 respuestas; agruparlos con otra área.",
+   "Publicar un aviso de privacidad claro sobre el uso de los datos.",
+   "Restringir el acceso a los datos crudos a RH o al proveedor externo.",
+   "Entregar a los jefes solo resultados agregados."
+  ],
+  "recuerda": "Sin anonimato real, la encuesta solo mide miedo."
+ },
+ "clima:El cliente lo nota": {
+  "resumen": "El mal clima interno se convierte en errores, quejas y clientes que no vuelven.",
+  "explicacion": [
+   "Un equipo desenganchado atiende peor: comete más errores, tiene menos paciencia y menos ganas de resolver el problema del cliente.",
+   "El cliente no ve el ambiente interno; solo ve entregas tarde, órdenes con errores y llamadas que nadie devuelve. Y decide comprarle a otro.",
+   "Ese costo casi nunca se etiqueta como \"clima\": aparece como retrabajo, descuentos, notas de crédito y ventas perdidas. Por eso hay que cruzar clima con indicadores de servicio."
+  ],
+  "ejemplo": {
+   "titulo": "Centro de servicio con peor clima",
+   "texto": "El centro de servicio con peor clima procesa 1,000 órdenes al mes.\nRetrabajo antes: 4% → 40 órdenes.\nRetrabajo ahora: 9% → 90 órdenes.\nDiferencia: 90 − 40 = 50 órdenes extra.\nCosto por retrabajo: $2,000 → 50 × $2,000 = $100,000 al mes.\nAl año: $100,000 × 12 = **$1,200,000**, sin contar clientes perdidos."
+  },
+  "costo": "Alrededor de **$1,200,000 al año** solo en retrabajo, antes de contar clientes que no regresan.",
+  "controles": [
+   "Cruzar los resultados de clima por área con quejas, retrabajo y recompra.",
+   "Presentar a Dirección el impacto en pesos, no solo en porcentaje de satisfacción.",
+   "Priorizar acciones de clima en las áreas que más tocan al cliente.",
+   "Dar seguimiento mensual a los indicadores de servicio de esas áreas."
+  ],
+  "recuerda": "El clima de adentro se cobra afuera, en ventas."
+ },
+ "capacitacion:Capacitar sin medir": {
+  "resumen": "Sin métrica antes del curso, nadie puede demostrar después que valió la pena.",
+  "explicacion": [
+   "Si nadie define antes del curso qué número debe mejorar, después nadie puede demostrar que valió la pena. El dinero se gastó, pero no se sabe si se invirtió.",
+   "Pasa cuando el curso se aprueba por intuición (\"les hace falta\") y la evaluación se queda en si les gustó. Meses después nadie recuerda cuál era el problema a resolver.",
+   "Sin línea base no hay comparación, y sin comparación el curso se vuelve un gasto más que Finanzas recorta en el siguiente presupuesto."
+  ],
+  "ejemplo": {
+   "titulo": "Excel avanzado para ventas",
+   "texto": "Costo: $65,000. Lleva más de 170 días sin reporte de resultados.\nSi se hubiera medido el tiempo de reporte semanal:\n10 ejecutivos ahorran 2 horas por semana → 10 × 2 × 4 = 80 horas al mes.\nSueldo de $25,000 ÷ 192 horas ≈ $130 la hora.\n80 × $130 = $10,400 al mes.\n$65,000 ÷ $10,400 ≈ **6 meses** para recuperar el curso."
+  },
+  "costo": "**$65,000** que no se pueden defender ante Finanzas porque nunca se midió nada.",
+  "controles": [
+   "Exigir cuatro datos antes de aprobar: métrica, línea base, meta y fecha de medición.",
+   "Medir a 90 días el indicador acordado, no solo la satisfacción.",
+   "Pedir al jefe solicitante que firme la meta junto con RH.",
+   "No aprobar cursos que no tengan esos cuatro datos."
+  ],
+  "recuerda": "Lo que no se mide antes, no se puede cobrar después."
+ },
+ "capacitacion:Capacitar y que se vaya": {
+  "resumen": "Lo invertido en quien renuncia es costo hundido, y a veces lo aprovecha la competencia.",
+  "explicacion": [
+   "Lo invertido en una persona que renuncia es **costo hundido**: no se recupera, y muchas veces lo aprovecha la competencia que la contrata ya capacitada.",
+   "Sucede cuando se inscribe a alguien sin revisar su riesgo de salida o sin un proyecto donde aplicar lo aprendido. La persona mejora su perfil, actualiza su CV y se va.",
+   "Al costo del curso se suman las horas que estuvo en el aula y el reemplazo, que habrá que volver a capacitar."
+  ],
+  "ejemplo": {
+   "titulo": "Power BI y renuncia",
+   "texto": "Beatriz Cordero, analista, tomó Power BI: $13,000 de su lugar.\nHoras en curso: 40. Sueldo: $25,000 ÷ 192 ≈ $130 la hora.\n40 × $130 = $5,200 en tiempo.\n$13,000 + $5,200 = **$18,200**.\nRenunció dos semanas después: nada de eso regresó."
+  },
+  "costo": "Alrededor de **$18,200** perdidos en una sola persona, más el reemplazo que habrá que capacitar.",
+  "controles": [
+   "Revisar el riesgo de rotación antes de inscribir a alguien.",
+   "Priorizar a quien tiene plan de carrera y riesgo de salida bajo.",
+   "Asignar un proyecto de aplicación inmediato al terminar el curso.",
+   "Dar seguimiento del jefe a 30 y 90 días."
+  ],
+  "recuerda": "Capacita a quien se va a quedar y ponlo a aplicar de inmediato."
+ },
+ "capacitacion:Olvidar el costo del tiempo": {
+  "resumen": "La factura es solo una parte: las horas en el aula también se pagan.",
+  "explicacion": [
+   "La factura del proveedor es solo una parte del costo. Las horas que el equipo pasa en el aula son horas pagadas en las que no está en su puesto.",
+   "Como ese costo no llega en una factura, nadie lo suma. Se compara el curso solo por colegiatura y se elige un formato presencial largo sin ver lo que cuesta sacar a los supervisores de su operación.",
+   "Con equipos de mandos medios, el costo del tiempo puede ser igual o mayor que la colegiatura."
+  ],
+  "ejemplo": {
+   "titulo": "12 supervisores, 64 horas",
+   "texto": "12 supervisores × 64 horas = 768 horas fuera de su puesto.\nSueldo: $25,000 ÷ 192 horas ≈ $130 la hora.\n768 × ($25,000 ÷ 192) = 4 × $25,000 = $100,000.\nColegiatura: $85,000.\nCosto real: $85,000 + $100,000 = **$185,000**."
+  },
+  "costo": "El tiempo suma **$100,000**: el curso de $85,000 cuesta en realidad $185,000.",
+  "controles": [
+   "Presupuestar cada curso con colegiatura + horas + viáticos.",
+   "Comparar formatos: en línea, por módulos o en horario de menor carga.",
+   "Calcular el retorno sobre el costo real, no sobre la factura.",
+   "Programar los cursos fuera de los cierres o picos de operación."
+  ],
+  "recuerda": "El curso más caro no siempre es el de la factura más alta."
+ },
+ "capacitacion:No cumplir la obligación legal": {
+  "resumen": "Capacitar es obligación legal; sin planes ni constancias DC-3, la empresa queda expuesta.",
+  "explicacion": [
+   "En México capacitar no es opcional: la ley obliga a la empresa a dar **capacitación y adiestramiento** y a entregar constancias de las habilidades adquiridas.",
+   "Muchas empresas sí capacitan, pero no lo documentan: no hay planes y programas, no hay constancias **DC-3** ni registro de quién tomó qué curso y cuándo.",
+   "En una inspección eso es multa; en un accidente o un juicio laboral, la falta de constancias debilita la defensa de la empresa justo cuando más la necesita."
+  ],
+  "ejemplo": {
+   "titulo": "Montacargas sin constancias",
+   "texto": "El jefe de almacén asegura que su equipo \"sí sabe\" operar montacargas.\nHay un accidente en el centro de distribución.\nEn la inspección se piden planes de capacitación y constancias DC-3.\nNo existen: el entrenamiento fue \"en piso\" y nadie lo registró.\nLa empresa enfrenta multa y una defensa débil ante la reclamación."
+  },
+  "costo": null,
+  "controles": [
+   "Mantener planes y programas de capacitación actualizados.",
+   "Emitir constancias DC-3 de cada curso que lo requiera.",
+   "Llevar un registro de quién tomó qué curso y cuándo.",
+   "Priorizar los puestos que operan maquinaria o tienen riesgo de seguridad."
+  ],
+  "recuerda": "Capacitar sin documentar es, ante la autoridad, no haber capacitado."
+ },
+ "capacitacion:Proveedor sin evaluar": {
+  "resumen": "Sin calificar al proveedor, se recontrata al mismo y se paga dos veces el error.",
+  "explicacion": [
+   "Si no se califica a cada proveedor de capacitación, nadie recuerda cuál salió mal. El mismo proveedor vuelve a aparecer en una propuesta nueva y se contrata otra vez.",
+   "Pasa porque la evaluación se queda en la hoja de reacción del último día y no se guarda en ningún historial que consulte quien compra.",
+   "Se paga dos veces por el mismo error: la colegiatura y las horas del equipo en un curso que ya se sabía que no funcionaba."
+  ],
+  "ejemplo": {
+   "titulo": "Proveedor con 5.2 de 10",
+   "texto": "Un proveedor con calificación de 5.2 de 10 vuelve a proponer un curso.\nColegiatura: $90,000 para 15 coordinadores, 16 horas cada uno.\nHoras: 15 × 16 = 240 horas.\nSueldo: $25,000 ÷ 192 ≈ $130 la hora → 240 × ($25,000 ÷ 192) = $31,250.\nCosto real repetido: $90,000 + $31,250 = **$121,250**."
+  },
+  "costo": "Alrededor de **$121,250** por repetir un curso con un proveedor que ya había salido mal.",
+  "controles": [
+   "Calificar cada curso con participantes y con el jefe solicitante.",
+   "Mantener una lista de proveedores con su historial de calificaciones.",
+   "Enviar a revisión del comité a cualquier proveedor con calificación baja.",
+   "Consultar el historial antes de aprobar cualquier propuesta."
+  ],
+  "recuerda": "Un proveedor sin historial es un error que se puede repetir."
+ },
+ "capacitacion:El curso como premio": {
+  "resumen": "Si el curso se reparte por antigüedad o presupuesto sobrante, no resuelve nada del negocio.",
+  "explicacion": [
+   "Cuando el curso se da por antigüedad, por cercanía con el jefe o \"porque sobró presupuesto\", no responde a ninguna necesidad del negocio.",
+   "El caso típico es diciembre: queda presupuesto y se inscribe a todo un equipo a un diplomado caro para \"no perderlo\". Nadie tiene un proyecto donde aplicarlo.",
+   "Se paga la colegiatura y el tiempo de mandos caros, y el indicador del negocio sigue igual. Además, el siguiente año Finanzas recorta el presupuesto de todos."
+  ],
+  "ejemplo": {
+   "titulo": "Diplomado de diciembre",
+   "texto": "Se inscribe a 8 gerentes a un diplomado de $35,000 cada uno.\nColegiatura: 8 × $35,000 = $280,000.\nHoras: 8 × 80 horas = 640 horas.\nSueldo: $60,000 ÷ 192 = $312.50 la hora → 640 × $312.50 = $200,000.\nTotal: $280,000 + $200,000 = **$480,000** sin ningún proyecto de aplicación."
+  },
+  "costo": "Hasta **$480,000** entre colegiatura y tiempo de gerentes, sin un indicador que mejore.",
+  "controles": [
+   "Exigir que cada curso nazca de una brecha medible del puesto o del negocio.",
+   "No aprobar cursos sin proyecto de aplicación al regresar.",
+   "Evitar inscripciones de fin de año solo para ejercer presupuesto.",
+   "Reconocer el desempeño con otras herramientas, no con cursos sin propósito."
+  ],
+  "recuerda": "El presupuesto que no se usa no es problema; el que se usa sin propósito, sí."
+ },
+ "capacitacion:Convenio de permanencia mal planteado": {
+  "resumen": "Obligar a quedarse o cobrar el curso al salir tiene límites legales importantes.",
+  "explicacion": [
+   "Muchas empresas creen que con un convenio pueden obligar a alguien a quedarse o a devolver el costo del curso si renuncia. En México eso tiene **límites importantes**: nadie puede ser obligado a trabajar sin su consentimiento y los descuentos al salario están acotados por ley.",
+   "En la práctica, se intenta descontar todo el curso del finiquito. El trabajador se niega, demanda y el cobro puede no proceder; la empresa termina pagando el finiquito completo y, además, abogados.",
+   "La mejor protección no es la penalización, sino capacitar a quien tiene plan de carrera y ponerlo a aplicar lo aprendido de inmediato."
+  ],
+  "ejemplo": {
+   "titulo": "Maestría patrocinada al gerente de logística",
+   "texto": "La empresa patrocina una maestría de $180,000 al gerente de logística.\nFirma un convenio de permanencia redactado sin asesoría.\nUn año después renuncia; RH intenta descontar los $180,000 del finiquito.\nEl gerente demanda: el descuento está limitado por ley y puede no proceder.\nResultado: se paga el finiquito completo, los $180,000 no regresan y se suman honorarios del juicio."
+  },
+  "costo": "Hasta **$180,000** que difícilmente se recuperan, más los honorarios de un juicio.",
+  "controles": [
+   "Revisar cualquier convenio con un abogado laboral antes de firmarlo.",
+   "No asumir que el costo del curso se puede descontar del finiquito.",
+   "Reservar los patrocinios caros para personas con plan de carrera claro.",
+   "Asignar un proyecto de aplicación inmediata al terminar el programa."
+  ],
+  "recuerda": "Retiene con carrera y aplicación, no con penalizaciones."
+ }
+}
