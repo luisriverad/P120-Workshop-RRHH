@@ -38,12 +38,12 @@
   ],
   "ejemplos": [
    {
-    "titulo": "El ejecutivo de cuenta con tope del 20%",
-    "texto": "Base: **$20,000** · Límite: **20%**\nVariable permitida = $20,000 × 0.20 ÷ 0.80 = **$5,000**\n(Comprueba: $5,000 ÷ $25,000 = 20%)\nSe le pagaron $8,000 de comisiones → exceso = $8,000 − $5,000 = **$3,000 al mes**."
+    "titulo": "El ejecutivo de cuenta con tope del 15%",
+    "texto": "Base: **$20,000** · Límite: **15%**\nVariable permitida = $20,000 × 0.15 ÷ 0.85 ≈ **$3,529**\n(Comprueba: $3,529 ÷ $23,529 ≈ 15%)\nSe le pagaron $6,918 de comisiones → exceso = $6,918 − $3,529 = **$3,389 al mes**."
    },
    {
     "titulo": "El exceso en un año",
-    "texto": "Exceso: $3,000 al mes × 12 meses = $36,000\nCon la carga integral de 32%, la media aceptada (factor 1.32):\n$36,000 × 1.32 = **$47,520 al año** que no estaban en el plan."
+    "texto": "Exceso: $3,389 al mes × 12 meses = $40,668\nCon la carga integral de 32%, la media aceptada (factor 1.32):\n$40,668 × 1.32 ≈ **$53,682 al año** que no estaban en el plan."
    }
   ],
   "recuerda": "El exceso de hoy, multiplicado por 12 y por las cargas, es la fuga del año."
