@@ -209,7 +209,7 @@
   "resumen": "Lo que pierde la empresa cada día que un puesto sigue sin cubrir.",
   "explicacion": [
    "No pagar un sueldo parece ahorro, pero la persona en ese puesto **producía más de lo que ganaba**. Ese valor se deja de generar, y la parte del trabajo que sí se cubre la hacen compañeros con horas extra (que se pagan al doble).",
-   "El app lo calcula así: valor que no se genera + horas extra de quienes cubren − sueldo que no se paga. Usa supuestos que puedes mover en la pestaña 2: por default el puesto genera **2 veces** su sueldo y los compañeros cubren el **40%** del trabajo.",
+   "En esta plataforma se calcula así: valor que no se genera + horas extra de quienes cubren − sueldo que no se paga. Usa supuestos que puedes mover en la pestaña 2: por default el puesto genera **2 veces** su sueldo y los compañeros cubren el **40%** del trabajo.",
    "Multiplicado por los días que la vacante sigue abierta, este número muestra por qué cubrir rápido es una decisión de utilidad, no solo de servicio."
   ],
   "ejemplos": [
@@ -390,8 +390,8 @@
  "desempeno:Cada persona es una inversión": {
   "resumen": "El sueldo es una inversión; cada puesto debe generar varias veces lo que cuesta.",
   "explicacion": [
-   "Una persona no cuesta solo su sueldo. Hay que sumar las cargas sociales e impuestos sobre nómina (IMSS, Infonavit, impuesto estatal sobre nómina); en la app se usa como referencia un **23%** adicional. Ese es el costo anual real.",
-   "La pregunta de rentabilidad no es cuánto cuesta, sino cuánto valor genera esa inversión. Por eso se espera que cada puesto produzca un múltiplo de su costo en ventas, servicio o producción; la app usa **3 veces** como referencia y se puede ajustar según el negocio.",
+   "Una persona no cuesta solo su sueldo. Hay que sumar las cargas sociales e impuestos sobre nómina (IMSS, Infonavit, impuesto estatal sobre nómina); en esta plataforma se usa como referencia un **23%** adicional. Ese es el costo anual real.",
+   "La pregunta de rentabilidad no es cuánto cuesta, sino cuánto valor genera esa inversión. Por eso se espera que cada puesto produzca un múltiplo de su costo en ventas, servicio o producción; esta plataforma usa **3 veces** como referencia y se puede ajustar según el negocio.",
    "Si un puesto no genera al menos ese múltiplo, la empresa está poniendo dinero en un lugar que no le regresa lo suficiente."
   ],
   "ejemplos": [
@@ -409,7 +409,7 @@
  "desempeno:El mejor vs. el promedio": {
   "resumen": "Por el mismo sueldo, el mejor puede aportar 50% más que el promedio.",
   "explicacion": [
-   "En casi todos los puestos hay una gran diferencia entre lo que logran los mejores y lo que logra el promedio, aunque ganen lo mismo. La app usa como referencia que alguien de alto desempeño rinde **50%** más.",
+   "En casi todos los puestos hay una gran diferencia entre lo que logran los mejores y lo que logra el promedio, aunque ganen lo mismo. Esta plataforma usa como referencia que alguien de alto desempeño rinde **50%** más.",
    "Por eso las personas de alto desempeño (las Estrellas) valen mucho más de lo que cuestan, y perderlas es tan caro: se va justo el que más aporta por cada peso de sueldo.",
    "Para la utilidad, retener y desarrollar a los mejores suele dar más que cualquier recorte de gastos."
   ],
@@ -419,7 +419,7 @@
     "texto": "El promedio vende **$400,000** al mes.\nEl mejor vende **$600,000** al mes (50% más).\nDiferencia: **$200,000** al mes.\nEn un año: 200,000 × 12 = **$2,400,000** más, por el mismo sueldo base."
    },
    {
-    "titulo": "Con la fórmula de la app",
+    "titulo": "Con la fórmula de esta plataforma",
     "texto": "Sueldo base: $20,000 × 12 = **$240,000** al año.\nCon cargas: 240,000 × 1.23 = **$295,200**.\nValor esperado (× 3): 295,200 × 3 = **$885,600** al año.\nValor extra del mejor = 885,600 × 50% = **$442,800** al año."
    }
   ],
@@ -444,7 +444,7 @@
   "resumen": "Si se va el mejor, reemplazarlo cuesta de 4 a 12 sueldos mensuales.",
   "explicacion": [
    "Cuando renuncia una persona clave hay que pagar la búsqueda y las entrevistas, aguantar la silla vacía y esperar los meses que tarda alguien nuevo en rendir igual. Todo eso se puede expresar en meses de sueldo.",
-   "La app usa estas referencias: operativo **4** meses, supervisión **6**, gerencia **9** y dirección **12** meses de sueldo. Entre más alto el puesto, más cuesta encontrar y preparar al reemplazo.",
+   "Esta plataforma usa estas referencias: operativo **4** meses, supervisión **6**, gerencia **9** y dirección **12** meses de sueldo. Entre más alto el puesto, más cuesta encontrar y preparar al reemplazo.",
    "Si además tenía gente a su cargo, el equipo queda sin líder mientras tanto y también baja su rendimiento."
   ],
   "ejemplos": [
@@ -554,7 +554,7 @@
   "resumen": "Estar presente sin rendir: no sale en reportes y suele costar más que faltar.",
   "explicacion": [
    "Es cuando la persona sí llega y sí checa, pero no rinde: está distraída, desmotivada, enferma o estresada. Ningún reporte lo muestra.",
-   "Se calcula sobre el **valor que la persona genera**, no solo sobre su sueldo. En la app ese valor se estima como el sueldo anual multiplicado por 2: la gente produce más de lo que cuesta.",
+   "Se calcula sobre el **valor que la persona genera**, no solo sobre su sueldo. En esta plataforma ese valor se estima como el sueldo anual multiplicado por 2: la gente produce más de lo que cuesta.",
    "Suele costar más que el ausentismo porque afecta a muchas personas un poquito todos los días, y como no se ve, nadie lo corrige."
   ],
   "ejemplos": [
@@ -573,7 +573,7 @@
   "resumen": "Las renuncias: el síntoma más caro del mal clima.",
   "explicacion": [
    "Es el porcentaje de la plantilla que se va **por decisión propia** en un año: renuncias del año ÷ plantilla. No incluye despidos.",
-   "Cada salida cuesta: buscar, contratar, capacitar y esperar a que la nueva persona rinda. En la app se estima en **6 meses de sueldo** por baja.",
+   "Cada salida cuesta: buscar, contratar, capacitar y esperar a que la nueva persona rinda. En esta plataforma se estima en **6 meses de sueldo** por baja.",
    "La gente no deja empresas: deja jefes, falta de crecimiento y ambientes que no tolera. Por eso es el dato que mejor conecta el clima con el dinero."
   ],
   "ejemplos": [
@@ -607,7 +607,7 @@
   "resumen": "La factura es la punta: las horas fuera del puesto también cuestan.",
   "explicacion": [
    "Cuando se habla del costo de un curso casi siempre se piensa en la factura del proveedor. Pero mientras el equipo está en el aula, se les sigue pagando y no producen.",
-   "El costo real suma tres cosas: **colegiatura + horas fuera del puesto + viáticos**. Para las horas se usa el sueldo por hora (en la app, sueldo mensual ÷ 192 horas al mes).",
+   "El costo real suma tres cosas: **colegiatura + horas fuera del puesto + viáticos**. Para las horas se usa el sueldo por hora (en esta plataforma, sueldo mensual ÷ 192 horas al mes).",
    "Si solo ves la factura, vas a creer que el curso se paga más rápido de lo que en realidad se paga."
   ],
   "ejemplos": [

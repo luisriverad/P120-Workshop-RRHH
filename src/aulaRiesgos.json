@@ -297,7 +297,13 @@
    "Revisar cada despido con el área legal antes de comunicarlo.",
    "Si la evidencia es débil, negociar una salida por convenio en lugar de despedir \"con causa\"."
   ],
-  "recuerda": "Sin papeles no hay causa: lo que no está documentado, en juicio no existió."
+  "recuerda": "Sin papeles no hay causa: lo que no está documentado, en juicio no existió.",
+  "fuentes": [
+   "Ley Federal del Trabajo, Artículo 47: causas de rescisión sin responsabilidad para el patrón y obligación de dar aviso escrito de la causa y la fecha.",
+   "Ley Federal del Trabajo, Artículo 48: indemnización de 3 meses de salario y salarios vencidos hasta por 12 meses si el despido es injustificado.",
+   "Ley Federal del Trabajo, Artículo 50: 20 días de salario por año trabajado cuando el patrón se niega a reinstalar.",
+   "Ley Federal del Trabajo, Artículo 162: prima de antigüedad de 12 días de salario por año."
+  ]
  },
  "rotacion:Renuncia o convenio que no protege": {
   "resumen": "Una renuncia forzada o un convenio sin desglose no cierra el caso: lo abre.",
@@ -317,7 +323,10 @@
    "Hacer convenios por escrito con el desglose de cada concepto pagado.",
    "Ratificar los convenios ante el Centro de Conciliación."
   ],
-  "recuerda": "Una firma forzada no ahorra la liquidación: la pospone y la encarece."
+  "recuerda": "Una firma forzada no ahorra la liquidación: la pospone y la encarece.",
+  "fuentes": [
+   "Ley Federal del Trabajo, Artículo 33: es nula la renuncia a salarios, indemnizaciones y prestaciones; el convenio debe ser por escrito, con desglose, y ratificarse ante la autoridad (Centro de Conciliación)."
+  ]
  },
  "rotacion:Finiquito mal calculado": {
   "resumen": "Pagar de menos en el finiquito genera reclamos, diferencias y gastos que sí se pagan.",
@@ -337,7 +346,14 @@
    "Llevar el control de vacaciones pendientes por persona durante el año.",
    "Obtener recibo firmado por la persona con el desglose de cada concepto."
   ],
-  "recuerda": "El finiquito correcto cuesta lo mismo hoy; el incorrecto cuesta más mañana."
+  "recuerda": "El finiquito correcto cuesta lo mismo hoy; el incorrecto cuesta más mañana.",
+  "fuentes": [
+   "Ley Federal del Trabajo, Artículo 76: días de vacaciones según la antigüedad.",
+   "Ley Federal del Trabajo, Artículo 79: pago de la parte proporcional de vacaciones al terminar la relación.",
+   "Ley Federal del Trabajo, Artículo 80: prima vacacional de al menos 25%.",
+   "Ley Federal del Trabajo, Artículo 87: aguinaldo de al menos 15 días de salario, proporcional al tiempo trabajado.",
+   "Ley Federal del Trabajo, Artículo 162: prima de antigüedad de 12 días de salario por año."
+  ]
  },
  "rotacion:Efecto contagio": {
   "resumen": "Cuando se va alguien respetado, otros lo siguen; una baja se vuelve varias.",
@@ -357,7 +373,10 @@
    "Identificar a quién podría reclutar la persona que se fue y hablar primero con ellos.",
    "Revisar sueldos de los puestos expuestos contra el mercado."
   ],
-  "recuerda": "Después de una baja clave, la siguiente conversación es con quienes se quedan."
+  "recuerda": "Después de una baja clave, la siguiente conversación es con quienes se quedan.",
+  "fuentes": [
+   "No tiene un artículo específico: es un riesgo de gestión. Referencia: buenas prácticas de RH (entrevistas de salida y planes de retención)."
+  ]
  },
  "rotacion:Fuga de conocimiento y clientes": {
   "resumen": "Lo que la persona sabía y los clientes que atendía pueden irse con ella.",
@@ -377,7 +396,12 @@
    "Tener un plan de sucesión para cada puesto crítico.",
    "Hacer una transición formal de cuentas antes de la última semana de la persona."
   ],
-  "recuerda": "Si solo una persona conoce al cliente, el cliente es de esa persona."
+  "recuerda": "Si solo una persona conoce al cliente, el cliente es de esa persona.",
+  "fuentes": [
+   "Ley Federal del Trabajo, Artículo 134, fracción XIII: obligación de guardar los secretos técnicos, comerciales y de fabricación.",
+   "Ley Federal del Trabajo, Artículo 47, fracción IX: revelar secretos es causa de rescisión.",
+   "Ley Federal de Protección a la Propiedad Industrial: protección de los secretos industriales."
+  ]
  },
  "rotacion:Rotación temprana: falla de selección": {
   "resumen": "Si alguien se va antes del año, casi siempre falló la contratación o la inducción.",
@@ -397,7 +421,11 @@
    "Dar seguimiento formal a los 30, 60 y 90 días con el jefe y RH.",
    "Medir la rotación de menos de un año por reclutador y por área."
   ],
-  "recuerda": "La rotación temprana se previene en la entrevista, no en la salida."
+  "recuerda": "La rotación temprana se previene en la entrevista, no en la salida.",
+  "fuentes": [
+   "Ley Federal del Trabajo, Artículo 39-A: periodo de prueba de hasta 30 días (hasta 180 para puestos de dirección o técnicos especializados).",
+   "Ley Federal del Trabajo, Artículo 39-B: relación de trabajo para capacitación inicial."
+  ]
  },
  "rotacion:Sobrecarga del equipo que se queda": {
   "resumen": "La vacante abierta carga al equipo y aumenta el riesgo de una segunda renuncia.",
@@ -417,7 +445,11 @@
    "Considerar apoyo temporal cuando la vacante vaya a tardar más de un mes.",
    "Vigilar las cargas de trabajo como factor de riesgo psicosocial."
   ],
-  "recuerda": "Una vacante que se alarga suele terminar en dos vacantes."
+  "recuerda": "Una vacante que se alarga suele terminar en dos vacantes.",
+  "fuentes": [
+   "NOM-035-STPS-2018: identificación y prevención de factores de riesgo psicosocial (incluye cargas de trabajo excesivas y jornadas prolongadas).",
+   "Ley Federal del Trabajo, Artículos 66 a 68: tiempo extra de hasta 3 horas diarias y 3 veces por semana; las horas que excedan 9 a la semana se pagan al triple."
+  ]
  },
  "desempeno:Perder al talento clave sin aviso": {
   "resumen": "Las Estrellas son las más buscadas; perder una cuesta meses de sueldo y resultados.",
