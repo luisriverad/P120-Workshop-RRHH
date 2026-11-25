@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback, Fragment, createContext, useContext } from "react";
 import GuiaEntrevista from "./GuiaEntrevista.jsx";
-import plantillaDetalleUrl from "./assets/plantilla-detalle-por-area.xlsx?url";
-import logoAxon from "./assets/axon-logo.png";
+import plantillaNominaUrl from "./assets/plantilla-nomina.xlsx?url";
+import logoAxon from "./assets/axon-workshops.png";
 import AULA_DETALLES from "./aulaDetalles.json";
 import AULA_RIESGOS_DET from "./aulaRiesgos.json";
 import { guardarFila, usuarioActual } from "./supabase.js";
@@ -332,55 +332,31 @@ const S = {
 // Cambia con el selector de periodo en el topbar
 // =============================================================
 const MESES_PLATAFORMA = [
-  { periodo: "Jul 2026", hoja: "JULIO",      claves: ["julio", "jul"] },
-  { periodo: "Ago 2026", hoja: "AGOSTO",     claves: ["agosto", "ago"] },
-  { periodo: "Sep 2026", hoja: "SEPTIEMBRE", claves: ["septiembre", "setiembre", "sep", "sept"] },
-  { periodo: "Oct 2026", hoja: "OCTUBRE",    claves: ["octubre", "oct"] },
-  { periodo: "Nov 2026", hoja: "NOVIEMBRE",  claves: ["noviembre", "nov"] },
-  { periodo: "Dic 2026", hoja: "DICIEMBRE",  claves: ["diciembre", "dic"] },
+  { periodo: "Mes 1", hoja: "MES 1", claves: [] },
+  { periodo: "Mes 2", hoja: "MES 2", claves: [] },
+  { periodo: "Mes 3", hoja: "MES 3", claves: [] },
 ];
 const monthsOrder = MESES_PLATAFORMA.map((m) => m.periodo);
-const PERIODO_DEFAULT = "Oct 2026";
+const PERIODO_DEFAULT = "Mes 3";
 
 // Detalle por área de cada mes (fuente: Plantilla Detalle por Area.xlsx).
 // Se puede reemplazar desde la app con "Cargar plantilla".
 const monthlyAreasRaw = {
-  "Jul 2026": [
+  "Mes 1": [
     { area: "Comercial",      base: 1855000, comisiones: 870000, bonos: 195000, destajos: 0, otros: 48000, limite: 35 },
     { area: "Posventa",       base: 1425000, comisiones: 120000, bonos: 235000, destajos: 100000, otros: 30000, limite: 25 },
     { area: "Operaciones",    base: 1215000, comisiones: 0, bonos: 75000, destajos: 0, otros: 22000, limite: 25 },
     { area: "Administración", base: 680000, comisiones: 0, bonos: 62000, destajos: 0, otros: 9000, limite: 12 },
     { area: "Dirección",      base: 545000, comisiones: 0, bonos: 210000, destajos: 0, otros: 35000, limite: 30 },
   ],
-  "Ago 2026": [
+  "Mes 2": [
     { area: "Comercial",      base: 1855000, comisiones: 870000, bonos: 195000, destajos: 0, otros: 48000, limite: 35 },
     { area: "Posventa",       base: 1425000, comisiones: 120000, bonos: 235000, destajos: 100000, otros: 30000, limite: 25 },
     { area: "Operaciones",    base: 1215000, comisiones: 0, bonos: 75000, destajos: 0, otros: 22000, limite: 25 },
     { area: "Administración", base: 680000, comisiones: 0, bonos: 62000, destajos: 0, otros: 9000, limite: 12 },
     { area: "Dirección",      base: 545000, comisiones: 0, bonos: 210000, destajos: 0, otros: 35000, limite: 30 },
   ],
-  "Sep 2026": [
-    { area: "Comercial",      base: 1855000, comisiones: 870000, bonos: 195000, destajos: 0, otros: 48000, limite: 35 },
-    { area: "Posventa",       base: 1425000, comisiones: 120000, bonos: 235000, destajos: 100000, otros: 30000, limite: 25 },
-    { area: "Operaciones",    base: 1215000, comisiones: 0, bonos: 75000, destajos: 0, otros: 22000, limite: 25 },
-    { area: "Administración", base: 680000, comisiones: 0, bonos: 62000, destajos: 0, otros: 9000, limite: 12 },
-    { area: "Dirección",      base: 545000, comisiones: 0, bonos: 210000, destajos: 0, otros: 35000, limite: 30 },
-  ],
-  "Oct 2026": [
-    { area: "Comercial",      base: 1855000, comisiones: 870000, bonos: 195000, destajos: 0, otros: 48000, limite: 35 },
-    { area: "Posventa",       base: 1425000, comisiones: 120000, bonos: 235000, destajos: 100000, otros: 30000, limite: 25 },
-    { area: "Operaciones",    base: 1215000, comisiones: 0, bonos: 75000, destajos: 0, otros: 22000, limite: 25 },
-    { area: "Administración", base: 680000, comisiones: 0, bonos: 62000, destajos: 0, otros: 9000, limite: 12 },
-    { area: "Dirección",      base: 545000, comisiones: 0, bonos: 210000, destajos: 0, otros: 35000, limite: 30 },
-  ],
-  "Nov 2026": [
-    { area: "Comercial",      base: 1855000, comisiones: 870000, bonos: 195000, destajos: 0, otros: 48000, limite: 35 },
-    { area: "Posventa",       base: 1425000, comisiones: 120000, bonos: 235000, destajos: 100000, otros: 30000, limite: 25 },
-    { area: "Operaciones",    base: 1215000, comisiones: 0, bonos: 75000, destajos: 0, otros: 22000, limite: 25 },
-    { area: "Administración", base: 680000, comisiones: 0, bonos: 62000, destajos: 0, otros: 9000, limite: 12 },
-    { area: "Dirección",      base: 545000, comisiones: 0, bonos: 210000, destajos: 0, otros: 35000, limite: 30 },
-  ],
-  "Dic 2026": [
+  "Mes 3": [
     { area: "Comercial",      base: 1855000, comisiones: 870000, bonos: 195000, destajos: 0, otros: 48000, limite: 35 },
     { area: "Posventa",       base: 1425000, comisiones: 120000, bonos: 235000, destajos: 100000, otros: 30000, limite: 25 },
     { area: "Operaciones",    base: 1215000, comisiones: 0, bonos: 75000, destajos: 0, otros: 22000, limite: 25 },
@@ -390,7 +366,7 @@ const monthlyAreasRaw = {
 };
 
 // Áreas del periodo + valores del mes anterior para comparar.
-// Julio es el primer mes: se compara contra sí mismo (sin variación).
+// El Mes 1 es el primero: se compara contra sí mismo (sin variación).
 function getAreasFor(period, areasPorMes = monthlyAreasRaw) {
   const idx = monthsOrder.indexOf(period);
   const curr = areasPorMes[period] || areasPorMes[PERIODO_DEFAULT] || [];
@@ -418,7 +394,7 @@ const PLANTILLA_COLS = [
   { key: "otros", header: "Otros" },
   { key: "limite", header: "Límite (%)" },
 ];
-const PLANTILLA_STORAGE_KEY = "rrhh.nomina.detalleArea.v2";
+const PLANTILLA_STORAGE_KEY = "rrhh.nomina.detalleArea.v3"; // v3: periodos Mes 1–3
 
 const leerCargaGuardada = () => {
   try { return JSON.parse(localStorage.getItem(PLANTILLA_STORAGE_KEY) || "null"); } catch { return null; }
@@ -436,67 +412,24 @@ const mesDeHoja = (nombre) => {
   return MESES_PLATAFORMA.find((m) => m.claves.some((k) => n.startsWith(k)));
 };
 
-// Plantilla con diseño (logo, estilos, hojas protegidas), una hoja por mes.
-// Se llena editando el XML del .xlsx para no perder el formato.
-const PLANTILLA_PRIMERA_FILA = 4;
-const PLANTILLA_ULTIMA_FILA = 27;
-
-async function descargarPlantillaDetalle(areasPorMes) {
-  const { unzipSync, zipSync, strToU8, strFromU8 } = await import("fflate");
-  const resp = await fetch(plantillaDetalleUrl);
+// Plantilla "VARIACIONES A LA NOMINA": hojas MES 1, MES 2 y MES 3 con Área, Base, Comisiones, Bonos, Destajos, Otros y Límite (%).
+async function descargarPlantillaDetalle() {
+  const resp = await fetch(plantillaNominaUrl);
   if (!resp.ok) throw new Error("No se pudo obtener la plantilla");
-  const files = unzipSync(new Uint8Array(await resp.arrayBuffer()));
-  const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-  // Hoja -> archivo XML (workbook.xml + relaciones)
-  const libro = strFromU8(files["xl/workbook.xml"]);
-  const rels = strFromU8(files["xl/_rels/workbook.xml.rels"]);
-  const destinoDe = (rid) => {
-    const m = rels.match(new RegExp(`<Relationship[^>]*Id="${rid}"[^>]*>`));
-    const t = m && m[0].match(/Target="([^"]+)"/);
-    return t ? "xl/" + t[1].replace(/^\/?xl\//, "") : null;
-  };
-  const hojas = [...libro.matchAll(/<sheet [^>]*name="([^"]+)"[^>]*r:id="([^"]+)"/g)].map((m) => ({ nombre: m[1], ruta: destinoDe(m[2]) }));
-
-  for (const { nombre, ruta } of hojas) {
-    const mes = mesDeHoja(nombre);
-    if (!mes || !ruta || !files[ruta]) continue;
-    const filas = areasPorMes[mes.periodo] || [];
-    let hoja = strFromU8(files[ruta]);
-    for (let r = PLANTILLA_PRIMERA_FILA; r <= PLANTILLA_ULTIMA_FILA; r++) {
-      const f = filas[r - PLANTILLA_PRIMERA_FILA];
-      const num = (col, v, st) => `<c r="${col}${r}" s="${st}"><v>${Number(v) || 0}</v></c>`;
-      const celdas = f
-        ? `<c r="B${r}" s="6" t="inlineStr"><is><t>${esc(f.area)}</t></is></c>` +
-          num("C", f.base, 7) + num("D", f.comisiones, 7) + num("E", f.bonos, 7) +
-          num("F", f.destajos, 7) + num("G", f.otros, 7) + num("H", (Number(f.limite) || 0) / 100, 8)
-        : `<c r="B${r}" s="6"/>` + ["C", "D", "E", "F", "G"].map((c) => `<c r="${c}${r}" s="7"/>`).join("") + `<c r="H${r}" s="8"/>`;
-      hoja = hoja.replace(new RegExp(`<row r="${r}"[^>]*?(?:/>|>[\\s\\S]*?</row>)`), `<row r="${r}" spans="2:8" ht="21" customHeight="1">${celdas}</row>`);
-    }
-    files[ruta] = strToU8(hoja);
-  }
-
-  let textos = strFromU8(files["xl/sharedStrings.xml"]);
-  textos = textos
-    .replace(/<t xml:space="preserve">Periodo: <\/t>/, `<t>Periodos: ${esc(monthsOrder[0])} a ${esc(monthsOrder[monthsOrder.length - 1])}</t>`)
-    .replace('en la hoja "Detalle por área"', "en la hoja de cada mes (JULIO a DICIEMBRE)")
-    .replace("como número (ej. 35 para 35%)", "como porcentaje (ej. 35%)")
-    .replace('súbelo con el botón "Cargar plantilla" con el mismo periodo seleccionado.', 'súbelo con el botón "Cargar plantilla": se cargan todos los meses a la vez.');
-  files["xl/sharedStrings.xml"] = strToU8(textos);
-
-  const blob = new Blob([zipSync(files)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  const blob = new Blob([await resp.arrayBuffer()], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `Plantilla Detalle por Area - ${monthsOrder[0]} a ${monthsOrder[monthsOrder.length - 1]}.xlsx`;
+  a.download = "VARIACIONES A LA NOMINA.xlsx";
   document.body.appendChild(a);
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// Lee el Excel (una hoja por mes) y devuelve { meses: { periodo: filas }, errores, vacias }
-async function leerPlantillaDetalle(file) {
+// Lee el Excel y devuelve { meses: { periodo: filas }, errores, vacias }.
+// Acepta la plantilla genérica (una hoja "Detalle por área", se aplica al periodo actual) o una hoja por mes.
+async function leerPlantillaDetalle(file, periodoActual) {
   const XLSX = await import("xlsx");
   const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
   const meses = {};
@@ -510,10 +443,33 @@ async function leerPlantillaDetalle(file) {
     res.errores.forEach((e) => errores.push(`${nombre}: ${e}`));
     if (res.filas.length) meses[mes.periodo] = res.filas;
   });
+  // Hojas "MES 1", "MES 2", "MES 3"…: la última es el periodo actual y las anteriores, los meses previos
+  const hojasMes = wb.SheetNames
+    .map((nombre) => ({ nombre, n: Number((String(nombre).match(/^\s*mes\s*(\d+)\s*$/i) || [])[1]) }))
+    .filter((h) => h.n > 0)
+    .sort((a, b) => a.n - b.n);
+  if (!Object.keys(meses).length && hojasMes.length && periodoActual) {
+    const fin = monthsOrder.indexOf(periodoActual);
+    hojasMes.forEach((h, k) => {
+      const idx = fin - (hojasMes.length - 1 - k);
+      if (fin < 0 || idx < 0) return;
+      const res = leerHojaDetalle(XLSX, wb.Sheets[h.nombre]);
+      if (res.vacia) { vacias.push(monthsOrder[idx]); return; }
+      res.errores.forEach((e) => errores.push(`${h.nombre}: ${e}`));
+      if (res.filas.length) meses[monthsOrder[idx]] = res.filas;
+    });
+  }
+  // Plantilla de una sola hoja: se lee la primera hoja con la columna "Área"
+  if (!Object.keys(meses).length && !errores.length && !vacias.length && periodoActual) {
+    const nombre = wb.SheetNames.find((n) => normalizarTexto(n).startsWith("detalle")) || wb.SheetNames[0];
+    const res = leerHojaDetalle(XLSX, wb.Sheets[nombre]);
+    res.errores.forEach((e) => errores.push(e));
+    if (res.filas.length) meses[periodoActual] = res.filas;
+  }
   if (!Object.keys(meses).length && !errores.length) {
     errores.push(vacias.length
       ? "Las hojas de los meses están vacías."
-      : "No encontré hojas con nombre de mes (JULIO a DICIEMBRE). Usa la plantilla descargada.");
+      : "No encontré las hojas MES 1, MES 2 y MES 3. Usa la plantilla descargada.");
   }
   return { meses, errores, vacias };
 }
@@ -1195,8 +1151,29 @@ function ChatAula({ modulo, paso }) {
 
 function AulaShell({ titulo, pasos, paso, setPaso, modulo, children }) {
   const ac = COLOR.accent;
+  const vista = useContext(AulaVistaCtx);
+  const nombreModulo = CHAT_MODULOS[modulo]?.nombre || "el módulo";
+  if (!vista.abierta) {
+    return (
+      <div className="aula-root no-print" style={{ display: "flex", justifyContent: "flex-end", marginTop: 32 }}>
+        <button
+          type="button"
+          onClick={vista.abrir}
+          title={titulo}
+          style={{ ...S.btn, display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 24px", fontSize: 15, borderRadius: 10, boxShadow: "0 8px 22px " + hexA(COLOR.accentLight, 0.45) }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z" /><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5" /></svg>
+          Vamos al Aula
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    );
+  }
   return (
-    <>
+    <div className="aula-root">
+      <button type="button" onClick={vista.cerrar} style={{ ...S.btnGhost, display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+        ← Volver a {nombreModulo}
+      </button>
       <h3 style={S.h3}>{titulo}</h3>
       <div style={{ ...S.card, padding: 0, overflow: "hidden" }}>
         <div style={{ display: "flex", flexWrap: "wrap", borderBottom: "1px solid " + COLOR.border, background: `linear-gradient(135deg, ${hexA(COLOR.accentLight, 0.08)} 0%, ${hexA(COLOR.accent, 0.02)} 100%)` }}>
@@ -1223,12 +1200,14 @@ function AulaShell({ titulo, pasos, paso, setPaso, modulo, children }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
 // Módulo del Aula actual (lo pone AulaShell) para buscar la explicación completa de cada concepto
 const AulaModuloCtx = createContext(null);
+// Vista del Aula: el módulo muestra su información y un botón "Vamos al Aula"; el Aula abre en su propia pantalla.
+const AulaVistaCtx = createContext({ abierta: false, abrir: () => {}, cerrar: () => {} });
 
 // Texto con **negritas** y saltos de línea
 function textoRico(t) {
@@ -1342,7 +1321,7 @@ function AulaConcepto({ n, titulo, children, formula, ejemploTxt }) {
                     </thead>
                     <tbody>
                       {det.tabla.filas.map((f) => (
-                        <tr key={f[0]}>{f.map((c, i) => <td key={i} style={{ ...S.td, padding: "12px 14px", fontWeight: i > 0 ? 600 : 400, color: i > 0 ? (/^no|generalmente no/i.test(c) ? COLOR.textMuted : c === "Sí" ? "#0a7d2c" : "#a16207") : COLOR.text }}>{c}</td>)}</tr>
+                        <tr key={f[0]}>{f.map((c, i) => <td key={i} style={{ ...S.td, padding: "12px 14px", fontWeight: i > 0 ? 600 : 400, color: i > 0 ? (c === "Sí" ? "#0a7d2c" : /^no\b|generalmente no/i.test(c) ? COLOR.textMuted : /generalmente sí|puede/i.test(c) ? "#a16207" : COLOR.ink) : COLOR.text }}>{c}</td>)}</tr>
                       ))}
                     </tbody>
                   </table>
@@ -1725,7 +1704,7 @@ function AulaVariaciones({ data = [] }) {
       <AulaConcepto n="4" titulo="Media móvil (MA)"
         formula="MA = promedio de los meses recientes"
         ejemploTxt="Si la base suele moverse ±2% y este mes sube 6%, algo pasó: altas, aumentos o un error de captura. Se revisa antes de pagar.">
-        Compara el mes contra su propia tendencia. No dice si un número es bueno o malo, dice si es <strong>raro</strong>. Los semáforos de arriba usan este criterio.
+        Compara el mes contra su propia tendencia. No dice si un número es bueno o malo, dice si es <strong>raro</strong>. Los semáforos del módulo usan este criterio.
       </AulaConcepto>
       <AulaConcepto n="5" titulo="Salario integrado"
         formula="Salario integrado = base + prestaciones + variable habitual"
@@ -1902,7 +1881,7 @@ function AulaVariaciones({ data = [] }) {
     return (
       <div>
         <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
-          Con los números de la tabla de arriba: ¿cuánto dinero se está pagando <strong>por encima</strong> de la política, y cuánto costaría si se mantiene un año? (Carga integral de {cargaInt}%{cargaInt === 32 ? ", la media aceptada" : ""}).
+          Con los números de la tabla: ¿cuánto dinero se está pagando <strong>por encima</strong> de la política, y cuánto costaría si se mantiene un año? (Carga integral de {cargaInt}%{cargaInt === 32 ? ", la media aceptada" : ""}).
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
           <div style={{ ...S.kpi, padding: 12 }}>
@@ -2073,7 +2052,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
   const [dias, setDias] = useState(60);
   const [multiplo, setMultiplo] = useState(2);
   const [cubren, setCubren] = useState(40);
-  const [fee, setFee] = useState(54000); // costo del headhunter (monto fijo)
+  const [feePct, setFeePct] = useState(18); // costo del headhunter: % del sueldo anual del puesto
   const [info, setInfo] = useState(null); // ventana de ayuda: "valor" | "cubren"
 
   const fmt = (v) => "$" + Math.round(v).toLocaleString("es-MX");
@@ -2144,6 +2123,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
   const pasoSilla = () => {
     const cd = costoDia(sueldo);
     const acumulado = cd.neto * dias;
+    const fee = sueldo * 12 * (feePct / 100);
     const cruce = cd.neto > 0 ? Math.ceil(fee / cd.neto) : null;
 
     // Gráfica: costo acumulado por día (0..120) vs costo del headhunter
@@ -2181,7 +2161,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
           {slider("Días que lleva abierta", dias, setDias, 0, 120, 1, (v) => `${v} días`)}
           {slider(<span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Valor que genera el puesto <BotonInfo titulo="el valor que genera el puesto" onClick={() => setInfo("valor")} /></span>, multiplo, setMultiplo, 1, 5, 0.5, (v) => `${v}× su sueldo`)}
           {slider(<span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>Trabajo que cubren compañeros <BotonInfo titulo="el trabajo que cubren los compañeros" onClick={() => setInfo("cubren")} /></span>, cubren, setCubren, 0, 100, 5, (v) => `${v}%`)}
-          {slider("Costo del headhunter", fee, setFee, 15000, 100000, 1000, fmt)}
+          {slider("Headhunter (% del sueldo anual)", feePct, setFeePct, 10, 35, 1, (v) => `${v}% · ${fmt(sueldo * 12 * v / 100)}`)}
           {info === "valor" && (
             <VentanaInfo titulo="Valor que genera el puesto" onCerrar={() => setInfo(null)}>
               <p style={{ margin: 0 }}>
@@ -2230,7 +2210,7 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
                   </div>
                 </div>
                 <div>
-                  {infoEtiqueta("Cómo se integra, con tus números de arriba")}
+                  {infoEtiqueta("Cómo se integra, con tus números")}
                   {paso(1, "Sueldo diario", `${fmt2(sueldo)} ÷ 30 días = **${fmt2(diario)}**`)}
                   {paso(2, "Valor que genera el puesto al día", `${fmt2(diario)} × ${multiplo} = **${fmt2(valorDia)}**`)}
                   {paso(3, "Parte del trabajo que nadie cubre", `100% − ${cubren}% = **${Math.round(sinCubrir * 100)}%**`)}
@@ -2319,8 +2299,11 @@ function AulaCobertura({ vacantes = [], porArea = [], funnel = [], plantAut = 0,
                 </g>
               );
             })}
-            {[0, 30, 60, 90, 120].map((d) => (
-              <text key={d} x={x(d)} y={H - B + 16} textAnchor="middle" fontSize="11" fill="#64748b">{d} días</text>
+            {[0, 15, 30, 45, 60, 75, 90, 105, 120].map((d) => (
+              <g key={d}>
+                <line x1={x(d)} x2={x(d)} y1={H - B} y2={H - B + 4} stroke="#94a3b8" strokeWidth="1" />
+                <text x={x(d)} y={H - B + 16} textAnchor={d === 120 ? "end" : "middle"} fontSize="11" fill="#64748b">{d === 120 ? "120 días" : d}</text>
+              </g>
             ))}
             {/* headhunter */}
             <line x1={L} y1={y(fee)} x2={W - R} y2={y(fee)} stroke="#1d4ed8" strokeWidth="2" strokeDasharray="6 4" />
@@ -2916,7 +2899,7 @@ const AULA_DES_RIESGOS = [
   {
     titulo: "Separar por bajo desempeño sin evidencia",
     nivel: "Alto",
-    que: "Estar en \"Bajo rendimiento\" no es, por sí solo, causa de despido sin responsabilidad para la empresa. Si el despido se declara injustificado, se paga indemnización y salarios vencidos.",
+    que: "Estar en \"Riesgo\" no es, por sí solo, causa de despido sin responsabilidad para la empresa. Si el despido se declara injustificado, se paga indemnización y salarios vencidos.",
     ejemplo: "Se despide a un operador de $20,000 al mes sin metas firmadas ni plan de mejora. Demanda y gana: 3 meses de indemnización ($60,000) más hasta 12 meses de salarios vencidos ($240,000).",
     mitiga: "Plan de mejora (PIP) con metas, fechas y seguimiento por escrito. Asesoría legal antes de separar y, si procede, negociar una salida ordenada: casi siempre sale más barato.",
     base: "Arts. 47, 48 y 50 LFT.",
@@ -2941,7 +2924,7 @@ const AULA_DES_RIESGOS = [
     titulo: "Decidir con evaluaciones sesgadas",
     nivel: "Medio",
     que: "Efecto halo, sesgo de lo reciente o poner a todos en el centro. Cada error de evaluación se convierte en un aumento, un bono o un ascenso mal invertido.",
-    ejemplo: "Un ejecutivo carismático queda en \"Estrella\" con 70% de su cuota y recibe el bono más alto. Su compañera con 115% queda en \"Pilar\".",
+    ejemplo: "Un ejecutivo carismático queda en \"Estrella\" con 70% de su cuota y recibe el bono más alto. Su compañera con 115% queda en \"Núcleo\".",
     mitiga: "Metas escritas, evidencia por criterio y una sesión de calibración entre jefes antes de cerrar aumentos, bonos o ascensos.",
     base: "Buenas prácticas de RH (calibración).",
   },
@@ -3004,6 +2987,7 @@ const AULA_DES_QUIZ = [
 
 function AulaDesempeno({ colaboradores = [] }) {
   const [paso, setPaso] = useState(0);
+  const [info, setInfo] = useState(null); // ventana de ayuda
   // Simulador (compartido con "Con tus datos")
   const [equipo, setEquipo] = useState(20);
   const [pctBajo, setPctBajo] = useState(15);
@@ -3012,7 +2996,7 @@ function AulaDesempeno({ colaboradores = [] }) {
   const [horasRetrabajo, setHorasRetrabajo] = useState(5);
   const [extraFuga, setExtraFuga] = useState(6);
   const [mesesReemplazo, setMesesReemplazo] = useState(6);
-  const [multiplo, setMultiplo] = useState(3);
+  const [multiplo, setMultiplo] = useState(2.5); // estándar comúnmente aceptado
   const [utilidad, setUtilidad] = useState(15000000);
   const [margen, setMargen] = useState(10);
   // Sueldos de referencia por nivel (para "Con tus datos")
@@ -3024,7 +3008,7 @@ function AulaDesempeno({ colaboradores = [] }) {
   const fmtM = (v) => (Math.abs(v) >= 1e6 ? "$" + (v / 1e6).toFixed(2) + "M" : fmt(v));
   const ac = COLOR.accent;
   const F = AULA_DES_FACTOR;
-  const pasos = ["Lo básico", "El costo de tolerar", "Con tus datos", "Riesgos que se asumen", "Pon a prueba al equipo"];
+  const pasos = ["Lo básico", "Indicadores de tu empresa", "El costo de tolerar", "Con tus datos", "Riesgos que se asumen", "Pon a prueba al equipo"];
 
   // ---------- datos reales del 9 box ----------
   const col = (id) => id % 3; // 0 bajo, 1 medio, 2 alto desempeño
@@ -3077,7 +3061,6 @@ function AulaDesempeno({ colaboradores = [] }) {
   const pasoBasico = () => {
     const costoOp = sueldosNivel["Operativo"] * 12 * F;
     const esperadoOp = costoOp * multiplo;
-    const difTop = esperadoOp * 0.5;
     const bajoPerdido = bajoEj ? bajoEj.esperado * (1 - productividad / 100) : esperadoOp * 0.4;
     const equipoAsc = 15;
     const costoAscenso = esperadoOp * 0.5 + equipoAsc * esperadoOp * 0.1;
@@ -3099,34 +3082,24 @@ function AulaDesempeno({ colaboradores = [] }) {
         <AulaConcepto n="3" titulo="RPE · Rentabilidad por empleado"
           formula="RPE = (Utilidad operativa ÷ Total de empleados) − Costo promedio por empleado"
           ejemploTxt={cuentaTxt(tRpe)}>
-          Muestra de forma directa el retorno que cada persona representa para la empresa. Si sale negativo, cada empleado cuesta más de lo que genera en utilidad. Cambia los datos en "El costo de tolerar".
+          Muestra de forma directa el retorno que cada persona representa para la empresa. Si sale negativo, cada empleado cuesta más de lo que genera en utilidad. Cambia los datos en "Indicadores de tu empresa".
         </AulaConcepto>
         <AulaConcepto n="4" titulo="Cada persona es una inversión"
           formula={`Valor esperado = costo anual × ${multiplo} (múltiplo del puesto)`}
           ejemploTxt={<>Un puesto operativo de {fmt(sueldosNivel["Operativo"])} al mes cuesta {fmt(costoOp)} al año con cargas. Para ser rentable debería generar cerca de <strong>{fmtM(esperadoOp)}</strong> en ventas, servicio o producción.</>}>
-          El sueldo no es el costo de una persona: es la inversión. La pregunta de rentabilidad es cuánto valor genera esa inversión. El múltiplo depende del negocio; ajústalo en "El costo de tolerar".
+          El sueldo no es el costo de una persona: es la inversión. La pregunta de rentabilidad es cuánto valor genera esa inversión. El estándar comúnmente aceptado es 2.5 veces su costo; ajústalo en "El costo de tolerar".
         </AulaConcepto>
-        <AulaConcepto n="5" titulo="El mejor vs. el promedio"
-          formula="Valor extra del mejor = valor esperado × 50%"
-          ejemploTxt={<>Si alguien de alto desempeño rinde 50% más que el promedio en el mismo puesto operativo, aporta <strong>{fmtM(difTop)}</strong> más al año por el mismo sueldo.</>}>
-          En casi todos los puestos hay una gran diferencia de productividad entre los mejores y el promedio. Por eso las Estrellas valen mucho más de lo que cuestan, y perderlas es tan caro.
-        </AulaConcepto>
-        <AulaConcepto n="6" titulo="Lo que cuesta un bajo desempeño"
+        <AulaConcepto n="5" titulo="Lo que cuesta un bajo desempeño"
           formula="Costo = valor esperado × (1 − rendimiento) + retrabajo de otros"
           ejemploTxt={bajoEj ? <><strong>{nombreCorto(bajoEj.nombre)}</strong> ({bajoEj.puesto}) rindiendo al {productividad}%: el puesto deja de generar cerca de <strong>{fmtM(bajoPerdido)}</strong> al año, sin contar el retrabajo de sus compañeros.</> : null}>
           No es su sueldo: es el valor que el puesto deja de generar, más las horas que otros dedican a corregir o cubrir. Ese costo no aparece en ningún reporte.
         </AulaConcepto>
-        <AulaConcepto n="7" titulo="Reemplazar a una Estrella"
-          formula="Costo de reemplazo ≈ sueldo mensual × meses (según nivel)"
-          ejemploTxt={estrella ? <>Si se va <strong>{nombreCorto(estrella.nombre)}</strong> ({estrella.puesto}, nivel {estrella.nivel.toLowerCase()}), reemplazarla cuesta cerca de <strong>{fmtM(estrella.reemplazo)}</strong> ({AULA_DES_MESES_REEMPLAZO[estrella.nivel]} meses de sueldo), y su equipo de {estrella.aCargo} personas queda sin líder mientras tanto.</> : null}>
-          Búsqueda, entrevistas, la silla vacía y los meses que tarda alguien nuevo en rendir igual. Referencias usadas: operativo 4, supervisión 6, gerencia 9 y dirección 12 meses de sueldo.
-        </AulaConcepto>
-        <AulaConcepto n="8" titulo="El mal ascenso (principio de Peter)"
+        <AulaConcepto n="6" titulo="El mal ascenso (principio de Peter)"
           formula="Costo = valor que deja de aportar + equipo rindiendo menos"
           ejemploTxt={<>Ascender al mejor ejecutivo a jefe de {equipoAsc} personas sin preparación: se pierde su aporte extra y, si el equipo baja 10% su productividad, el costo ronda <strong>{fmtM(costoAscenso)}</strong> al año.</>}>
           La gente tiende a ascender hasta un puesto donde ya no es buena. Ascender solo por desempeño, sin mirar el potencial (eje vertical del 9 box), es una de las decisiones más caras de RH.
         </AulaConcepto>
-        <AulaConcepto n="9" titulo="Evaluar mal también cuesta"
+        <AulaConcepto n="7" titulo="Evaluar mal también cuesta"
           formula="Despido injustificado = 3 meses + hasta 12 meses de salarios vencidos"
           ejemploTxt={<>Un operador de {fmt(sueldosNivel["Operativo"])} despedido "por bajo desempeño" sin evidencia puede costar cerca de <strong>{fmtM(despido)}</strong> si gana la demanda (Arts. 48 y 50 LFT).</>}>
           Cada evaluación sin evidencia termina en un aumento, bono o ascenso mal invertido, o en una separación que no se puede defender. Las metas escritas y la calibración protegen ese dinero.
@@ -3136,7 +3109,8 @@ function AulaDesempeno({ colaboradores = [] }) {
   };
 
   // ---------- Paso 1: simulador ----------
-  const pasoSimulador = () => {
+  // Costo de tolerar el bajo desempeño (lo usan "El costo de tolerar" e "Indicadores de tu empresa")
+  const calcTolerar = () => {
     const nBajos = Math.round((equipo * pctBajo) / 100);
     const tops = Math.max(1, Math.round(equipo * 0.2));
     const core = Math.max(0, equipo - nBajos - tops);
@@ -3149,6 +3123,16 @@ function AulaDesempeno({ colaboradores = [] }) {
     const fugasBase = tops * 0.1;
     const costoFuga = Math.max(0, fugas - fugasBase) * sueldo * 1.5 * mesesReemplazo;
     const totalCosto = costoProductividad + costoRetrabajo + costoFuga;
+    return { nBajos, tops, core, costoAnualPersona, costoProductividad, costoRetrabajo, probFuga, fugas, fugasBase, costoFuga, totalCosto };
+  };
+
+  // ---------- Paso 1: indicadores de la empresa (ROB · IPCH · RPE) ----------
+  const pasoIndicadores = () => (
+    <CalculadoraRCH v={rch} setV={setRch} costoTolerarAnual={calcTolerar().totalCosto} equipo={equipo} sola />
+  );
+
+  const pasoSimulador = () => {
+    const { nBajos, tops, core, costoProductividad, costoRetrabajo, probFuga, fugas, fugasBase, costoFuga, totalCosto } = calcTolerar();
     const fugasVisibles = Math.min(tops, Math.round(fugas));
     const pctUtilidad = utilidad > 0 ? (totalCosto / utilidad) * 100 : 0;
     const ventasNecesarias = margen > 0 ? totalCosto / (margen / 100) : 0;
@@ -3167,7 +3151,7 @@ function AulaDesempeno({ colaboradores = [] }) {
     const segmentos = [
       { label: "Valor que el puesto no genera", v: costoProductividad, color: "#983838", nota: `${nBajos} persona${nBajos !== 1 ? "s" : ""} al ${productividad}% · múltiplo ${multiplo}×` },
       { label: "Retrabajo que absorben los demás", v: costoRetrabajo, color: "#8c6900", nota: `${horasRetrabajo} h/semana por cada una` },
-      { label: "Renuncias extra de los mejores", v: costoFuga, color: "#233a63", nota: `${Math.max(0, fugas - fugasBase).toFixed(1)} renuncias más de lo normal · ${mesesReemplazo} meses de sueldo cada una` },
+      { label: "Renuncias extra de los mejores", info: "fuga", v: costoFuga, color: "#233a63", nota: `${Math.max(0, fugas - fugasBase).toFixed(1)} renuncias más de lo normal · ${mesesReemplazo} meses de sueldo cada una` },
     ];
 
     return (
@@ -3238,11 +3222,56 @@ function AulaDesempeno({ colaboradores = [] }) {
             {segmentos.map((s) => (
               <div key={s.label} style={{ display: "grid", gridTemplateColumns: "12px 1fr auto", gap: 8, alignItems: "baseline", fontSize: 12 }}>
                 <span style={{ width: 10, height: 10, background: s.color, borderRadius: 2, display: "inline-block" }} />
-                <span><strong style={{ color: COLOR.ink }}>{s.label}</strong> <span style={{ color: COLOR.textMuted }}>· {s.nota}</span></span>
+                <span><strong style={{ color: COLOR.ink }}>{s.label}</strong>{s.info && <span style={{ display: "inline-flex", verticalAlign: "middle", marginLeft: 6 }}><BotonInfo titulo={s.label.toLowerCase()} onClick={() => setInfo(s.info)} /></span>} <span style={{ color: COLOR.textMuted }}>· {s.nota}</span></span>
                 <strong style={{ fontVariantNumeric: "tabular-nums", color: COLOR.ink }}>{fmt(s.v)}</strong>
               </div>
             ))}
           </div>
+          {info === "fuga" && (() => {
+            const f2 = (v) => "$" + Math.round(v).toLocaleString("es-MX");
+            const extra = Math.max(0, fugas - fugasBase);
+            const paso = (n, t, cuenta) => (
+              <div style={{ display: "grid", gridTemplateColumns: "26px 1fr", gap: 10, alignItems: "start", padding: "10px 0", borderBottom: "1px solid " + COLOR.borderSoft }}>
+                <span style={{ width: 22, height: 22, borderRadius: 6, background: "#233a63", color: "#fff", fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</span>
+                <div>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: COLOR.ink }}>{t}</div>
+                  <div style={{ fontSize: 13, color: COLOR.textSoft, fontVariantNumeric: "tabular-nums" }}>{textoRico(cuenta)}</div>
+                </div>
+              </div>
+            );
+            return (
+              <VentanaInfo titulo="Renuncias extra de los mejores" onCerrar={() => setInfo(null)}>
+                <p style={{ margin: 0 }}>
+                  Cuando el bajo desempeño se tolera, <strong>los mejores cargan con el trabajo que otros no hacen</strong>, ven que da lo mismo esforzarse y empiezan a buscar otro lugar. Por eso, entre más bajo desempeño se tolera, <strong>más probable es que se vayan los mejores</strong>.
+                </p>
+                <p style={{ margin: 0 }}>
+                  Aquí solo se cuentan las renuncias <strong>de más</strong>: las que pasan por encima de la rotación normal (10% al año), multiplicadas por lo que cuesta reemplazar a alguien de alto desempeño.
+                </p>
+                <div>
+                  {infoEtiqueta("La fórmula")}
+                  <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 13, background: COLOR.surfaceSoft, border: "1px dashed " + COLOR.border, padding: "10px 12px", color: COLOR.ink, lineHeight: 1.5 }}>
+                    Costo = (renuncias esperadas − renuncias normales) × sueldo de los mejores × meses de reemplazo
+                  </div>
+                </div>
+                <div>
+                  {infoEtiqueta("Cómo se integra, con tus números")}
+                  {paso(1, "Cuántos son \"los mejores\"", `20% del equipo: ${equipo} × 20% = **${tops} persona${tops !== 1 ? "s" : ""}**`)}
+                  {paso(2, "Riesgo de que se vayan en un año", `10% normal + ${extraFuga} puntos por cada 10% de bajo desempeño tolerado (${pctBajo}%) = **${Math.round(probFuga)}%** (normal: 10%)`)}
+                  {paso(3, "Renuncias de más", `${tops} × ${Math.round(probFuga)}% = ${fugas.toFixed(2)} esperadas − ${tops} × 10% = ${fugasBase.toFixed(2)} normales = **${extra.toFixed(2)} renuncias extra**`)}
+                  {paso(4, "Costo de reemplazar a uno de los mejores", `Ganan 1.5× el sueldo promedio: ${f2(sueldo)} × 1.5 = ${f2(sueldo * 1.5)} al mes × ${mesesReemplazo} meses = **${f2(sueldo * 1.5 * mesesReemplazo)}**`)}
+                  {paso(5, "Costo anual", `${extra.toFixed(2)} × ${f2(sueldo * 1.5 * mesesReemplazo)} = **${f2(costoFuga)}**`)}
+                </div>
+                <div style={{ fontSize: 13, background: COLOR.accentSoft, borderLeft: `3px solid ${COLOR.accent}`, padding: "10px 12px", lineHeight: 1.6 }}>
+                  {textoRico(extra > 0
+                    ? `**¿Por qué sale una fracción?** Es un promedio: ${extra.toFixed(2)} renuncias extra al año quiere decir que, en promedio, **cada ${(1 / extra).toFixed(1)} años** se va uno de tus mejores que no se habría ido. No es que se vaya \"medio\" vendedor; es el costo esperado por año.`
+                    : "**Sin renuncias extra:** con este nivel de bajo desempeño tolerado, el riesgo de perder a los mejores se queda en la rotación normal.")}
+                </div>
+                <div style={{ fontSize: 12.5, color: COLOR.textMuted }}>
+                  Los supuestos (puntos de riesgo por cada 10%, meses de reemplazo) se ajustan en "Supuestos". Son referencias para el ejercicio: la renuncia de los mejores por sobrecarga y falta de equidad es uno de los costos ocultos más documentados del bajo desempeño tolerado.
+                </div>
+              </VentanaInfo>
+            );
+          })()}
 
           <Conclusion kind={pctUtilidad >= 5 ? "danger" : "warn"}>
             {nBajos === 0 ? (
@@ -3253,7 +3282,6 @@ function AulaDesempeno({ colaboradores = [] }) {
           </Conclusion>
         </div>
       </div>
-      <CalculadoraRCH v={rch} setV={setRch} costoTolerarAnual={totalCosto} equipo={equipo} />
       </>
     );
   };
@@ -3273,7 +3301,7 @@ function AulaDesempeno({ colaboradores = [] }) {
     return (
       <div>
         <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 14 }}>
-          Con la matriz de arriba ({colaboradores.length} evaluados). ¿Cuánto dinero está en juego en tu 9 box? Si mueves a alguien de casilla, esta pestaña se actualiza.
+          Con la matriz 9 Box del módulo ({colaboradores.length} evaluados). ¿Cuánto dinero está en juego en tu 9 box?
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
           {kpi("Talento clave en riesgo", fmtM(valorRiesgoClave), `costo de reemplazar a ${clave.length} personas de desempeño alto`, "#233a63")}
@@ -3346,6 +3374,7 @@ function AulaDesempeno({ colaboradores = [] }) {
 
   const contenido = [
     pasoBasico,
+    pasoIndicadores,
     pasoSimulador,
     pasoDatos,
     () => <AulaRiesgos riesgos={AULA_DES_RIESGOS} intro="Cada decisión de desempeño mueve dinero: aumentos, bonos, ascensos, renuncias y demandas. Haz clic en una tarjeta para ver la explicación completa, un ejemplo y cómo se controla." />,
@@ -4009,7 +4038,7 @@ function AulaCapacitacion({ cursos = [], incidencias = [] }) {
           </div>
           {slider("Colegiatura del curso", colegiatura, setColegiatura, 10000, 300000, 5000, fmt)}
           {slider("Participantes", participantes, setParticipantes, 1, 30, 1, (v) => `${v} persona${v > 1 ? "s" : ""}`)}
-          {slider("Horas fuera del puesto (cada uno)", horas, setHoras, 4, 120, 4, (v) => `${v} h`)}
+          {slider("Horas fuera del puesto (cada uno)", horas, setHoras, 1, 120, 1, (v) => `${v} h`)}
           {slider("Sueldo mensual promedio", sueldo, setSueldo, 8000, 80000, 1000, fmt)}
           {slider("Mejora esperada en su productividad", mejora, setMejora, 0, 30, 1, (v) => `${v}%`)}
           {slider("Participantes que aplican lo aprendido", aplica, setAplica, 0, 100, 5, (v) => `${v}%`)}
@@ -4258,7 +4287,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
     }
     setCargaLeyendo(true);
     try {
-      const res = await leerPlantillaDetalle(file);
+      const res = await leerPlantillaDetalle(file, periodo);
       setCargaPrev({ archivo: file.name, ...res });
     } catch {
       setCargaPrev({ archivo: file.name, meses: {}, vacias: [], errores: ["No se pudo leer el archivo. Verifica que sea la plantilla en Excel."] });
@@ -4618,7 +4647,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
           <button
             style={{ ...S.btnGhost, display: "inline-flex", alignItems: "center", gap: 6 }}
-            onClick={() => descargarPlantillaDetalle(areasPorMes)}
+            onClick={() => descargarPlantillaDetalle()}
             title="Descarga un Excel con las columnas de esta tabla para llenarlo"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
@@ -4689,8 +4718,8 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
         const yTicks = [];
         for (let i = 0; i <= yMax; i += 10) yTicks.push(i);
         yTicks.reverse();
-        const mes = (periodo || "").split(" ")[0]?.toUpperCase() || "MES";
-        const anio = (periodo || "").split(" ")[1] || "";
+        const mes = (periodo || "MES").toUpperCase();
+        const anio = "";
         const colorAbove = "#8c6900"; // dorado Axon
         const colorBelow = "#475569"; // slate-600, neutral gray
         const gradAbove = "linear-gradient(180deg, #fdca00 0%, #8c6900 100%)";
@@ -4915,7 +4944,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
           );
           const promedio = (totMes.variable / totMes.total) * 100;
           return {
-            mes: m.split(" ")[0],
+            mes: m,
             promedio,
             bars: areasList.map((a) => {
               const r = raw.find((x) => x.area === a);
@@ -4953,7 +4982,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                 color: "#64748b",
                 marginBottom: 4,
               }}>
-                Comparativo por área · Jul–{series[series.length - 1].mes} 2026
+                Comparativo por área · Mes 1 a {series[series.length - 1].mes}
               </div>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
                 <div style={{ fontSize: 18, fontWeight: 600, color: "#0f172a", letterSpacing: -0.2 }}>
@@ -5149,7 +5178,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
             { base: 0, variable: 0, total: 0 }
           );
           return {
-            mes: m.split(" ")[0],
+            mes: m,
             pctVar: (totales.variable / totales.total) * 100,
             total: totales.total,
           };
@@ -5182,7 +5211,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
                 color: "#64748b",
                 marginBottom: 4,
               }}>
-                Acumulado Jul–{series[series.length - 1].mes} 2026
+                Acumulado Mes 1 a {series[series.length - 1].mes}
               </div>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
                 <div style={{ fontSize: 18, fontWeight: 600, color: "#0f172a", letterSpacing: -0.2 }}>
@@ -5379,7 +5408,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 700, color: "#0f172a" }}>Cargar plantilla</div>
-                <div style={{ fontSize: 12, color: "#475569", marginTop: 2 }}>Detalle por área · <strong>{monthsOrder[0]} a {monthsOrder[monthsOrder.length - 1]}</strong> · una hoja por mes</div>
+                <div style={{ fontSize: 12, color: "#475569", marginTop: 2 }}>Hojas <strong>MES 1, MES 2 y MES 3</strong> · un mes por hoja</div>
               </div>
               <button style={{ ...S.btnGhost, padding: "4px 10px" }} onClick={cerrarCarga}>✕</button>
             </div>
@@ -5472,7 +5501,7 @@ function Nomina({ periodo = PERIODO_DEFAULT }) {
             )}
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
-              <button style={{ ...S.btnGhost, fontSize: 12 }} onClick={() => descargarPlantillaDetalle(areasPorMes)}>
+              <button style={{ ...S.btnGhost, fontSize: 12 }} onClick={() => descargarPlantillaDetalle()}>
                 ¿No tienes la plantilla? Descárgala
               </button>
               <div style={{ display: "flex", gap: 8 }}>
@@ -6488,7 +6517,7 @@ async function descargarPlantillaDesempeno(colaboradores) {
     "Cómo llenarla (las columnas con * son obligatorias)",
     "1. Hoja \"Colaboradores\": una fila por persona evaluada.",
     "2. Desempeño y Potencial: escribe Bajo, Medio o Alto. Con los dos se ubica a cada persona en su casilla del 9 Box.",
-    "   · Potencial alto + Desempeño alto = Estrella · Potencial bajo + Desempeño bajo = Bajo rendimiento (PIP).",
+    "   · Potencial alto + Desempeño alto = Estrella · Potencial bajo + Desempeño bajo = Riesgo (decidir: mejora inmediata o salida planeada).",
     "3. Última evaluación: calificación de 0 a 10 (opcional).",
     "4. Al subirla se reemplaza la lista de colaboradores y se recalculan los indicadores y el Aula de Desempeño.",
     "5. Guarda el archivo y súbelo en Desempeño con el botón \"Cargar plantilla\".",
@@ -9997,7 +10026,8 @@ async function descargarPlantillaRotacion(carga, bajasEjemplo) {
     ["   · Las altas sin \"Reemplaza a\" se consideran crecimiento y no cuentan como costo de rotación."],
     ["3. Hoja \"Plantilla\" (opcional): plantilla promedio de cada mes (Año, Mes 1-12) para calcular el % de rotación."],
     ["4. Fechas en formato dd/mm/aaaa. Montos en pesos, sin texto."],
-    ["5. Guarda el archivo y súbelo en Rotación con el botón \"Cargar plantilla\"."],
+    ["5. Hoja \"Listas\": aquí cambias las opciones de las listas desplegables (Área, Tipo de baja y Motivo). Agrega, borra o renombra valores en su columna y las listas de \"Bajas\" y \"Altas\" se actualizan solas."],
+    ["6. Guarda el archivo y súbelo en Rotación con el botón \"Cargar plantilla\"."],
     [],
     ["Costo de rotación por baja = finiquito/liquidación + costo de reemplazo + costo oculto + costo hundido."],
   ];
@@ -10011,7 +10041,62 @@ async function descargarPlantillaRotacion(carga, bajasEjemplo) {
   XLSX.utils.book_append_sheet(wb, hojaDe(ROT_COLS_BAJAS, bajas), "Bajas");
   XLSX.utils.book_append_sheet(wb, hojaDe(ROT_COLS_ALTAS, altas), "Altas");
   XLSX.utils.book_append_sheet(wb, hojaDe(ROT_COLS_PLANTILLA, filasPlantilla), "Plantilla");
-  XLSX.writeFile(wb, "Plantilla Altas y Bajas - Rotación.xlsx");
+
+  // Hoja "Listas": opciones editables de las listas desplegables
+  const unicos = (arr) => [...new Set(arr.map((x) => String(x || "").trim()).filter(Boolean))];
+  const LISTA_FILAS = 60;
+  const listaAreas = unicos([...AREAS_EMPRESA, ...bajas.map((b) => b.area), ...altas.map((x) => x.area)]);
+  const listaTipos = ["Voluntaria", "Involuntaria"];
+  const listaMotivos = unicos([
+    ...bajas.map((b) => b.motivo),
+    "Mejor oferta", "Ambiente laboral", "Desempeño", "Personal", "Falta de crecimiento", "Relación con el jefe",
+    "Horario o carga de trabajo", "Cambio de residencia", "Abandono de trabajo", "Término de contrato",
+  ]);
+  const aoaListas = [["Área", "Tipo de baja", "Motivo"]];
+  for (let i = 0; i < Math.max(listaAreas.length, listaTipos.length, listaMotivos.length); i++) {
+    aoaListas.push([listaAreas[i] ?? null, listaTipos[i] ?? null, listaMotivos[i] ?? null]);
+  }
+  const wsListas = XLSX.utils.aoa_to_sheet(aoaListas);
+  wsListas["!cols"] = [{ wch: 22 }, { wch: 16 }, { wch: 32 }];
+  XLSX.utils.book_append_sheet(wb, wsListas, "Listas");
+
+  // Listas desplegables (validación de datos). SheetJS no las escribe: se agregan al XML del archivo.
+  const { unzipSync, zipSync, strToU8, strFromU8 } = await import("fflate");
+  const files = unzipSync(new Uint8Array(XLSX.write(wb, { type: "array", bookType: "xlsx" })));
+  const col = (cols, key) => XLSX.utils.encode_col(cols.findIndex((c) => c.key === key));
+  const rango = (letra) => `Listas!$${letra}$2:$${letra}$${LISTA_FILAS + 1}`;
+  const validacion = (sqref, fuente, estricta) =>
+    `<dataValidation type="list" allowBlank="1" showInputMessage="1" showErrorMessage="1" errorStyle="${estricta ? "stop" : "warning"}" ` +
+    `errorTitle="Valor fuera de la lista" error="${estricta ? "Elige una opción de la lista. Puedes cambiar las opciones en la hoja Listas." : "Este valor no está en la hoja Listas. Puedes agregarlo ahí."}" sqref="${sqref}"><formula1>${fuente}</formula1></dataValidation>`;
+  const reglas = {
+    "xl/worksheets/sheet2.xml": [ // Bajas
+      validacion(`${col(ROT_COLS_BAJAS, "area")}2:${col(ROT_COLS_BAJAS, "area")}1000`, rango("A"), false),
+      validacion(`${col(ROT_COLS_BAJAS, "tipo")}2:${col(ROT_COLS_BAJAS, "tipo")}1000`, rango("B"), true),
+      validacion(`${col(ROT_COLS_BAJAS, "motivo")}2:${col(ROT_COLS_BAJAS, "motivo")}1000`, rango("C"), false),
+    ],
+    "xl/worksheets/sheet3.xml": [ // Altas
+      validacion(`${col(ROT_COLS_ALTAS, "area")}2:${col(ROT_COLS_ALTAS, "area")}1000`, rango("A"), false),
+    ],
+  };
+  Object.entries(reglas).forEach(([ruta, dv]) => {
+    if (!files[ruta]) return;
+    let xml = strFromU8(files[ruta]);
+    const bloque = `<dataValidations count="${dv.length}">${dv.join("")}</dataValidations>`;
+    const antes = ["<hyperlinks", "<printOptions", "<pageMargins", "<pageSetup", "<headerFooter", "<rowBreaks", "<colBreaks", "<ignoredErrors", "<drawing", "<legacyDrawing", "<tableParts", "<extLst", "</worksheet>"]
+      .map((t) => xml.indexOf(t)).filter((i) => i >= 0);
+    const pos = Math.min(...antes);
+    xml = xml.slice(0, pos) + bloque + xml.slice(pos);
+    files[ruta] = strToU8(xml);
+  });
+  const blob = new Blob([zipSync(files)], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  const url = URL.createObjectURL(blob);
+  const enlace = document.createElement("a");
+  enlace.href = url;
+  enlace.download = "Plantilla Altas y Bajas - Rotación.xlsx";
+  document.body.appendChild(enlace);
+  enlace.click();
+  document.body.removeChild(enlace);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // =============================================================
@@ -10849,7 +10934,7 @@ function Rotacion() {
                   <td style={S.td}><span style={S.badge(c.tipoColor)}>{c.tipo}</span></td>
                   <td style={S.td}>{bajasMesActual}</td>
                   <td style={S.td}>{totalBajas}</td>
-                  <td style={{ ...S.td, textAlign: "right", color: "#64748b", fontSize: 12 }}>Ver desglose →</td>
+                  <td style={{ ...S.td, textAlign: "right", color: "#64748b", fontSize: 12 }}>Ver ejemplo →</td>
                 </tr>
               ))}
             </tbody>
@@ -13388,66 +13473,75 @@ const cellBg = (accent) =>
 
 const NINE_BOX = [
   // Fila superior — POTENCIAL ALTO
-  { id: 0, titulo: "Diamante en bruto", eje: "Pot. alto · Desemp. bajo", accent: "#5d6678",
-    resumen: "Diagnosticar barreras y acelerar su desarrollo.",
+  { id: 0, titulo: "Enigma", eje: "Pot. alto · Desemp. bajo", accent: "#5d6678",
+    resumen: "Puede más de lo que entrega. Diagnosticar qué lo frena.",
+    explicacion: ["Tiene capacidad para mucho más, pero **hoy no lo está entregando**. Suele ser alguien nuevo en el puesto, mal ubicado, sin claridad de qué se espera o con un obstáculo (jefe, herramientas, carga de trabajo o algo personal).", "Es caro tenerlo así: pagas por un talento que no se convierte en resultados. Pero también es caro perderlo. Lo primero es **diagnosticar qué lo frena**; si en 90 días no mejora, probablemente su casilla real no es esta."],
     plan: {
       d30: ["1:1 de diagnóstico: detectar barreras (claridad de rol, recursos, motivación).", "Definir 3 objetivos medibles a 90 días.", "Asignar mentor interno."],
       d60: ["Capacitación dirigida a las brechas técnicas detectadas.", "Eliminar obstáculos operativos identificados.", "Revisión quincenal de avances con su jefe."],
       d90: ["Asignar un proyecto de visibilidad media.", "Medir el salto de desempeño vs. objetivos.", "Decidir: acelerar promoción o reforzar plan."],
     } },
-  { id: 1, titulo: "Futuro líder", eje: "Pot. alto · Desemp. medio", accent: "#2e4773",
-    resumen: "Estirar con retos, mentoría y proyectos visibles.",
+  { id: 1, titulo: "Futura estrella", eje: "Pot. alto · Desemp. medio", accent: "#2e4773",
+    resumen: "Desarrollar con retos y metas claras.",
+    explicacion: ["Ya rinde bien y tiene **potencial para mucho más**. Es tu cantera de futuros líderes y la mejor inversión en desarrollo: cada peso en retos, mentoría o proyectos visibles regresa en resultados.", "El riesgo es dejarlo estancado: si no ve camino de crecimiento, se va con la competencia que sí se lo ofrece. Necesita **retos concretos y metas claras** para llegar a Estrella."],
     plan: {
       d30: ["Conversación de carrera: aspiración y rol objetivo.", "Inscribir en programa de liderazgo.", "Feedback 360° inicial."],
       d60: ["Asignar proyecto cross-funcional como líder.", "Job shadowing con un directivo.", "Revisión de competencias de liderazgo."],
       d90: ["Ampliar alcance / span de control.", "Medir resultados del proyecto liderado.", "Incluir formalmente en pipeline de sucesión."],
     } },
   { id: 2, titulo: "Estrella", eje: "Pot. alto · Desemp. alto", accent: "#233a63",
-    resumen: "Retener, plan de sucesión y promoción.",
+    resumen: "Retener a toda costa: es tu mayor retorno.",
+    explicacion: ["Entrega **resultados altos** y todavía puede crecer. Son pocos, mueven la utilidad y son los más buscados por la competencia.", "Perder una Estrella cuesta varios meses de sueldo en reemplazo y resultados que tardan en recuperarse. **Retenla a toda costa**: plan de sucesión, compensación competitiva y conversaciones de carrera frecuentes."],
     plan: {
       d30: ["Reconocimiento formal del desempeño.", "Conversación de retención (compensación y carrera).", "Identificar posición clave de sucesión."],
       d60: ["Liderar una iniciativa estratégica.", "Exposición al comité directivo.", "Mentoría inversa hacia el equipo."],
       d90: ["Plan de promoción / ascenso definido.", "Esquema de retención (bono / equity / desarrollo).", "Formalizar como sucesor de una posición crítica."],
     } },
   // Fila media — POTENCIAL MEDIO
-  { id: 3, titulo: "Enigma", eje: "Pot. medio · Desemp. bajo", accent: "#9c5152",
-    resumen: "Conversación clara y objetivos a 90 días.",
+  { id: 3, titulo: "Dilema", eje: "Pot. medio · Desemp. bajo", accent: "#9c5152",
+    resumen: "Plan de mejora con fecha y meta medible.",
+    explicacion: ["Rinde **por debajo de lo esperado** y su potencial es medio. La pregunta es si, con apoyo claro, puede llegar al nivel que pide el puesto.", "Se resuelve con un **plan de mejora con fecha y meta medible** (normalmente 60 a 90 días), por escrito. Dejarlo indefinidamente aquí es pagar un sueldo completo por un resultado parcial y desgastar al equipo que cubre la diferencia."],
     plan: {
       d30: ["Conversación franca de expectativas.", "Definir objetivos explícitos a 90 días.", "Identificar causa raíz: ajuste de puesto vs. motivación."],
       d60: ["Acompañamiento cercano y quick wins.", "Revisión semanal de avances.", "Ajustar funciones si hay desajuste de rol."],
       d90: ["Evaluar la mejora real.", "Decidir: consolidar, reubicar o plan de mejora formal.", "Documentar acuerdos."],
     } },
-  { id: 4, titulo: "Pilar / Core", eje: "Pot. medio · Desemp. medio", accent: "#4c5c79",
-    resumen: "Mantener motivado y desarrollar lateralmente.",
+  { id: 4, titulo: "Núcleo", eje: "Pot. medio · Desemp. medio", accent: "#4c5c79",
+    resumen: "Sostener y subir su productividad.",
+    explicacion: ["Es la **mayoría del equipo**: cumple lo que se espera y tiene potencial moderado. Sostiene la operación del día a día.", "No necesita un plan heroico, sino **metas claras, reconocimiento y mejoras de productividad**. Subir un poco el rendimiento de muchos en el Núcleo mueve más la utilidad que cualquier otra casilla."],
     plan: {
       d30: ["Reconocer su aporte estable.", "Encuesta de motivación e intereses.", "Detectar apetito de desarrollo lateral."],
       d60: ["Rotación o ampliación de funciones.", "Capacitación de actualización.", "Asignar responsabilidades de mayor alcance."],
       d90: ["Definir ruta: especialización o liderazgo.", "Plan de engagement a 12 meses.", "Reconocimiento por consistencia."],
     } },
   { id: 5, titulo: "Alto desempeño", eje: "Pot. medio · Desemp. alto", accent: "#36507a",
-    resumen: "Reconocer y ampliar el alcance del rol.",
+    resumen: "Reconocer y prepararlo para crecer.",
+    explicacion: ["Entrega **resultados por encima de lo esperado**, aunque su potencial para puestos más grandes es medio.", "Hay que **reconocerlo**, o se desmotiva o se va, y **prepararlo para crecer**: más alcance, proyectos o un rol de referente. Cuidado con ascenderlo a jefe sin preparación: puedes perder a tu mejor ejecutor y ganar un mal jefe."],
     plan: {
       d30: ["Reconocer resultados sobresalientes.", "Explorar si el potencial está subestimado.", "Plantear nuevos retos."],
       d60: ["Ampliar alcance del rol o complejidad.", "Asignar proyecto de mayor exigencia.", "Mentor para desarrollar potencial latente."],
-      d90: ["Reevaluar potencial.", "Si crece → mover a Futuro líder.", "Si se mantiene → consolidar como experto clave."],
+      d90: ["Reevaluar potencial.", "Si crece → mover a Futura estrella.", "Si se mantiene → consolidar como experto clave."],
     } },
   // Fila inferior — POTENCIAL BAJO
-  { id: 6, titulo: "Bajo rendimiento", eje: "Pot. bajo · Desemp. bajo", accent: "#983838",
-    resumen: "Plan de mejora (PIP) y decisión a corto plazo.",
+  { id: 6, titulo: "Riesgo", eje: "Pot. bajo · Desemp. bajo", accent: "#983838",
+    resumen: "Decidir: mejora inmediata o salida planeada.",
+    explicacion: ["Bajo desempeño y bajo potencial: es **la casilla más cara de tolerar**. Cada mes cuesta su sueldo, más el valor que el puesto deja de generar y el retrabajo que absorben otros.", "Hay que **decidir pronto**: un plan de mejora inmediato y documentado, o una salida planeada y bien hecha. Sin evidencia por escrito, una separación puede terminar en demanda."],
     plan: {
       d30: ["Plan de mejora formal (PIP) con metas y fechas.", "Documentar acuerdos por escrito.", "1:1 semanal de seguimiento."],
       d60: ["Soporte y capacitación puntual.", "Medir avance objetivo vs. metas del PIP.", "Alertar a RH si no hay progreso."],
       d90: ["Decisión final: reintegrar si mejora.", "Gestionar salida ordenada si no cumple.", "Cerrar expediente con RH."],
     } },
-  { id: 7, titulo: "Confiable", eje: "Pot. bajo · Desemp. medio", accent: "#6f6b73",
-    resumen: "Mantener en el rol con objetivos claros.",
+  { id: 7, titulo: "Efectivo", eje: "Pot. bajo · Desemp. medio", accent: "#6f6b73",
+    resumen: "Cumple, pero no crece. Vigilar su costo.",
+    explicacion: ["Cumple con su trabajo, pero **no muestra capacidad o interés en crecer**. Es valioso en su rol actual.", "La clave es **vigilar su costo**: que su sueldo y aumentos no crezcan más rápido que lo que aporta. Mantenlo con objetivos claros y evita invertir en un desarrollo que no se va a aprovechar."],
     plan: {
       d30: ["Reconocer su consistencia y valor.", "Clarificar que su rol es apreciado.", "Definir objetivos de mantenimiento."],
       d60: ["Capacitación para sostener el desempeño.", "Detectar riesgo de estancamiento o desmotivación.", "Pequeños retos de rotación."],
       d90: ["Plan de retención ligero.", "Reconocimiento por estabilidad / antigüedad.", "Revisar bienestar y carga de trabajo."],
     } },
-  { id: 8, titulo: "Especialista", eje: "Pot. bajo · Desemp. alto", accent: "#415a80",
-    resumen: "Retener como experto y transferir conocimiento.",
+  { id: 8, titulo: "Experto confiable", eje: "Pot. bajo · Desemp. alto", accent: "#415a80",
+    resumen: "Aprovechar su experiencia para formar a otros.",
+    explicacion: ["Domina su trabajo y **entrega resultados altos**, pero su potencial para otros puestos es bajo: es experto en lo que hace.", "Su mayor valor es **su conocimiento**. Aprovéchalo para formar a otros y documentar procesos, para que la empresa no dependa solo de él. Si se va sin transmitir lo que sabe, se lleva meses de aprendizaje."],
     plan: {
       d30: ["Reconocer el expertise técnico.", "Conversación: ruta experto vs. gestión.", "Mapear conocimiento crítico que posee."],
       d60: ["Formalizar como referente técnico.", "Iniciar transferencia de conocimiento / documentación.", "Asignar mentoría a juniors."],
@@ -13528,7 +13622,7 @@ function tarjetasRCH(v) {
 
 // Calculadora para "El costo de tolerar": datos editables + los 3 indicadores
 // + cuánto subiría el RPE si se dejara de pagar el costo de tolerar.
-function CalculadoraRCH({ v, setV, costoTolerarAnual = 0, equipo = 0 }) {
+function CalculadoraRCH({ v, setV, costoTolerarAnual = 0, equipo = 0, sola = false }) {
   const cambiar = (k, texto) => {
     const n = Number(String(texto).replace(/[^0-9.-]/g, ""));
     const next = { ...v, [k]: Number.isFinite(n) ? n : 0 };
@@ -13545,10 +13639,10 @@ function CalculadoraRCH({ v, setV, costoTolerarAnual = 0, equipo = 0 }) {
   const despues = calcularRCH({ ...v, utilidad: v.utilidad + recuperado, ebitda: v.ebitda + recuperado });
 
   return (
-    <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid " + COLOR.borderSoft }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink, marginBottom: 4 }}>¿Cómo se ve en los indicadores de tu empresa?</div>
+    <div style={sola ? {} : { marginTop: 22, paddingTop: 18, borderTop: "1px solid " + COLOR.borderSoft }}>
+      <div style={{ fontSize: 14, fontWeight: 700, color: COLOR.ink, marginBottom: 4 }}>¿Cómo se ven los indicadores de tu empresa?</div>
       <div style={{ fontSize: 12.5, color: COLOR.text, lineHeight: 1.55, marginBottom: 12 }}>
-        Escribe los datos del mes de tu empresa. Los tres indicadores de "Lo básico" se calculan al instante, y abajo ves cuánto cambiarían si el costo de tolerar se convirtiera en utilidad.
+        Escribe los datos del mes de tu empresa. Los tres indicadores de "Lo básico" (ROB, IPCH y RPE) se calculan al instante, y abajo ves cuánto cambiarían si el costo de tolerar el bajo desempeño (siguiente pestaña) se convirtiera en utilidad.
       </div>
 
       <div style={{ border: "1px solid " + COLOR.border, background: COLOR.surfaceSoft, padding: 12, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, alignItems: "start", marginBottom: 12 }}>
@@ -13597,7 +13691,7 @@ function CalculadoraRCH({ v, setV, costoTolerarAnual = 0, equipo = 0 }) {
 
       {base.emp && costoTolerarAnual > 0 && (
         <Conclusion kind={despues.rpe >= 0 ? "info" : "warn"}>
-          El simulador de arriba calcula <strong>{fmtRch(costoTolerarAnual)}</strong> al año por tolerar el bajo desempeño en un equipo de {equipo} personas
+          El simulador de "El costo de tolerar" calcula <strong>{fmtRch(costoTolerarAnual)}</strong> al año por tolerar el bajo desempeño en un equipo de {equipo} personas
           (<strong>{fmtRch(recuperado)}</strong> al mes). Si ese dinero se convirtiera en utilidad, el <strong>IPCH</strong> pasaría de {fmtRch(base.ipch)} a <strong>{fmtRch(despues.ipch)}</strong> por persona
           y el <strong>RPE</strong> de {fmtRch(base.rpe)} a <strong style={{ color: despues.rpe < 0 ? "#b00020" : "#0a7d2c" }}>{fmtRch(despues.rpe)}</strong>.
           {despues.rpe < 0 && base.rpe < 0 && <> Aun así sigue negativo: el bajo desempeño no es el único problema; también hay que revisar plantilla, precios o costos.</>}
@@ -13658,7 +13752,7 @@ function Desempeno() {
     const nom = primerNombre(p.nombre);
     const carga = p.aCargo > 0 ? `lidera a ${p.aCargo} persona${p.aCargo > 1 ? "s" : ""}` : "sin personas a cargo";
     return `${nom} (${p.puesto}, ${p.area}) lleva ${p.antiguedad} en la empresa, ${carga}, ` +
-      `con última evaluación de ${p.ultimaEval}. Ubicado en «${box.titulo}» (${box.eje}), el foco es: ${box.resumen.toLowerCase()}`;
+      `con última evaluación de ${p.ultimaEval}. Ubicado en «${box.titulo}» (${box.eje}), el foco es: ${box.resumen.charAt(0).toLowerCase() + box.resumen.slice(1)}`;
   };
   const abrirPlan = (boxId, personaId = null) => { setPlanForId(personaId); setPlanBoxId(boxId); };
   const cerrarPlan = () => { setPlanBoxId(null); setPlanForId(null); };
@@ -13734,7 +13828,7 @@ function Desempeno() {
       </div>
       <div style={S.hint}>
         Modelo de 9 box: cruza el <strong>potencial</strong> (eje vertical) con el <strong>desempeño</strong> (eje horizontal).
-        <strong> Arrastra</strong> a cada persona para reubicarla, o haz <strong>clic</strong> sobre ella para ver su ficha completa.
+        El número de cada casilla es cuántas personas hay en ella; haz <strong>clic</strong> en «Acción recomendada» para ver qué significa y su plan de trabajo.
       </div>
 
       <div style={S.grid4}>
@@ -13830,8 +13924,8 @@ function Desempeno() {
                       border: `1px solid ${activo ? hexA(box.accent, 0.6) : COLOR.border}`,
                       borderRadius: 0,
                       padding: 11,
-                      minHeight: 150,
-                      display: "flex", flexDirection: "column", gap: 9,
+                      minHeight: 112,
+                      display: "flex", flexDirection: "column", gap: 8,
                       boxShadow: activo ? `0 0 0 3px ${hexA(box.accent, 0.25)}, ${COLOR.shadowHover}` : COLOR.shadow,
                       transition: "box-shadow 0.12s ease, border-color 0.12s ease",
                     }}
@@ -13840,33 +13934,7 @@ function Desempeno() {
                       <div style={{ fontSize: 14, fontWeight: 700, color: box.accent, lineHeight: 1.15 }}>{box.titulo}</div>
                       <span style={{ ...S.badge("#fff"), border: `1px solid ${hexA(box.accent, 0.4)}`, color: box.accent, fontSize: 12 }}>{gente.length}</span>
                     </div>
-
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 5, flex: 1, alignContent: "flex-start" }}>
-                      {gente.map((c) => (
-                        <button
-                          key={c.id}
-                          draggable
-                          onDragStart={(e) => { setDragId(c.id); e.dataTransfer.effectAllowed = "move"; }}
-                          onDragEnd={() => { setDragId(null); setOverBox(null); }}
-                          onClick={() => setDetalleId(c.id)}
-                          title={`${c.nombre} · ${c.puesto} — clic para ver ficha, arrastra para mover`}
-                          style={{
-                            display: "inline-flex", alignItems: "center", gap: 6,
-                            fontSize: 12, fontWeight: 600, padding: "4px 9px 4px 4px", borderRadius: 999,
-                            border: `1px solid ${hexA(box.accent, 0.3)}`,
-                            background: "#fff", color: COLOR.inkSoft,
-                            cursor: "grab", boxShadow: "0 1px 2px rgba(15,23,42,0.06)",
-                            opacity: dragId === c.id ? 0.4 : 1,
-                          }}
-                        >
-                          <span style={{ width: 20, height: 20, borderRadius: "50%", flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#fff", background: box.accent }}>
-                            {iniciales(c.nombre)}
-                          </span>
-                          {c.nombre.split(" ")[0]} {c.nombre.split(" ")[1]?.[0] ? c.nombre.split(" ")[1][0] + "." : ""}
-                        </button>
-                      ))}
-                      {gente.length === 0 && <span style={{ fontSize: 12, color: COLOR.textMuted, fontStyle: "italic" }}>Suelta aquí…</span>}
-                    </div>
+                    <div style={{ fontSize: 12, color: COLOR.textSoft, lineHeight: 1.4, marginTop: -2 }}>{box.resumen}</div>
 
                     <button
                       onClick={() => abrirPlan(box.id)}
@@ -13989,6 +14057,14 @@ function Desempeno() {
             </div>
 
             <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 14 }}>
+              {planBox.explicacion && (
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, color: planBox.accent, marginBottom: 6 }}>¿Qué significa esta casilla?</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 13.5, color: COLOR.text, lineHeight: 1.6 }}>
+                    {planBox.explicacion.map((t, k) => <p key={k} style={{ margin: 0 }}>{textoRico(t)}</p>)}
+                  </div>
+                </div>
+              )}
               {planPersona ? (
                 <div style={{ borderRadius: 8, padding: "12px 14px", background: hexA(planBox.accent, 0.06), border: `1px solid ${hexA(planBox.accent, 0.2)}` }}>
                   <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5, color: planBox.accent, marginBottom: 4 }}>Diagnóstico</div>
@@ -14088,43 +14164,6 @@ function Desempeno() {
           </div>
         </div>
       )}
-
-      <h3 style={S.h3}>Distribución del talento</h3>
-      <div style={S.card}>
-        {(() => {
-          const maxCount = Math.max(1, ...NINE_BOX.map((b) => enBox(b.id).length));
-          return (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {NINE_BOX.map((box) => {
-                const n = enBox(box.id).length;
-                const w = Math.round((n / maxCount) * 100);
-                return (
-                  <div key={box.id} title={box.resumen} style={{ display: "grid", gridTemplateColumns: "190px 1fr 34px", alignItems: "center", gap: 12 }}>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ width: 10, height: 10, borderRadius: 3, background: box.accent, flexShrink: 0 }} />
-                        <span style={{ fontSize: 13, fontWeight: 700, color: box.accent, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{box.titulo}</span>
-                      </div>
-                      <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 1, paddingLeft: 18 }}>{box.eje}</div>
-                    </div>
-                    <div style={{ background: hexA(box.accent, 0.08), borderRadius: 6, height: 26, position: "relative", overflow: "hidden" }}>
-                      <div style={{
-                        width: n === 0 ? 0 : `${Math.max(w, 6)}%`, height: "100%", borderRadius: 6,
-                        background: `linear-gradient(90deg, ${hexA(box.accent, 0.75)} 0%, ${box.accent} 100%)`,
-                        transition: "width 0.3s ease",
-                      }} />
-                    </div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: n === 0 ? COLOR.textMuted : COLOR.ink, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{n}</div>
-                  </div>
-                );
-              })}
-              <div style={{ fontSize: 11, color: COLOR.textMuted, marginTop: 4, borderTop: "1px solid " + COLOR.borderSoft, paddingTop: 8 }}>
-                Nº de colaboradores por casilla · pasa el cursor sobre cada barra para ver el enfoque recomendado.
-              </div>
-            </div>
-          );
-        })()}
-      </div>
 
       <AulaDesempeno colaboradores={colaboradores} />
     </div>
@@ -14329,6 +14368,13 @@ function Catalogos() {
 // =============================================================
 export default function SaaSRRHH() {
   const [tab, setTab] = useState("nomina");
+  const [aulaAbierta, setAulaAbierta] = useState(false);
+  useEffect(() => { setAulaAbierta(false); }, [tab]);
+  const vistaAula = useMemo(() => ({
+    abierta: aulaAbierta,
+    abrir: () => { setAulaAbierta(true); window.scrollTo({ top: 0, behavior: "smooth" }); },
+    cerrar: () => { setAulaAbierta(false); window.scrollTo({ top: 0, behavior: "smooth" }); },
+  }), [aulaAbierta]);
   const [filter, setFilter] = useState("");
   const [periodo, setPeriodo] = useState(PERIODO_DEFAULT);
   const [vistaGuia, setVistaGuia] = useState(false);
@@ -14354,7 +14400,7 @@ export default function SaaSRRHH() {
   const q = normalizar(filter.trim());
   const resultadosBusqueda = !q
     ? null
-    : TABS.concat([{ id: "catalogos", label: "Catálogos maestros", num: "•" }]).map((t) => {
+    : TABS.map((t) => {
         const indice = SEARCH_INDEX.find((s) => s.tab === t.id);
         const labelMatch = normalizar(t.label).includes(q);
         const matchedConcepts = indice ? indice.concepts.filter((c) => normalizar(c).includes(q)) : [];
@@ -14413,24 +14459,11 @@ export default function SaaSRRHH() {
       {/* Topbar */}
       <div style={S.topbar} className="no-print">
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <img src={logoAxon} alt="Axon" style={{ height: 44, width: "auto", display: "block" }} />
+          <img src={logoAxon} alt="Axon Workshops" style={{ height: 34, width: "auto", display: "block" }} />
           <div style={{ width: 1, height: 34, background: COLOR.border }} />
           <div>
             <div style={S.subtitle}>Rentabilidad de Recursos Humanos</div>
           </div>
-        </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <button
-            style={S.btn}
-            onClick={() => {
-              const tabActual = TABS.find((t) => t.id === tab)?.label || (tab === "catalogos" ? "Catálogos maestros" : "Vista");
-              document.title = `${tabActual} · ${periodo} · Axon`;
-              setTimeout(() => window.print(), 50);
-            }}
-            title="Imprimir / Exportar a PDF la pestaña actual"
-          >
-            Exportar
-          </button>
         </div>
       </div>
 
@@ -14506,7 +14539,7 @@ export default function SaaSRRHH() {
                   <div
                     key={t.id}
                     style={S.sidebarItem(tab === t.id)}
-                    onClick={() => setTab(t.id)}
+                    onClick={() => { setTab(t.id); setAulaAbierta(false); }}
                   >
                     <div style={S.sidebarNum(tab === t.id)}>{t.num}</div>
                     <span>{t.label}</span>
@@ -14516,27 +14549,10 @@ export default function SaaSRRHH() {
             )}
           </div>
 
-          <div style={S.sidebarSection}>
-            <div style={S.sidebarTitle}>Configuración</div>
-          </div>
-          <div style={S.sidebarItem(false)}>
-            <span style={{ fontSize: 13 }}>Usuarios y permisos</span>
-          </div>
-          <div style={S.sidebarItem(tab === "catalogos")} onClick={intentarAbrirCatalogos}>
-            <span style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
-              Catálogos maestros
-              {catalogosUnlocked
-                ? <span style={{ fontSize: 9, color: "#0a7d2c", fontWeight: 700 }}>● desbloqueado</span>
-                : <span style={{ color: "#64748b", display: "inline-flex" }}><IconLock size={12} /></span>}
-            </span>
-          </div>
-          <div style={S.sidebarItem(false)}>
-            <span style={{ fontSize: 13 }}>Integraciones</span>
-          </div>
         </aside>
 
         {/* Contenido principal */}
-        <div style={S.main} className="print-main">{render()}</div>
+        <div style={S.main} className={"print-main" + (aulaAbierta ? " modo-aula" : "")}><AulaVistaCtx.Provider value={vistaAula}>{render()}</AulaVistaCtx.Provider></div>
       </div>
 
       {/* Password modal · Catálogos maestros */}
@@ -14607,15 +14623,7 @@ export default function SaaSRRHH() {
         <div>© 2026 · Tablero de control para RRHH</div>
         <div style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 600, letterSpacing: 0.2 }}>
           Powered by
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 4,
-            padding: "3px 9px", borderRadius: 4,
-            background: "#000",
-            color: "#facc15", fontWeight: 800, letterSpacing: 0.6, fontSize: 10,
-            boxShadow: "0 1px 2px rgba(0, 0, 0, 0.25)",
-          }}>
-            AXON B2B
-          </span>
+          <img src={logoAxon} alt="Axon Workshops" style={{ height: 18, width: "auto", display: "block" }} />
         </div>
       </footer>
     </div>

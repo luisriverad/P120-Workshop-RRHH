@@ -13,6 +13,9 @@
       ::selection { background: #feeaa0; color: #0f172a; }
       *:focus-visible { outline: 2px solid #8c6900; outline-offset: 2px; }
 
+      /* Vista del Aula: se oculta la información del módulo y queda solo el Aula */
+      .modo-aula > * > *:not(.aula-root) { display: none !important; }
+
       /* Modo impresión: ocultar sidebar, topbar y footer; expandir contenido a página completa */
       @media print {
         @page { margin: 14mm 12mm; size: A4 portrait; }

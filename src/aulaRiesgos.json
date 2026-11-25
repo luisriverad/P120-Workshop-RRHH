@@ -472,9 +472,9 @@
   "recuerda": "Retener a una Estrella cuesta mucho menos que reemplazarla."
  },
  "desempeno:Separar por bajo desempeño sin evidencia": {
-  "resumen": "Estar en \"Bajo rendimiento\" no basta para despedir: sin evidencia, el juicio se pierde.",
+  "resumen": "Estar en \"Riesgo\" no basta para despedir: sin evidencia, el juicio se pierde.",
   "explicacion": [
-   "Que alguien aparezca en la caja de **Bajo rendimiento** del 9 box no es, por sí solo, una causa de despido sin responsabilidad para la empresa. Es una calificación interna, no una prueba.",
+   "Que alguien aparezca en la caja de **Riesgo** del 9 box no es, por sí solo, una causa de despido sin responsabilidad para la empresa. Es una calificación interna, no una prueba.",
    "Sin metas firmadas, seguimiento por escrito ni un plan de mejora, el despido puede declararse **injustificado**. Entonces se paga indemnización, salarios vencidos y, en ciertos casos, otros conceptos adicionales.",
    "Lo más rentable casi siempre es hacer bien el proceso: un plan de mejora documentado y, si no funciona, una salida negociada y ratificada, que cuesta mucho menos que un juicio."
   ],
@@ -540,7 +540,7 @@
   ],
   "ejemplo": {
    "titulo": "Bono al carisma, no a los resultados",
-   "texto": "Un ejecutivo carismático cumple **70%** de su cuota y queda en \"Estrella\": bono de **$120,000**.\nSu compañera cumple **115%** y queda en \"Pilar\": bono de **$60,000**.\nBono mal asignado: $120,000 − $60,000 = **$60,000**.\nSi ella se va por la injusticia, reemplazo (6 meses de $40,000): 6 × $40,000 = **$240,000**.\nTotal en riesgo: $60,000 + $240,000 = **$300,000**."
+   "texto": "Un ejecutivo carismático cumple **70%** de su cuota y queda en \"Estrella\": bono de **$120,000**.\nSu compañera cumple **115%** y queda en \"Núcleo\": bono de **$60,000**.\nBono mal asignado: $120,000 − $60,000 = **$60,000**.\nSi ella se va por la injusticia, reemplazo (6 meses de $40,000): 6 × $40,000 = **$240,000**.\nTotal en riesgo: $60,000 + $240,000 = **$300,000**."
   },
   "costo": "Cerca de **$60,000** mal invertidos en bono y hasta **$300,000** si se pierde a quien sí cumplió.",
   "controles": [

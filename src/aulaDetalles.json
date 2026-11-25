@@ -391,20 +391,45 @@
   "resumen": "El sueldo es una inversión; cada puesto debe generar varias veces lo que cuesta.",
   "explicacion": [
    "Una persona no cuesta solo su sueldo. Hay que sumar las cargas sociales e impuestos sobre nómina (IMSS, Infonavit, impuesto estatal sobre nómina); en esta plataforma se usa como referencia un **23%** adicional. Ese es el costo anual real.",
-   "La pregunta de rentabilidad no es cuánto cuesta, sino cuánto valor genera esa inversión. Por eso se espera que cada puesto produzca un múltiplo de su costo en ventas, servicio o producción; esta plataforma usa **3 veces** como referencia y se puede ajustar según el negocio.",
+   "La pregunta de rentabilidad no es cuánto cuesta, sino cuánto valor genera esa inversión. Por eso se espera que cada puesto produzca un múltiplo de su costo en ventas, servicio o producción; el estándar comúnmente aceptado es **2.5 veces** su costo, y se puede ajustar según el negocio.",
    "Si un puesto no genera al menos ese múltiplo, la empresa está poniendo dinero en un lugar que no le regresa lo suficiente."
   ],
   "ejemplos": [
    {
     "titulo": "Un auxiliar de almacén de $12,000 al mes",
-    "texto": "Sueldo al año: 12,000 × 12 = **$144,000**\nCon cargas (23%): 144,000 × 1.23 = **$177,120**\nValor esperado (× 3): 177,120 × 3 = **$531,360** al año en pedidos surtidos y entregados."
+    "texto": "Sueldo al año: 12,000 × 12 = **$144,000**\nCon cargas (23%): 144,000 × 1.23 = **$177,120**\nValor esperado (× 2.5): 177,120 × 2.5 = **$442,800** al año en pedidos surtidos y entregados."
    },
    {
     "titulo": "Un contador de $25,000 al mes",
-    "texto": "Sueldo al año: 25,000 × 12 = **$300,000**\nCon cargas (23%): 300,000 × 1.23 = **$369,000**\nValor esperado (× 3): 369,000 × 3 = **$1,107,000** al año en control, cierres a tiempo y ahorro de multas."
+    "texto": "Sueldo al año: 25,000 × 12 = **$300,000**\nCon cargas (23%): 300,000 × 1.23 = **$369,000**\nValor esperado (× 2.5): 369,000 × 2.5 = **$922,500** al año en control, cierres a tiempo y ahorro de multas."
    }
   ],
-  "recuerda": "No preguntes cuánto cuesta una persona, pregunta cuánto genera por lo que cuesta."
+  "recuerda": "No preguntes cuánto cuesta una persona, pregunta cuánto genera por lo que cuesta.",
+  "tabla": {
+   "titulo": "¿Cuántas veces su costo debe generar cada puesto?",
+   "intro": "Referencias rápidas por tipo de puesto:",
+   "columnas": [
+    "Tipo de puesto",
+    "Debe generar"
+   ],
+   "filas": [
+    [
+     "Ventas y comercial",
+     "3× a 5×"
+    ],
+    [
+     "Operación, producción y logística",
+     "2× a 3×"
+    ],
+    [
+     "Administración y soporte",
+     "1.5× a 2×"
+    ]
+   ],
+   "notas": [
+    "El **2.5×** es el estándar general comúnmente aceptado; ajústalo según el tipo de puesto."
+   ]
+  }
  },
  "desempeno:El mejor vs. el promedio": {
   "resumen": "Por el mismo sueldo, el mejor puede aportar 50% más que el promedio.",
@@ -420,7 +445,7 @@
    },
    {
     "titulo": "Con la fórmula de esta plataforma",
-    "texto": "Sueldo base: $20,000 × 12 = **$240,000** al año.\nCon cargas: 240,000 × 1.23 = **$295,200**.\nValor esperado (× 3): 295,200 × 3 = **$885,600** al año.\nValor extra del mejor = 885,600 × 50% = **$442,800** al año."
+    "texto": "Sueldo base: $20,000 × 12 = **$240,000** al año.\nCon cargas: 240,000 × 1.23 = **$295,200**.\nValor esperado (× 2.5): 295,200 × 2.5 = **$738,000** al año.\nValor extra del mejor = 738,000 × 50% = **$369,000** al año."
    }
   ],
   "recuerda": "El mejor no cuesta más que el promedio, pero aporta mucho más: perderlo es carísimo."

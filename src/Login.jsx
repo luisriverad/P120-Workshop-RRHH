@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logoDragon from "./assets/dragon-logo.png";
-import logoAxon from "./assets/axon-logo.png";
+import logoAxon from "./assets/axon-workshops.png";
 import { guardarFila } from "./supabase.js";
 
 // Pantalla de registro de asistencia (nombre y correo). No es seguridad:
@@ -54,7 +54,7 @@ const CSS = `
 .lg-skip:hover { color: #17130a; }
 .lg-nota { display: flex; gap: 8px; align-items: flex-start; margin-top: 26px; padding: 12px 14px; border-radius: 10px; background: #fbf7ea; font-size: 12px; line-height: 1.5; color: #6b6352; }
 .lg-pie { margin-top: auto; padding-top: 32px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #9b927e; }
-.lg-pie img { height: 22px; width: auto; }
+.lg-pie img { height: 20px; width: auto; }
 
 @keyframes lg-sube { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
@@ -150,7 +150,7 @@ export default function Login({ onEntrar }) {
         </form>
 
         <div className="lg-pie">
-          Impartido por <img src={logoAxon} alt="Axon" />
+          Impartido por <img src={logoAxon} alt="Axon Workshops" />
         </div>
       </section>
     </div>
